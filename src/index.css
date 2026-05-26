@@ -1,0 +1,68 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #4B0FA3;
+  --color-secondary: #7B2FF7;
+  --color-accent: #F5B700;
+  --color-background: #F8F8FC;
+  --color-text-dark: #1A1A1A;
+  --color-gray-light: #D9D9E3;
+  
+  --animate-blob: blob 7s infinite;
+}
+
+@keyframes blob {
+  0% { transform: translate(0px, 0px) scale(1); }
+  33% { transform: translate(30px, -50px) scale(1.1); }
+  66% { transform: translate(-20px, 20px) scale(0.9); }
+  100% { transform: translate(0px, 0px) scale(1); }
+}
+
+@layer base {
+  :root {
+    --primary: #4B0FA3;
+    --secondary: #7B2FF7;
+    --accent: #F5B700;
+    --background: #F8F8FC;
+    --text-dark: #1A1A1A;
+    --gray-light: #D9D9E3;
+    --white: #FFFFFF;
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--text-dark);
+    font-family: ui-sans-serif, system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    background-image: linear-gradient(to right, var(--primary), var(--secondary));
+  }
+
+  .bg-primary-gradient {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+  }
+
+  .glass-card {
+    background-color: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px rgba(75, 15, 163, 0.1);
+  }
+  
+  .glass-card-hover {
+    transition: all 0.3s ease;
+  }
+  
+  .glass-card-hover:hover {
+    box-shadow: 0 12px 40px rgba(123, 47, 247, 0.2);
+    transform: translateY(-4px);
+  }
+}
