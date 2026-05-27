@@ -36,12 +36,12 @@ const Hero = () => {
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 mb-12">
-              <button className="flex items-center justify-center gap-2 bg-primary hover:bg-secondary text-white px-8 py-4 rounded-xl font-bold text-lg transition-all duration-300 shadow-[0_8px_20px_rgba(75,15,163,0.3)] hover:shadow-[0_12px_25px_rgba(123,47,247,0.4)] hover:-translate-y-1">
+              <a href="#subjects" className="flex items-center justify-center gap-2 bg-primary hover:bg-secondary text-white px-8 py-4 rounded-xl font-bold text-lg transition-all duration-300 shadow-[0_8px_20px_rgba(75,15,163,0.3)] hover:shadow-[0_12px_25px_rgba(123,47,247,0.4)] hover:-translate-y-1 inline-flex">
                 Start Practicing <ChevronRight className="w-5 h-5" />
-              </button>
-              <button className="flex items-center justify-center gap-2 bg-white text-text-dark border border-gray-200 hover:border-gray-300 hover:bg-gray-50 px-8 py-4 rounded-xl font-bold text-lg transition-all duration-300 shadow-sm hover:shadow-md">
+              </a>
+              <a href="#cta" className="flex items-center justify-center gap-2 bg-white text-text-dark border border-gray-200 hover:border-gray-300 hover:bg-gray-50 px-8 py-4 rounded-xl font-bold text-lg transition-all duration-300 shadow-sm hover:shadow-md inline-flex">
                 <Download className="w-5 h-5" /> Download App
-              </button>
+              </a>
             </div>
 
             <div className="flex items-center gap-6 text-gray-500 font-medium">
@@ -107,9 +107,9 @@ const Hero = () => {
                 </div>
               </div>
 
-              <button className="w-full mt-6 bg-gray-900 text-white rounded-xl py-3 text-sm font-bold hover:bg-gray-800 transition-colors">
+              <a href="#subjects" className="w-full mt-6 bg-gray-900 text-white rounded-xl py-3 text-sm font-bold hover:bg-gray-800 transition-colors block text-center">
                 Continue Practice Session
-              </button>
+              </a>
             </div>
 
             {/* Floating Elements */}

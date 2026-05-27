@@ -10,22 +10,19 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
           <div className="col-span-1 lg:col-span-1">
             <a href="#" className="flex items-center gap-2 mb-6">
-              <div className="w-8 h-8 rounded-lg bg-white flex items-center justify-center">
-                <span className="text-primary font-bold text-xl leading-none">P</span>
-              </div>
-              <span className="font-bold text-2xl tracking-tight text-white">Preplyx</span>
+              <img src="a.jpg" alt="Preplyx" className="h-12 w-auto bg-white rounded-lg p-1" />
             </a>
             <p className="text-gray-400 text-sm leading-relaxed mb-6">
               The smartest way to prepare for WAEC, NECO, and JAMB. Join thousands of successful students today.
             </p>
             <div className="flex gap-4">
-              <a href="#" className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-primary transition-colors text-xs font-bold">
+              <a href="https://x.com" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-primary transition-colors text-xs font-bold">
                 X
               </a>
-              <a href="#" className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-primary transition-colors text-xs font-bold">
+              <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-primary transition-colors text-xs font-bold">
                 FB
               </a>
-              <a href="#" className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-primary transition-colors text-xs font-bold">
+              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-primary transition-colors text-xs font-bold">
                 IG
               </a>
             </div>
@@ -36,8 +33,8 @@ const Footer = () => {
             <ul className="space-y-3">
               <li><a href="#features" className="text-gray-400 hover:text-white transition-colors text-sm">Features</a></li>
               <li><a href="#subjects" className="text-gray-400 hover:text-white transition-colors text-sm">Subjects</a></li>
-              <li><a href="#" className="text-gray-400 hover:text-white transition-colors text-sm">Pricing</a></li>
-              <li><a href="#" className="text-gray-400 hover:text-white transition-colors text-sm">Download App</a></li>
+              <li><a href="#cta" className="text-gray-400 hover:text-white transition-colors text-sm">Pricing</a></li>
+              <li><a href="#cta" className="text-gray-400 hover:text-white transition-colors text-sm">Download App</a></li>
             </ul>
           </div>
 
@@ -45,9 +42,9 @@ const Footer = () => {
             <h4 className="font-bold text-lg mb-6">Support</h4>
             <ul className="space-y-3">
               <li><a href="#faq" className="text-gray-400 hover:text-white transition-colors text-sm">FAQ</a></li>
-              <li><a href="#" className="text-gray-400 hover:text-white transition-colors text-sm">Help Center</a></li>
-              <li><a href="#" className="text-gray-400 hover:text-white transition-colors text-sm">Contact Us</a></li>
-              <li><a href="#" className="text-gray-400 hover:text-white transition-colors text-sm">Community</a></li>
+              <li><a href="#faq" className="text-gray-400 hover:text-white transition-colors text-sm">Help Center</a></li>
+              <li><a href="mailto:hello@preplyx.com" className="text-gray-400 hover:text-white transition-colors text-sm">Contact Us</a></li>
+              <li><a href="#testimonials" className="text-gray-400 hover:text-white transition-colors text-sm">Community</a></li>
             </ul>
           </div>
 
@@ -73,8 +70,8 @@ const Footer = () => {
             © {new Date().getFullYear()} Preplyx Inc. All rights reserved.
           </p>
           <div className="flex gap-6">
-            <a href="#" className="text-gray-400 hover:text-white transition-colors text-sm">Privacy Policy</a>
-            <a href="#" className="text-gray-400 hover:text-white transition-colors text-sm">Terms of Service</a>
+            <a href="#about" className="text-gray-400 hover:text-white transition-colors text-sm">Privacy Policy</a>
+            <a href="#about" className="text-gray-400 hover:text-white transition-colors text-sm">Terms of Service</a>
           </div>
         </div>
       </div>

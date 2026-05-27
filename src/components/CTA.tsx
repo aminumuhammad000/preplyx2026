@@ -3,7 +3,7 @@ import { Download, ArrowRight } from 'lucide-react';
 
 const CTA = () => {
   return (
-    <section className="py-24 relative overflow-hidden bg-white">
+    <section id="cta" className="py-24 relative overflow-hidden bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="relative rounded-[2.5rem] bg-gray-900 overflow-hidden shadow-2xl">
           {/* Neon Glow Effects */}
@@ -25,12 +25,12 @@ const CTA = () => {
               </p>
               
               <div className="flex flex-col sm:flex-row gap-4">
-                <button className="flex items-center justify-center gap-2 bg-primary hover:bg-secondary text-white px-8 py-4 rounded-xl font-bold text-lg transition-all shadow-[0_0_20px_rgba(123,47,247,0.4)] hover:shadow-[0_0_30px_rgba(123,47,247,0.6)]">
+                <button onClick={() => alert('Download starting...')} className="flex items-center justify-center gap-2 bg-primary hover:bg-secondary text-white px-8 py-4 rounded-xl font-bold text-lg transition-all shadow-[0_0_20px_rgba(123,47,247,0.4)] hover:shadow-[0_0_30px_rgba(123,47,247,0.6)]">
                   <Download className="w-5 h-5" /> Download APK
                 </button>
-                <button className="flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 text-white border border-white/20 px-8 py-4 rounded-xl font-bold text-lg transition-all backdrop-blur-sm">
+                <a href="#features" className="flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 text-white border border-white/20 px-8 py-4 rounded-xl font-bold text-lg transition-all backdrop-blur-sm inline-flex">
                   Get Started <ArrowRight className="w-5 h-5" />
-                </button>
+                </a>
               </div>
             </motion.div>
 
