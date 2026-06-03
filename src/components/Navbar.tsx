@@ -60,30 +60,49 @@ const Navbar = () => {
 
       <AnimatePresence>
         {mobileMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            className="md:hidden bg-white border-t"
-          >
-            <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-              {navLinks.map((link) => (
-                <a
-                  key={link.name}
-                  href={link.href}
-                  className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-primary hover:bg-gray-50"
+          <>
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setMobileMenuOpen(false)}
+              className="fixed inset-0 bg-black/60 z-[60] md:hidden backdrop-blur-sm"
+            />
+            <motion.div
+              initial={{ x: '100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '100%' }}
+              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+              className="fixed top-0 right-0 h-screen w-[85vw] max-w-sm bg-white shadow-2xl z-[70] md:hidden flex flex-col"
+            >
+              <div className="flex items-center justify-between p-6 border-b border-gray-100">
+                <img src="a.jpg" alt="Preplyx" className="h-8 w-auto" />
+                <button
                   onClick={() => setMobileMenuOpen(false)}
+                  className="p-2 rounded-full text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors"
                 >
-                  {link.name}
-                </a>
-              ))}
-              <div className="px-3 py-4">
-                <a href="#cta" onClick={() => setMobileMenuOpen(false)} className="w-full bg-primary hover:bg-secondary text-white px-6 py-3 rounded-xl font-medium transition-colors block text-center">
+                  <X className="h-6 w-6" />
+                </button>
+              </div>
+              <div className="flex-1 px-6 py-8 space-y-4 overflow-y-auto">
+                {navLinks.map((link) => (
+                  <a
+                    key={link.name}
+                    href={link.href}
+                    className="block px-4 py-3 rounded-xl text-lg font-medium text-gray-700 hover:text-primary hover:bg-primary/5 transition-all"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    {link.name}
+                  </a>
+                ))}
+              </div>
+              <div className="p-6 border-t border-gray-100 bg-gray-50/50">
+                <a href="#cta" onClick={() => setMobileMenuOpen(false)} className="w-full bg-primary hover:bg-secondary text-white px-6 py-4 rounded-xl font-semibold transition-all flex justify-center items-center shadow-lg hover:shadow-primary/30 transform hover:-translate-y-1">
                   Get Started
                 </a>
               </div>
-            </div>
-          </motion.div>
+            </motion.div>
+          </>
         )}
       </AnimatePresence>
     </nav>
