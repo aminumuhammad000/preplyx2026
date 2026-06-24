@@ -2,26 +2,45 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { getCompletedSessions, CompletedSession } from '@/lib/storage';
+import { useAuth } from '@/context/AuthContext';
+
+export interface CompletedSession {
+  id: string;
+  exam: string;
+  subject: string;
+  score: number;
+  total: number;
+  pct: number;
+  date: number;
+  timeSpentSeconds?: number;
+}
 
 export default function RecentSessionsList() {
   const router = useRouter();
-  const [sessions, setSessions] = useState<CompletedSession[]>([]);
+  const [sessions, setSessions] = useState<CompletedSession[] | null>(null);
   const [mounted, setMounted] = useState(false);
+  const { token } = useAuth();
 
   useEffect(() => {
     setMounted(true);
-    setSessions(getCompletedSessions());
-  }, []);
+    if (token) {
+      fetch('http://localhost:5000/api/data/sessions', {
+        headers: { Authorization: `Bearer ${token}` }
+      })
+      .then(res => res.json())
+      .then(data => setSessions(data))
+      .catch(err => console.error(err));
+    }
+  }, [token]);
 
-  if (!mounted) {
+  if (!mounted || !sessions) {
     return <div style={{ padding: '20px', textAlign: 'center', color: 'var(--color-text-muted)' }}>Loading sessions...</div>;
   }
 
   if (sessions.length === 0) {
     return (
       <div style={{ padding: '30px', textAlign: 'center', color: 'var(--color-text-muted)', backgroundColor: '#fff', borderRadius: '12px', border: '1px solid var(--glass-border)' }}>
-        No recent sessions found. Start a practice exam to see your history!
+        No recent sessions found on server. Start a practice exam to see your history!
       </div>
     );
   }
@@ -45,70 +64,66 @@ export default function RecentSessionsList() {
   };
 
   return (
-    <div style={{ borderRadius: '12px', backgroundColor: '#fff', boxShadow: 'var(--shadow-soft)', border: '1px solid var(--glass-border)', overflowX: 'auto' }}>
-      <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
-        <thead style={{ backgroundColor: 'var(--color-bg-main)', borderBottom: '1px solid var(--glass-border)' }}>
-          <tr>
-            <th style={{ padding: '16px 20px', fontSize: '11px', fontWeight: 700, color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: '1px' }}>Exam Session</th>
-            <th style={{ padding: '16px 20px', fontSize: '11px', fontWeight: 700, color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: '1px' }}>Date</th>
-            <th style={{ padding: '16px 20px', fontSize: '11px', fontWeight: 700, color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: '1px' }}>Time Spent</th>
-            <th style={{ padding: '16px 20px', fontSize: '11px', fontWeight: 700, color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: '1px' }}>Correct</th>
-            <th style={{ padding: '16px 20px', fontSize: '11px', fontWeight: 700, color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: '1px' }}>Wrong</th>
-            <th style={{ padding: '16px 20px', fontSize: '11px', fontWeight: 700, color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: '1px', textAlign: 'right' }}>Score</th>
-          </tr>
-        </thead>
-        <tbody>
-          {sessions.slice(0, 10).map((row, i) => {
-            const grade = getGradeColor(row.pct);
-            const wrongCount = row.total - row.score;
-            
-            return (
-              <tr 
-                key={row.id} 
-                onClick={() => router.push(`/dashboard/result?id=${row.id}`)}
-                className="recent-session-link"
-                style={{
-                  borderBottom: i < Math.min(sessions.length, 10) - 1 ? '1px solid var(--glass-border)' : 'none',
-                  cursor: 'pointer',
-                  transition: 'background-color 0.2s'
-                }}
-              >
-                <td style={{ padding: '16px 20px' }}>
-                  <div style={{ fontSize: '13px', fontWeight: 700, color: 'var(--color-text-main)', textTransform: 'capitalize' }}>
-                    {row.exam} {row.subject}
-                  </div>
-                </td>
-                <td style={{ padding: '16px 20px', fontSize: '13px', color: 'var(--color-text-muted)' }}>
-                  {formatDate(row.date)}
-                </td>
-                <td style={{ padding: '16px 20px', fontSize: '13px', color: 'var(--color-text-muted)', fontWeight: 500 }}>
-                  {formatTimeSpent(row.timeSpentSeconds)}
-                </td>
-                <td style={{ padding: '16px 20px' }}>
-                  <span style={{ fontSize: '13px', fontWeight: 700, color: '#16a34a' }}>{row.score}</span>
-                  <span style={{ fontSize: '11px', color: 'var(--color-text-muted)', marginLeft: '2px' }}>/{row.total}</span>
-                </td>
-                <td style={{ padding: '16px 20px' }}>
-                  <span style={{ fontSize: '13px', fontWeight: 700, color: '#dc2626' }}>{wrongCount}</span>
-                </td>
-                <td style={{ padding: '16px 20px', textAlign: 'right' }}>
-                  <span style={{ 
-                    display: 'inline-block',
-                    padding: '4px 10px', 
-                    borderRadius: '20px', 
-                    backgroundColor: grade.bg, 
-                    color: grade.text,
-                    fontSize: '12px', 
-                    fontWeight: 800 
-                  }}>
-                    {row.pct}%
-                  </span>
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+      {sessions.slice(0, 10).map((row, index) => {
+        const grade = getGradeColor(row.pct);
+        const wrongCount = row.total - row.score;
+        
+        return (
+          <div 
+            key={row.id || index}
+            onClick={() => router.push(`/dashboard/result?id=${row.id}`)}
+            className="recent-session-card"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              padding: '20px 24px',
+              borderRadius: '16px',
+              backgroundColor: '#fff',
+              boxShadow: '0 4px 12px rgba(0,0,0,0.03)',
+              border: '1px solid var(--glass-border)',
+              cursor: 'pointer',
+              transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+              flexWrap: 'wrap',
+              gap: '16px'
+            }}
+          >
+            <div style={{ flex: '1 1 200px' }}>
+              <div style={{ fontSize: '16px', fontWeight: 800, color: 'var(--color-text-main)', textTransform: 'capitalize', marginBottom: '6px', letterSpacing: '-0.3px' }}>
+                {row.exam} {row.subject}
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '13px', color: 'var(--color-text-muted)', fontWeight: 500 }}>
+                <span>{formatDate(row.date)}</span>
+                <span style={{ width: '4px', height: '4px', borderRadius: '50%', backgroundColor: 'var(--glass-border)' }} />
+                <span>{formatTimeSpent(row.timeSpentSeconds)}</span>
+              </div>
+            </div>
+
+            <div style={{ display: 'flex', alignItems: 'center', gap: '24px', flexWrap: 'wrap' }}>
+              <div style={{ display: 'flex', gap: '20px' }}>
+                <div>
+                  <div style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.8px', color: 'var(--color-text-muted)', marginBottom: '4px', fontWeight: 700 }}>Correct</div>
+                  <div style={{ fontSize: '15px', fontWeight: 800, color: '#16a34a' }}>{row.score} <span style={{ fontSize: '12px', color: '#86efac', fontWeight: 600 }}>/{row.total}</span></div>
+                </div>
+                <div>
+                  <div style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.8px', color: 'var(--color-text-muted)', marginBottom: '4px', fontWeight: 700 }}>Wrong</div>
+                  <div style={{ fontSize: '15px', fontWeight: 800, color: '#dc2626' }}>{wrongCount}</div>
+                </div>
+              </div>
+              
+              <div style={{ 
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                minWidth: '68px', padding: '10px 14px', borderRadius: '12px', 
+                backgroundColor: grade.bg, color: grade.text,
+                fontSize: '16px', fontWeight: 900 
+              }}>
+                {row.pct}%
+              </div>
+            </div>
+          </div>
+        );
+      })}
     </div>
   );
 }

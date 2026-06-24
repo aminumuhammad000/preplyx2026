@@ -1,9 +1,12 @@
 export interface ActiveSession {
   exam: string;
   subject: string;
+  subjects?: string[]; // For multi-subject exams
+  currentSubjectIndex?: number; // For multi-subject exams
+  currentSubject?: string; // For multi-subject exams
   currentQIndex: number;
   answers: Record<number, string>;
-  flagged: number[]; // Array instead of Set for JSON serialization
+  flagged: string[]; // Array instead of Set for JSON serialization
   timeLeft: number;
   lastAccessed: number; // timestamp
   totalQ: number;
@@ -19,11 +22,12 @@ export interface CompletedSession {
   date: number; // timestamp
   timeSpentSeconds?: number;
   details?: {
-    questionId: number;
+    questionId: string;
     questionText: string;
     userAnswer: string;
     correctAnswer: string;
     isCorrect: boolean;
+    explanation?: string;
   }[];
 }
 
@@ -97,7 +101,7 @@ export function getCompletedSessions(): CompletedSession[] {
 export function getOverallStats(): OverallStats {
   const sessions = getCompletedSessions();
   if (sessions.length === 0) {
-    return { questionsAnswered: 0, averageAccuracy: 0, studyTimeSeconds: 0 };
+    return { questionsAnswered: 0, averageAccuracy: 0, studyTimeSeconds: 0, currentStreak: 0, monthlyStreak: 0 };
   }
 
   let totalQuestions = 0;

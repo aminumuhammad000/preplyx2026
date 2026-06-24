@@ -12,8 +12,8 @@
   --gradient-primary: linear-gradient(135deg, var(--color-primary), var(--color-primary-light));
   
   /* Shadows */
-  --shadow-soft: 0 4px 20px rgba(75, 15, 163, 0.08);
-  --shadow-hover: 0 10px 30px rgba(75, 15, 163, 0.15);
+  --shadow-soft: 0 2px 8px rgba(75, 15, 163, 0.04);
+  --shadow-hover: 0 4px 16px rgba(75, 15, 163, 0.08);
   
   /* Radius */
   --radius-sm: 8px;
@@ -25,6 +25,25 @@
   --glass-bg: rgba(255, 255, 255, 0.7);
   --glass-border: rgba(255, 255, 255, 0.5);
   --glass-blur: blur(12px);
+}
+
+/* Dark Mode Variables */
+.dark {
+  --color-primary: #6B21F7;
+  --color-primary-light: #8B5CF6;
+  --color-accent: #FBBF24;
+  --color-bg-main: #0F0F1A;
+  --color-bg-card: #1A1A2E;
+  --color-text-main: #F8F8FC;
+  --color-text-muted: #9CA3AF;
+  
+  --gradient-primary: linear-gradient(135deg, var(--color-primary), var(--color-primary-light));
+  
+  --shadow-soft: 0 2px 8px rgba(107, 33, 247, 0.08);
+  --shadow-hover: 0 4px 16px rgba(107, 33, 247, 0.12);
+  
+  --glass-bg: rgba(26, 26, 46, 0.7);
+  --glass-border: rgba(139, 92, 246, 0.3);
 }
 
 * {
@@ -267,4 +286,46 @@ button {
 
 .practice-stat-item:last-child {
   border-right: none !important;
+}
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+  /* Improve touch targets */
+  button, a {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Smooth scrolling on mobile */
+  * {
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Prevent text selection on touch */
+  .no-select {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+
+  /* Better tap highlighting */
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Safe area insets for notched devices */
+  body {
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+  }
+}
+
+/* Sidebar button hover effects */
+.sidebar-btn:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+.logout-btn:hover {
+  background-color: rgba(248, 113, 113, 0.1) !important;
 }

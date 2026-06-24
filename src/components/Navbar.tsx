@@ -19,6 +19,7 @@ const Navbar = () => {
     { name: 'Subjects', href: '#subjects' },
     { name: 'Testimonials', href: '#testimonials' },
     { name: 'FAQ', href: '#faq' },
+    { name: 'Virtual Account', href: '/wallet/virtual-account' },
   ];
 
   return (

@@ -2,27 +2,65 @@
 import { useState, useEffect, Suspense } from 'react';
 import { useRouter } from 'next/navigation';
 import { use } from 'react';
-import { Timer, ArrowLeft, ArrowRight, Flag, CheckCheck, BookOpen, AlertCircle } from 'lucide-react';
-import { saveActiveSession, getActiveSession, clearActiveSession, saveCompletedSession } from '@/lib/storage';
-
-const MOCK_QUESTIONS = [
-  { id: 1, question: "Which of the following is NOT a factor that affects the rate of a chemical reaction?", option_a: "Temperature", option_b: "Concentration of reactants", option_c: "Color of reactants", option_d: "Surface area of reactants", correct_answer: "C", explanation: "The color of reactants does not affect the rate of a chemical reaction. The main factors that affect reaction rate are temperature, concentration, surface area, and catalysts." },
-  { id: 2, question: "If 2x + 5 = 15, what is the value of x?", option_a: "5", option_b: "10", option_c: "15", option_d: "20", correct_answer: "A", explanation: "2x + 5 = 15 → 2x = 10 → x = 5. Subtract 5 from both sides then divide by 2." },
-  { id: 3, question: "The capital of Nigeria is ________.", option_a: "Lagos", option_b: "Kano", option_c: "Abuja", option_d: "Port Harcourt", correct_answer: "C", explanation: "Abuja became the capital of Nigeria in 1991, replacing Lagos. It is located in the Federal Capital Territory (FCT)." },
-  { id: 4, question: "Photosynthesis takes place in which part of a plant cell?", option_a: "Mitochondria", option_b: "Nucleus", option_c: "Ribosome", option_d: "Chloroplast", correct_answer: "D", explanation: "Photosynthesis occurs in the chloroplasts, which contain chlorophyll — the green pigment that captures sunlight to convert CO₂ and water into glucose and oxygen." },
-  { id: 5, question: "Which gas is most abundant in the Earth's atmosphere?", option_a: "Oxygen", option_b: "Nitrogen", option_c: "Carbon Dioxide", option_d: "Argon", correct_answer: "B", explanation: "Nitrogen makes up approximately 78% of Earth's atmosphere, followed by Oxygen (21%), Argon (0.93%), and Carbon Dioxide (~0.04%)." },
-];
+import { Timer, ArrowLeft, ArrowRight, Flag, CheckCheck, BookOpen, AlertCircle, Calculator } from 'lucide-react';
+import { saveActiveSession, getActiveSession, clearActiveSession } from '@/lib/storage';
+import { api } from '@/lib/api';
+import { useAuth } from '@/context/AuthContext';
+import ScientificCalculator from '@/components/ScientificCalculator';
 
 function CBTContent({ params }: { params: Promise<{ exam: string, subject: string }> }) {
   const router = useRouter();
   const { exam, subject } = use(params);
+  const { token } = useAuth();
+  
+  const [questions, setQuestions] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [currentQIndex, setCurrentQIndex] = useState(0);
-  const [answers, setAnswers] = useState<Record<number, string>>({});
-  const [flagged, setFlagged] = useState<Set<number>>(new Set());
+  const [answers, setAnswers] = useState<Record<string, string>>({});
+  const [flagged, setFlagged] = useState<Set<string>>(new Set());
   const [timeLeft, setTimeLeft] = useState(3600);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [sessionLoaded, setSessionLoaded] = useState(false);
   const [showSubmitConfirm, setShowSubmitConfirm] = useState(false);
+  const [showCalculator, setShowCalculator] = useState(false);
+
+  useEffect(() => {
+    const fetchQuestions = async () => {
+      if (!token) {
+        setError('Authentication required');
+        setLoading(false);
+        return;
+      }
+
+      try {
+        setLoading(true);
+        const fetchedQuestions = await api.getQuestions({ exam, subject, limit: 100 });
+        
+        // Transform questions to match the expected format
+        const transformedQuestions = (fetchedQuestions || []).map((q: any) => ({
+          id: q._id,
+          question: q.text,
+          options: {
+            A: q.options[0],
+            B: q.options[1],
+            C: q.options[2],
+            D: q.options[3]
+          },
+          correct_answer: q.correctAnswer,
+          explanation: q.explanation
+        }));
+        
+        setQuestions(transformedQuestions);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Failed to fetch questions');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchQuestions();
+  }, [exam, subject, token]);
 
   useEffect(() => {
     const session = getActiveSession();
@@ -37,8 +75,8 @@ function CBTContent({ params }: { params: Promise<{ exam: string, subject: strin
 
   useEffect(() => {
     if (!sessionLoaded || isSubmitted) return;
-    saveActiveSession({ exam, subject, currentQIndex, answers, flagged: Array.from(flagged), timeLeft, lastAccessed: Date.now(), totalQ: MOCK_QUESTIONS.length });
-  }, [currentQIndex, answers, flagged, timeLeft, exam, subject, sessionLoaded, isSubmitted]);
+    saveActiveSession({ exam, subject, currentQIndex, answers, flagged: Array.from(flagged), timeLeft, lastAccessed: Date.now(), totalQ: questions.length });
+  }, [currentQIndex, answers, flagged, timeLeft, exam, subject, sessionLoaded, isSubmitted, questions.length]);
 
   useEffect(() => {
     if (timeLeft <= 0) { handleSubmit(); return; }
@@ -48,21 +86,91 @@ function CBTContent({ params }: { params: Promise<{ exam: string, subject: strin
 
   const formatTime = (s: number) => `${Math.floor(s / 3600).toString().padStart(2, '0')}:${Math.floor((s % 3600) / 60).toString().padStart(2, '0')}:${(s % 60).toString().padStart(2, '0')}`;
 
-  const q = MOCK_QUESTIONS[currentQIndex];
-  const opts: [string, string][] = [['A', q.option_a], ['B', q.option_b], ['C', q.option_c], ['D', q.option_d]];
-  const answered = Object.keys(answers).length;
-  const isTimeLow = timeLeft < 300; // under 5 mins
+  if (loading) return (
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', flexDirection: 'column', gap: '16px' }}>
+      <div style={{ width: '40px', height: '40px', borderRadius: '8px', background: 'var(--gradient-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <BookOpen size={20} color="#fff" />
+      </div>
+      <div style={{ textAlign: 'center' }}>
+        <div style={{ fontSize: '16px', fontWeight: 700, color: 'var(--color-text-main)', marginBottom: '4px' }}>Loading Exam...</div>
+        <div style={{ fontSize: '13px', color: 'var(--color-text-muted)' }}>Fetching questions from server</div>
+      </div>
+    </div>
+  );
 
-  const handleSubmit = () => {
+  if (error) return (
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', flexDirection: 'column', gap: '16px' }}>
+      <div style={{ width: '40px', height: '40px', borderRadius: '8px', background: '#fee2e2', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <AlertCircle size={20} color="#dc2626" />
+      </div>
+      <div style={{ textAlign: 'center' }}>
+        <div style={{ fontSize: '16px', fontWeight: 700, color: 'var(--color-text-main)', marginBottom: '4px' }}>Error Loading Exam</div>
+        <div style={{ fontSize: '13px', color: 'var(--color-text-muted)' }}>{error}</div>
+      </div>
+    </div>
+  );
+
+  if (questions.length === 0) return (
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', flexDirection: 'column', gap: '16px' }}>
+      <div style={{ width: '40px', height: '40px', borderRadius: '8px', background: '#fef3c7', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <AlertCircle size={20} color="#D97706" />
+      </div>
+      <div style={{ textAlign: 'center' }}>
+        <div style={{ fontSize: '16px', fontWeight: 700, color: 'var(--color-text-main)', marginBottom: '4px' }}>No Questions Available</div>
+        <div style={{ fontSize: '13px', color: 'var(--color-text-muted)' }}>There are no questions for this exam and subject combination.</div>
+      </div>
+    </div>
+  );
+
+  const q = questions[currentQIndex];
+  const opts: [string, string][] = q ? [['A', q.options.A], ['B', q.options.B], ['C', q.options.C], ['D', q.options.D]] : [['A', ''], ['B', ''], ['C', ''], ['D', '']];
+  const answered = Object.keys(answers).length;
+  const isTimeLow = timeLeft < 300;
+
+  const handleSubmit = async () => {
     setIsSubmitted(true);
-    const correct = MOCK_QUESTIONS.filter(q => answers[q.id] === q.correct_answer).length;
-    const total = MOCK_QUESTIONS.length;
-    const pct = Math.round((correct / total) * 100);
-    const details = MOCK_QUESTIONS.map(q => ({ questionId: q.id, questionText: q.question, userAnswer: answers[q.id] || "Skipped", correctAnswer: q.correct_answer, isCorrect: answers[q.id] === q.correct_answer }));
-    const sessionId = `${exam}-${subject}-${Date.now()}`;
-    saveCompletedSession({ id: sessionId, exam, subject, score: correct, total, pct, date: Date.now(), timeSpentSeconds: 3600 - timeLeft, details });
-    clearActiveSession();
-    setTimeout(() => router.push(`/dashboard/result?id=${sessionId}`), 800);
+    const correct = (questions || []).filter(q => answers[q.id] === q.correct_answer).length;
+    const total = (questions || []).length;
+    const pct = total > 0 ? Math.round((correct / total) * 100) : 0;
+    const details = (questions || []).map(q => ({
+      questionId: q.id,
+      questionText: q.question,
+      userAnswer: answers[q.id] || "Skipped",
+      correctAnswer: q.correct_answer,
+      isCorrect: answers[q.id] === q.correct_answer,
+      explanation: q.explanation || '',
+    }));
+
+    try {
+      if (!token) {
+        throw new Error('Authentication required');
+      }
+
+      const sessionData = {
+        exam,
+        subject,
+        score: correct,
+        total,
+        percentage: pct,
+        timeSpentSeconds: 3600 - timeLeft,
+        details,
+      };
+
+      const savedSession = await api.saveSession(token, sessionData);
+      const sessionId = savedSession._id || savedSession.id;
+      
+      clearActiveSession();
+      setTimeout(() => router.push(`/dashboard/result?id=${sessionId}`), 800);
+    } catch (error) {
+      console.error('Error saving session:', error);
+      // Fallback to local storage if API fails
+      const sessionId = `${exam}-${subject}-${Date.now()}`;
+      localStorage.setItem(`completed_${sessionId}`, JSON.stringify({
+        id: sessionId, exam, subject, score: correct, total, pct, date: Date.now(), timeSpentSeconds: 3600 - timeLeft, details
+      }));
+      clearActiveSession();
+      setTimeout(() => router.push(`/dashboard/result?id=${sessionId}`), 800);
+    }
   };
 
   const toggleFlag = () => {
@@ -100,11 +208,11 @@ function CBTContent({ params }: { params: Promise<{ exam: string, subject: strin
             <div style={{ backgroundColor: 'var(--color-bg-main)', borderRadius: '10px', padding: '14px 16px', marginBottom: '24px' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
                 <span style={{ fontSize: '13px', color: 'var(--color-text-muted)' }}>Answered</span>
-                <span style={{ fontSize: '13px', fontWeight: 700, color: '#16a34a' }}>{answered} / {MOCK_QUESTIONS.length}</span>
+                <span style={{ fontSize: '13px', fontWeight: 700, color: '#16a34a' }}>{answered} / {questions.length}</span>
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <span style={{ fontSize: '13px', color: 'var(--color-text-muted)' }}>Unanswered</span>
-                <span style={{ fontSize: '13px', fontWeight: 700, color: '#dc2626' }}>{MOCK_QUESTIONS.length - answered}</span>
+                <span style={{ fontSize: '13px', fontWeight: 700, color: '#dc2626' }}>{questions.length - answered}</span>
               </div>
             </div>
             <div style={{ display: 'flex', gap: '12px' }}>
@@ -118,6 +226,9 @@ function CBTContent({ params }: { params: Promise<{ exam: string, subject: strin
           </div>
         </div>
       )}
+
+      {/* Scientific Calculator */}
+      {showCalculator && <ScientificCalculator onClose={() => setShowCalculator(false)} />}
 
       {/* Top Bar */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 28px', backgroundColor: '#0f172a', color: '#fff', flexShrink: 0, borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
@@ -148,10 +259,13 @@ function CBTContent({ params }: { params: Promise<{ exam: string, subject: strin
               <div style={{ color: '#64748b', fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Flagged</div>
             </div>
             <div style={{ textAlign: 'center' }}>
-              <div style={{ fontSize: '16px', fontWeight: 800, color: '#94a3b8' }}>{MOCK_QUESTIONS.length - answered}</div>
+              <div style={{ fontSize: '16px', fontWeight: 800, color: '#94a3b8' }}>{questions.length - answered}</div>
               <div style={{ color: '#64748b', fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Left</div>
             </div>
           </div>
+          <button onClick={() => setShowCalculator(!showCalculator)} style={{ display: 'flex', alignItems: 'center', gap: '7px', padding: '9px 20px', borderRadius: '9px', background: showCalculator ? '#7B2FF7' : '#1e293b', color: '#fff', fontWeight: 700, fontSize: '13px', border: '1px solid rgba(255,255,255,0.1)', cursor: 'pointer', transition: 'all 0.15s' }}>
+            <Calculator size={15} /> Calculator
+          </button>
           <button onClick={() => setShowSubmitConfirm(true)} style={{ display: 'flex', alignItems: 'center', gap: '7px', padding: '9px 20px', borderRadius: '9px', background: 'var(--gradient-primary)', color: '#fff', fontWeight: 700, fontSize: '13px', border: 'none', cursor: 'pointer', boxShadow: '0 2px 12px rgba(123,47,247,0.4)' }}>
             <CheckCheck size={15} /> Submit Exam
           </button>
@@ -163,9 +277,9 @@ function CBTContent({ params }: { params: Promise<{ exam: string, subject: strin
 
           {/* Question Header */}
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-            <div style={{ display: 'flex', align: 'center', gap: '10px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
               <span style={{ fontSize: '11px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1.2px', color: 'var(--color-text-muted)', backgroundColor: '#f1f5f9', padding: '4px 12px', borderRadius: '20px' }}>
-                Question {currentQIndex + 1} <span style={{ opacity: 0.6 }}>of {MOCK_QUESTIONS.length}</span>
+                Question {currentQIndex + 1} <span style={{ opacity: 0.6 }}>of {questions.length}</span>
               </span>
             </div>
             <button onClick={toggleFlag} style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', fontWeight: 600, color: flagged.has(q.id) ? '#D97706' : 'var(--color-text-muted)', background: flagged.has(q.id) ? '#FEF3C7' : '#f1f5f9', border: 'none', borderRadius: '20px', padding: '5px 14px', cursor: 'pointer', transition: 'all 0.2s' }}>
@@ -176,7 +290,7 @@ function CBTContent({ params }: { params: Promise<{ exam: string, subject: strin
 
           {/* Progress Bar */}
           <div style={{ height: '4px', backgroundColor: '#e2e8f0', borderRadius: '4px', marginBottom: '28px', overflow: 'hidden' }}>
-            <div style={{ height: '100%', width: `${((currentQIndex + 1) / MOCK_QUESTIONS.length) * 100}%`, background: 'var(--gradient-primary)', borderRadius: '4px', transition: 'width 0.4s ease' }} />
+            <div style={{ height: '100%', width: `${((currentQIndex + 1) / questions.length) * 100}%`, background: 'var(--gradient-primary)', borderRadius: '4px', transition: 'width 0.4s ease' }} />
           </div>
 
           {/* Question Text */}
@@ -188,7 +302,7 @@ function CBTContent({ params }: { params: Promise<{ exam: string, subject: strin
 
           {/* Options */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '32px' }}>
-            {opts.map(([letter, text]) => {
+            {(opts || []).map(([letter, text]) => {
               const isSelected = answers[q.id] === letter;
               return (
                 <button key={letter} onClick={() => setAnswers({ ...answers, [q.id]: letter })} style={{
@@ -219,13 +333,13 @@ function CBTContent({ params }: { params: Promise<{ exam: string, subject: strin
             <button onClick={() => setCurrentQIndex(i => Math.max(0, i - 1))} disabled={currentQIndex === 0} style={{ display: 'flex', alignItems: 'center', gap: '7px', padding: '10px 22px', borderRadius: '9px', border: '1px solid #e2e8f0', backgroundColor: '#fff', fontSize: '13px', fontWeight: 600, color: 'var(--color-text-muted)', cursor: currentQIndex === 0 ? 'not-allowed' : 'pointer', opacity: currentQIndex === 0 ? 0.4 : 1, transition: 'all 0.15s' }}>
               <ArrowLeft size={15} /> Previous
             </button>
-            <span style={{ fontSize: '12px', color: 'var(--color-text-muted)', fontWeight: 500 }}>{currentQIndex + 1} / {MOCK_QUESTIONS.length}</span>
-            {currentQIndex === MOCK_QUESTIONS.length - 1 ? (
+            <span style={{ fontSize: '12px', color: 'var(--color-text-muted)', fontWeight: 500 }}>{currentQIndex + 1} / {questions.length}</span>
+            {currentQIndex === questions.length - 1 ? (
               <button onClick={() => setShowSubmitConfirm(true)} style={{ display: 'flex', alignItems: 'center', gap: '7px', padding: '10px 22px', borderRadius: '9px', border: 'none', background: 'var(--gradient-primary)', fontSize: '13px', fontWeight: 700, color: '#fff', cursor: 'pointer', boxShadow: '0 2px 12px rgba(123,47,247,0.4)', transition: 'all 0.15s' }}>
                 <CheckCheck size={15} /> Submit
               </button>
             ) : (
-              <button onClick={() => setCurrentQIndex(i => Math.min(MOCK_QUESTIONS.length - 1, i + 1))} style={{ display: 'flex', alignItems: 'center', gap: '7px', padding: '10px 22px', borderRadius: '9px', border: 'none', background: 'var(--gradient-primary)', fontSize: '13px', fontWeight: 700, color: '#fff', cursor: 'pointer', transition: 'all 0.15s' }}>
+              <button onClick={() => setCurrentQIndex(i => Math.min(questions.length - 1, i + 1))} style={{ display: 'flex', alignItems: 'center', gap: '7px', padding: '10px 22px', borderRadius: '9px', border: 'none', background: 'var(--gradient-primary)', fontSize: '13px', fontWeight: 700, color: '#fff', cursor: 'pointer', transition: 'all 0.15s' }}>
                 Next <ArrowRight size={15} />
               </button>
             )}
@@ -248,8 +362,9 @@ function CBTContent({ params }: { params: Promise<{ exam: string, subject: strin
                 ))}
               </div>
             </div>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '7px' }}>
-              {MOCK_QUESTIONS.map((mq, idx) => {
+            {/* Added max height and scroll to support 100 questions cleanly */}
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '7px', maxHeight: '180px', overflowY: 'auto', paddingRight: '8px' }}>
+              {(questions || []).map((mq, idx) => {
                 const isAnswered = answers[mq.id] !== undefined;
                 const isCurrent = idx === currentQIndex;
                 const isFlagged = flagged.has(mq.id);

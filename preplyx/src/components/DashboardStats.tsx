@@ -1,17 +1,33 @@
 "use client";
 
 import { useEffect, useState } from 'react';
-import { getOverallStats, OverallStats } from '@/lib/storage';
 import { Target, CheckCircle2, Clock } from 'lucide-react';
+import { useAuth } from '@/context/AuthContext';
+
+export interface OverallStats {
+  questionsAnswered: number;
+  averageAccuracy: number;
+  studyTimeSeconds: number;
+  currentStreak: number;
+  monthlyStreak: number;
+}
 
 export default function DashboardStats() {
   const [stats, setStats] = useState<OverallStats | null>(null);
   const [mounted, setMounted] = useState(false);
+  const { token } = useAuth();
 
   useEffect(() => {
     setMounted(true);
-    setStats(getOverallStats());
-  }, []);
+    if (token) {
+      fetch('http://localhost:5000/api/data/stats', {
+        headers: { Authorization: `Bearer ${token}` }
+      })
+      .then(res => res.json())
+      .then(data => setStats(data))
+      .catch(err => console.error(err));
+    }
+  }, [token]);
 
   if (!mounted || !stats) {
     return <div style={{ display: 'flex', gap: '16px', marginBottom: '28px', opacity: 0.5 }}>Loading stats...</div>;
@@ -31,10 +47,10 @@ export default function DashboardStats() {
   ];
 
   return (
-    <div style={{ display: 'flex', gap: '16px', marginBottom: '28px' }}>
+    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px', marginBottom: '28px' }}>
       {statItems.map(stat => (
         <div key={stat.label} style={{
-          flex: 1, borderRadius: '10px', padding: '16px 18px',
+          flex: '1 1 200px', borderRadius: '10px', padding: '16px 18px',
           backgroundColor: '#fff', boxShadow: 'var(--shadow-soft)', border: '1px solid var(--glass-border)'
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>

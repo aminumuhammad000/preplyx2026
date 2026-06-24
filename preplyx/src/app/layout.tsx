@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { AuthProvider } from "@/context/AuthContext";
+import BackendStatus from "@/components/BackendStatus";
 
 export const metadata: Metadata = {
   title: "Preplyx | JAMB, WAEC & NECO CBT Platform",
@@ -17,6 +18,7 @@ export default function RootLayout({
       <body className="desktop-background">
         <div className="app-window">
           <AuthProvider>
+            <BackendStatus />
             <main className="flex flex-col flex-1" style={{ overflowY: 'auto', position: 'relative' }}>
               {children}
             </main>

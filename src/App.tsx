@@ -1,28 +1,30 @@
-import Navbar from './components/Navbar';
-import Hero from './components/Hero';
-import About from './components/About';
-import Features from './components/Features';
-import Subjects from './components/Subjects';
-import Statistics from './components/Statistics';
-import Testimonials from './components/Testimonials';
-import CTA from './components/CTA';
-import FAQ from './components/FAQ';
-import Footer from './components/Footer';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { AuthProvider } from './context/AuthContext';
+import ProtectedRoute from './components/ProtectedRoute';
+import Landing from './pages/Landing';
+import Login from './pages/Login';
+import Register from './pages/Register';
+import Dashboard from './pages/Dashboard';
+import VirtualAccount from './pages/VirtualAccount';
 
 function App() {
   return (
-    <div className="font-sans text-text-dark bg-background min-h-screen">
-      <Navbar />
-      <Hero />
-      <About />
-      <Features />
-      <Subjects />
-      <Statistics />
-      <Testimonials />
-      <CTA />
-      <FAQ />
-      <Footer />
-    </div>
+    <AuthProvider>
+      <BrowserRouter>
+        <Routes>
+          {/* Public Routes */}
+          <Route path="/" element={<Landing />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+
+          {/* Protected Routes */}
+          <Route element={<ProtectedRoute />}>
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/wallet/virtual-account" element={<VirtualAccount />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </AuthProvider>
   );
 }
 

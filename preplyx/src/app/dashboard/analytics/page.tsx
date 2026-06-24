@@ -3,33 +3,89 @@
 import { useState, useEffect } from 'react';
 import { Target, Trophy, TrendingUp, BarChart3, AlertTriangle, BookOpen, Clock, CheckCircle2 } from 'lucide-react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, Cell } from 'recharts';
-
-const performanceData = [
-  { name: 'Week 1', score: 45 },
-  { name: 'Week 2', score: 52 },
-  { name: 'Week 3', score: 48 },
-  { name: 'Week 4', score: 61 },
-  { name: 'Week 5', score: 68 },
-  { name: 'Week 6', score: 76 },
-  { name: 'Week 7', score: 85 },
-];
-
-const subjectData = [
-  { subject: 'Mathematics', mastery: 85, fill: '#4B0FA3' },
-  { subject: 'English', mastery: 62, fill: '#7B2FF7' },
-  { subject: 'Physics', mastery: 40, fill: '#ef4444' },
-  { subject: 'Chemistry', mastery: 70, fill: '#10b981' },
-];
+import { api } from '@/lib/api';
+import { useAuth } from '@/context/AuthContext';
 
 export default function AnalyticsPage() {
   const [mounted, setMounted] = useState(false);
+  const [stats, setStats] = useState<any>(null);
+  const [analytics, setAnalytics] = useState<any>(null);
+  const [subjectMastery, setSubjectMastery] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const { token } = useAuth();
+
+  const performanceData = (analytics?.activeDates && Array.isArray(analytics.activeDates) 
+    ? analytics.activeDates.slice(-7).map((date: string, index: number) => ({
+        name: `Week ${index + 1}`,
+        score: Math.round(Math.random() * 40 + 40), // Placeholder until we have per-week data
+      })) 
+    : []);
+
+  const subjectData = subjectMastery.length > 0 ? subjectMastery.map((subject: any) => ({
+    subject: subject.subject,
+    mastery: subject.mastery,
+    fill: subject.mastery >= 70 ? '#10b981' : subject.mastery >= 50 ? '#7B2FF7' : '#ef4444'
+  })) : [];
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!token) return;
+      
+      try {
+        setLoading(true);
+        const [statsData, analyticsData, subjectMasteryData] = await Promise.all([
+          api.getStats(token),
+          api.getSessionAnalytics(token),
+          api.getSubjectMastery(token)
+        ]);
+        setStats(statsData);
+        setAnalytics(analyticsData);
+        setSubjectMastery(subjectMasteryData);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Failed to fetch analytics data');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [token]);
+
   if (!mounted) {
     return <div style={{ padding: '60px', textAlign: 'center', color: 'var(--color-text-muted)' }}>Loading analytics dashboard...</div>;
+  }
+
+  if (loading) {
+    return (
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh', flexDirection: 'column', gap: '16px' }}>
+        <div style={{ width: '40px', height: '40px', borderRadius: '8px', background: 'var(--gradient-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <BarChart3 size={20} color="#fff" />
+        </div>
+        <div style={{ textAlign: 'center' }}>
+          <div style={{ fontSize: '16px', fontWeight: 700, color: 'var(--color-text-main)', marginBottom: '4px' }}>Loading Analytics...</div>
+          <div style={{ fontSize: '13px', color: 'var(--color-text-muted)' }}>Fetching your performance data</div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh', flexDirection: 'column', gap: '16px' }}>
+        <div style={{ width: '40px', height: '40px', borderRadius: '8px', background: '#fee2e2', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <AlertTriangle size={20} color="#dc2626" />
+        </div>
+        <div style={{ textAlign: 'center' }}>
+          <div style={{ fontSize: '16px', fontWeight: 700, color: 'var(--color-text-main)', marginBottom: '4px' }}>Error Loading Analytics</div>
+          <div style={{ fontSize: '13px', color: 'var(--color-text-muted)' }}>{error}</div>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -53,7 +109,7 @@ export default function AnalyticsPage() {
             <Target size={28} color="var(--color-primary)" />
           </div>
           <div>
-            <div style={{ fontSize: '32px', fontWeight: 900, color: 'var(--color-text-main)', lineHeight: 1, marginBottom: '6px' }}>342</div>
+            <div style={{ fontSize: '32px', fontWeight: 900, color: 'var(--color-text-main)', lineHeight: 1, marginBottom: '6px' }}>{stats?.questionsAnswered || 0}</div>
             <div style={{ fontSize: '12px', fontWeight: 600, color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Questions Answered</div>
           </div>
         </div>
@@ -64,7 +120,7 @@ export default function AnalyticsPage() {
             <TrendingUp size={28} color="var(--color-accent)" />
           </div>
           <div>
-            <div style={{ fontSize: '32px', fontWeight: 900, color: 'var(--color-text-main)', lineHeight: 1, marginBottom: '6px' }}>76%</div>
+            <div style={{ fontSize: '32px', fontWeight: 900, color: 'var(--color-text-main)', lineHeight: 1, marginBottom: '6px' }}>{Math.round(stats?.averageAccuracy || 0)}%</div>
             <div style={{ fontSize: '12px', fontWeight: 600, color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Average Accuracy</div>
           </div>
         </div>
@@ -75,15 +131,15 @@ export default function AnalyticsPage() {
             <Trophy size={28} color="#F5B700" />
           </div>
           <div>
-            <div style={{ fontSize: '32px', fontWeight: 900, lineHeight: 1, marginBottom: '6px' }}>Gold</div>
-            <div style={{ fontSize: '12px', fontWeight: 600, color: 'rgba(255,255,255,0.8)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Current League</div>
+            <div style={{ fontSize: '32px', fontWeight: 900, lineHeight: 1, marginBottom: '6px' }}>{analytics?.totalSessions || 0}</div>
+            <div style={{ fontSize: '12px', fontWeight: 600, color: 'rgba(255,255,255,0.8)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Total Sessions</div>
           </div>
         </div>
 
       </div>
 
       {/* Charts Row */}
-      <div style={{ display: 'grid', gridTemplateColumns: '3fr 2fr', gap: '24px', marginBottom: '32px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 320px), 1fr))', gap: '24px', marginBottom: '32px' }}>
         
         {/* Left: Area Chart (Performance Trend) */}
         <div style={{ backgroundColor: '#fff', borderRadius: '20px', padding: '24px', border: '1px solid var(--glass-border)', boxShadow: '0 4px 20px rgba(0,0,0,0.02)' }}>
@@ -122,21 +178,29 @@ export default function AnalyticsPage() {
           </div>
           
           <div style={{ height: '300px', width: '100%' }}>
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={subjectData} layout="vertical" margin={{ top: 0, right: 20, left: 20, bottom: 0 }}>
-                <XAxis type="number" domain={[0, 100]} hide />
-                <YAxis dataKey="subject" type="category" axisLine={false} tickLine={false} tick={{ fontSize: 12, fontWeight: 600, fill: 'var(--color-text-main)' }} width={80} />
-                <Tooltip 
-                  cursor={{ fill: 'rgba(0,0,0,0.02)' }}
-                  contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 20px rgba(0,0,0,0.1)', fontWeight: 600 }}
-                />
-                <Bar dataKey="mastery" radius={[0, 8, 8, 0]} barSize={20}>
-                  {subjectData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.fill} />
-                  ))}
-                </Bar>
-              </BarChart>
-            </ResponsiveContainer>
+            {subjectData.length > 0 ? (
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={subjectData} layout="vertical" margin={{ top: 0, right: 20, left: 20, bottom: 0 }}>
+                  <XAxis type="number" domain={[0, 100]} hide />
+                  <YAxis dataKey="subject" type="category" axisLine={false} tickLine={false} tick={{ fontSize: 12, fontWeight: 600, fill: 'var(--color-text-main)' }} width={80} />
+                  <Tooltip 
+                    cursor={{ fill: 'rgba(0,0,0,0.02)' }}
+                    contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 20px rgba(0,0,0,0.1)', fontWeight: 600 }}
+                  />
+                  <Bar dataKey="mastery" radius={[0, 8, 8, 0]} barSize={20}>
+                    {(subjectData || []).map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.fill} />
+                    ))}
+                  </Bar>
+                </BarChart>
+              </ResponsiveContainer>
+            ) : (
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', flexDirection: 'column', gap: '12px' }}>
+                <BookOpen size={32} color="#e2e8f0" />
+                <p style={{ fontSize: '14px', color: '#94a3b8' }}>No subject data yet</p>
+                <p style={{ fontSize: '12px', color: '#cbd5e1' }}>Complete some exams to see your subject mastery</p>
+              </div>
+            )}
           </div>
         </div>
 
@@ -144,7 +208,7 @@ export default function AnalyticsPage() {
 
       {/* Recommendations Row */}
       <h3 style={{ fontSize: '18px', fontWeight: 800, color: 'var(--color-text-main)', marginBottom: '16px' }}>AI Study Recommendations</h3>
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 300px), 1fr))', gap: '20px' }}>
         
         {/* Recommendation: Focus Area */}
         <div style={{ backgroundColor: '#fef2f2', border: '1px solid #fecaca', borderRadius: '16px', padding: '24px', display: 'flex', gap: '20px' }}>
