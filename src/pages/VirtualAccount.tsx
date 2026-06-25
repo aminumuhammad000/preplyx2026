@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { getVirtualAccount, createVirtualAccount } from '../services/api';
-import copy from 'copy-to-clipboard';
 
 interface VirtualAccountInfo {
   bankName: string;
@@ -41,8 +40,10 @@ export default function VirtualAccount() {
     }
   };
 
-  const copyNumber = () => {
-    if (account?.accountNumber) copy(account.accountNumber);
+  const copyNumber = async () => {
+    if (account?.accountNumber) {
+      await navigator.clipboard.writeText(account.accountNumber);
+    }
   };
 
   if (loading) return <div className="flex justify-center items-center h-64">Loading...</div>;
