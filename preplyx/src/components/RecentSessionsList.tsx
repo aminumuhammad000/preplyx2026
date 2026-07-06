@@ -86,16 +86,17 @@ export default function RecentSessionsList() {
               cursor: 'pointer',
               transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
               flexWrap: 'wrap',
-              gap: '16px'
+              gap: '16px',
+              color: '#e6673c'
             }}
           >
             <div style={{ flex: '1 1 200px' }}>
-              <div style={{ fontSize: '16px', fontWeight: 800, color: 'var(--color-text-main)', textTransform: 'capitalize', marginBottom: '6px', letterSpacing: '-0.3px' }}>
+              <div style={{ fontSize: '16px', fontWeight: 800, color: '#e6673c', textTransform: 'capitalize', marginBottom: '6px', letterSpacing: '-0.3px' }}>
                 {row.exam} {row.subject}
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '13px', color: 'var(--color-text-muted)', fontWeight: 500 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '13px', color: '#e6673c', fontWeight: 500 }}>
                 <span>{formatDate(row.date)}</span>
-                <span style={{ width: '4px', height: '4px', borderRadius: '50%', backgroundColor: 'var(--glass-border)' }} />
+                <span style={{ width: '4px', height: '4px', borderRadius: '50%', backgroundColor: '#e6673c' }} />
                 <span>{formatTimeSpent(row.timeSpentSeconds)}</span>
               </div>
             </div>
@@ -103,11 +104,11 @@ export default function RecentSessionsList() {
             <div style={{ display: 'flex', alignItems: 'center', gap: '24px', flexWrap: 'wrap' }}>
               <div style={{ display: 'flex', gap: '20px' }}>
                 <div>
-                  <div style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.8px', color: 'var(--color-text-muted)', marginBottom: '4px', fontWeight: 700 }}>Correct</div>
+                  <div style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.8px', color: '#e6673c', marginBottom: '4px', fontWeight: 700 }}>Correct</div>
                   <div style={{ fontSize: '15px', fontWeight: 800, color: '#16a34a' }}>{row.score} <span style={{ fontSize: '12px', color: '#86efac', fontWeight: 600 }}>/{row.total}</span></div>
                 </div>
                 <div>
-                  <div style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.8px', color: 'var(--color-text-muted)', marginBottom: '4px', fontWeight: 700 }}>Wrong</div>
+                  <div style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.8px', color: '#e6673c', marginBottom: '4px', fontWeight: 700 }}>Wrong</div>
                   <div style={{ fontSize: '15px', fontWeight: 800, color: '#dc2626' }}>{wrongCount}</div>
                 </div>
               </div>

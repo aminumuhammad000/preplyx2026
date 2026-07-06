@@ -57,7 +57,7 @@ export default function LoginPage() {
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px', marginBottom: '32px' }}>
           <img 
             src="/logo.png" 
-            alt="Preplyx Logo" 
+            alt="logo.png" 
             style={{
               width: '40px',
               height: '40px',
@@ -66,7 +66,7 @@ export default function LoginPage() {
             }} 
           />
           <span style={{ fontSize: '24px', fontWeight: 700, color: 'var(--color-text-main)' }}>
-            Preplyx
+            Swallern
           </span>
         </div>
 

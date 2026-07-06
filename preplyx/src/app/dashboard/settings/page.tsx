@@ -229,12 +229,12 @@ export default function Settings() {
                 width: '40px',
                 height: '40px',
                 borderRadius: '10px',
-                backgroundColor: darkMode ? '#2d2d4a' : '#f5f3ff',
+                backgroundColor: darkMode ? 'rgba(230,103,60,0.15)' : 'rgba(230,103,60,0.1)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center'
               }}>
-                <section.icon size={20} color="#7B2FF7" />
+                <section.icon size={20} color="#e6673c" />
               </div>
               <h3 style={{ fontSize: '16px', fontWeight: 700, color: 'var(--color-text-main)' }}>
                 {section.title}
@@ -273,7 +273,7 @@ export default function Settings() {
                         width: '44px',
                         height: '24px',
                         borderRadius: '12px',
-                        backgroundColor: item.value ? '#7B2FF7' : '#cbd5e1',
+                        backgroundColor: item.value ? '#e6673c' : '#cbd5e1',
                         position: 'relative',
                         cursor: 'pointer',
                         border: 'none',
@@ -324,7 +324,7 @@ export default function Settings() {
                       padding: '8px 16px',
                       borderRadius: '8px',
                       background: darkMode ? '#1a1a2e' : '#fff',
-                      color: '#7B2FF7',
+                      color: '#e6673c',
                       fontSize: '13px',
                       fontWeight: 600,
                       border: '1px solid var(--glass-border)',

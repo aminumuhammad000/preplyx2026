@@ -25,7 +25,7 @@ export default function AnalyticsPage() {
   const subjectData = subjectMastery.length > 0 ? subjectMastery.map((subject: any) => ({
     subject: subject.subject,
     mastery: subject.mastery,
-    fill: subject.mastery >= 70 ? '#10b981' : subject.mastery >= 50 ? '#7B2FF7' : '#ef4444'
+    fill: subject.mastery >= 70 ? 'var(--color-primary)' : subject.mastery >= 50 ? 'var(--color-primary)' : 'var(--color-neutral)'
   })) : [];
 
   useEffect(() => {
@@ -64,7 +64,7 @@ export default function AnalyticsPage() {
     return (
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh', flexDirection: 'column', gap: '16px' }}>
         <div style={{ width: '40px', height: '40px', borderRadius: '8px', background: 'var(--gradient-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <BarChart3 size={20} color="#fff" />
+          <BarChart3 size={20} color="var(--color-background)" />
         </div>
         <div style={{ textAlign: 'center' }}>
           <div style={{ fontSize: '16px', fontWeight: 700, color: 'var(--color-text-main)', marginBottom: '4px' }}>Loading Analytics...</div>
@@ -77,8 +77,8 @@ export default function AnalyticsPage() {
   if (error) {
     return (
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh', flexDirection: 'column', gap: '16px' }}>
-        <div style={{ width: '40px', height: '40px', borderRadius: '8px', background: '#fee2e2', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <AlertTriangle size={20} color="#dc2626" />
+        <div style={{ width: '40px', height: '40px', borderRadius: '8px', background: 'var(--color-background)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <AlertTriangle size={20} color="var(--color-primary)" />
         </div>
         <div style={{ textAlign: 'center' }}>
           <div style={{ fontSize: '16px', fontWeight: 700, color: 'var(--color-text-main)', marginBottom: '4px' }}>Error Loading Analytics</div>
@@ -104,7 +104,7 @@ export default function AnalyticsPage() {
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '20px', marginBottom: '32px' }}>
         
         {/* Stat Card 1 */}
-        <div style={{ backgroundColor: '#fff', borderRadius: '16px', padding: '24px', border: '1px solid var(--glass-border)', boxShadow: '0 4px 20px rgba(0,0,0,0.02)', display: 'flex', alignItems: 'center', gap: '20px' }}>
+        <div style={{ backgroundColor: 'var(--color-background)', borderRadius: '16px', padding: '24px', border: '1px solid var(--glass-border)', boxShadow: '0 4px 20px rgba(0,0,0,0.02)', display: 'flex', alignItems: 'center', gap: '20px' }}>
           <div style={{ width: '56px', height: '56px', borderRadius: '14px', backgroundColor: 'rgba(75,15,163,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
             <Target size={28} color="var(--color-primary)" />
           </div>
@@ -115,7 +115,7 @@ export default function AnalyticsPage() {
         </div>
 
         {/* Stat Card 2 */}
-        <div style={{ backgroundColor: '#fff', borderRadius: '16px', padding: '24px', border: '1px solid var(--glass-border)', boxShadow: '0 4px 20px rgba(0,0,0,0.02)', display: 'flex', alignItems: 'center', gap: '20px' }}>
+        <div style={{ backgroundColor: 'var(--color-background)', borderRadius: '16px', padding: '24px', border: '1px solid var(--glass-border)', boxShadow: '0 4px 20px rgba(0,0,0,0.02)', display: 'flex', alignItems: 'center', gap: '20px' }}>
           <div style={{ width: '56px', height: '56px', borderRadius: '14px', backgroundColor: 'rgba(123,47,247,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
             <TrendingUp size={28} color="var(--color-accent)" />
           </div>
@@ -128,7 +128,7 @@ export default function AnalyticsPage() {
         {/* Stat Card 3 */}
         <div style={{ background: 'var(--gradient-primary)', borderRadius: '16px', padding: '24px', boxShadow: '0 10px 30px rgba(75,15,163,0.15)', display: 'flex', alignItems: 'center', gap: '20px', color: '#fff' }}>
           <div style={{ width: '56px', height: '56px', borderRadius: '14px', backgroundColor: 'rgba(255,255,255,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-            <Trophy size={28} color="#F5B700" />
+            <Trophy size={28} color="var(--color-primary)" />
           </div>
           <div>
             <div style={{ fontSize: '32px', fontWeight: 900, lineHeight: 1, marginBottom: '6px' }}>{analytics?.totalSessions || 0}</div>
@@ -142,7 +142,7 @@ export default function AnalyticsPage() {
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 320px), 1fr))', gap: '24px', marginBottom: '32px' }}>
         
         {/* Left: Area Chart (Performance Trend) */}
-        <div style={{ backgroundColor: '#fff', borderRadius: '20px', padding: '24px', border: '1px solid var(--glass-border)', boxShadow: '0 4px 20px rgba(0,0,0,0.02)' }}>
+        <div style={{ backgroundColor: 'var(--color-background)', borderRadius: '20px', padding: '24px', border: '1px solid var(--glass-border)', boxShadow: '0 4px 20px rgba(0,0,0,0.02)' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
             <h3 style={{ fontSize: '16px', fontWeight: 800, color: 'var(--color-text-main)' }}>Score Trend Over Time</h3>
             <div style={{ fontSize: '12px', fontWeight: 600, color: 'var(--color-accent)', backgroundColor: 'rgba(123,47,247,0.1)', padding: '6px 14px', borderRadius: '20px' }}>Last 7 Weeks</div>
@@ -159,7 +159,7 @@ export default function AnalyticsPage() {
                 </defs>
                 <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: 'var(--color-text-muted)' }} dy={10} />
                 <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: 'var(--color-text-muted)' }} />
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--color-neutral)" />
                 <Tooltip 
                   contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 20px rgba(0,0,0,0.1)', fontWeight: 600 }}
                   itemStyle={{ color: 'var(--color-primary)' }}
@@ -171,7 +171,7 @@ export default function AnalyticsPage() {
         </div>
 
         {/* Right: Bar Chart (Subject Mastery) */}
-        <div style={{ backgroundColor: '#fff', borderRadius: '20px', padding: '24px', border: '1px solid var(--glass-border)', boxShadow: '0 4px 20px rgba(0,0,0,0.02)' }}>
+        <div style={{ backgroundColor: 'var(--color-background)', borderRadius: '20px', padding: '24px', border: '1px solid var(--glass-border)', boxShadow: '0 4px 20px rgba(0,0,0,0.02)' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
             <h3 style={{ fontSize: '16px', fontWeight: 800, color: 'var(--color-text-main)' }}>Subject Mastery</h3>
             <BarChart3 size={18} color="var(--color-text-muted)" />
@@ -196,9 +196,9 @@ export default function AnalyticsPage() {
               </ResponsiveContainer>
             ) : (
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', flexDirection: 'column', gap: '12px' }}>
-                <BookOpen size={32} color="#e2e8f0" />
-                <p style={{ fontSize: '14px', color: '#94a3b8' }}>No subject data yet</p>
-                <p style={{ fontSize: '12px', color: '#cbd5e1' }}>Complete some exams to see your subject mastery</p>
+                <BookOpen size={32} color="var(--color-background)" />
+                <p style={{ fontSize: '14px', color: 'var(--color-neutral)' }}>No subject data yet</p>
+                <p style={{ fontSize: '12px', color: 'var(--color-neutral)' }}>Complete some exams to see your subject mastery</p>
               </div>
             )}
           </div>
@@ -211,26 +211,26 @@ export default function AnalyticsPage() {
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 300px), 1fr))', gap: '20px' }}>
         
         {/* Recommendation: Focus Area */}
-        <div style={{ backgroundColor: '#fef2f2', border: '1px solid #fecaca', borderRadius: '16px', padding: '24px', display: 'flex', gap: '20px' }}>
-          <div style={{ width: '48px', height: '48px', borderRadius: '12px', backgroundColor: '#fee2e2', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-            <AlertTriangle size={24} color="#ef4444" />
+        <div style={{ backgroundColor: 'var(--color-background)', border: '1px solid var(--color-neutral)', borderRadius: '16px', padding: '24px', display: 'flex', gap: '20px' }}>
+          <div style={{ width: '48px', height: '48px', borderRadius: '12px', backgroundColor: 'var(--color-background)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+            <AlertTriangle size={24} color="var(--color-primary)" />
           </div>
           <div>
-            <h4 style={{ fontSize: '15px', fontWeight: 800, color: '#991b1b', marginBottom: '8px' }}>Focus Area: Physics</h4>
-            <p style={{ fontSize: '13px', color: '#b91c1c', lineHeight: 1.6 }}>
+            <h4 style={{ fontSize: '15px', fontWeight: 800, color: 'var(--color-neutral)', marginBottom: '8px' }}>Focus Area: Physics</h4>
+            <p style={{ fontSize: '13px', color: 'var(--color-neutral)', lineHeight: 1.6 }}>
               Your accuracy in Physics is currently below 50%. Based on your recent tests, we strongly recommend practicing <strong>Kinematics</strong> and <strong>Dynamics</strong>. Try dedicating your next two study sessions exclusively to Physics.
             </p>
           </div>
         </div>
 
         {/* Recommendation: Strong Area */}
-        <div style={{ backgroundColor: '#f0fdf4', border: '1px solid #bbf7d0', borderRadius: '16px', padding: '24px', display: 'flex', gap: '20px' }}>
+        <div style={{ backgroundColor: 'var(--color-background)', border: '1px solid var(--color-neutral)', borderRadius: '16px', padding: '24px', display: 'flex', gap: '20px' }}>
           <div style={{ width: '48px', height: '48px', borderRadius: '12px', backgroundColor: '#dcfce3', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-            <CheckCircle2 size={24} color="#16a34a" />
+            <CheckCircle2 size={24} color="var(--color-primary)" />
           </div>
           <div>
-            <h4 style={{ fontSize: '15px', fontWeight: 800, color: '#166534', marginBottom: '8px' }}>Strong Subject: Mathematics</h4>
-            <p style={{ fontSize: '13px', color: '#15803d', lineHeight: 1.6 }}>
+            <h4 style={{ fontSize: '15px', fontWeight: 800, color: 'var(--color-neutral)', marginBottom: '8px' }}>Strong Subject: Mathematics</h4>
+            <p style={{ fontSize: '13px', color: 'var(--color-neutral)', lineHeight: 1.6 }}>
               You are doing exceptionally well in Mathematics with an 85% mastery rate! Keep up the incredible momentum. To reach the 90%+ tier, focus specifically on advanced <strong>Calculus</strong> questions.
             </p>
           </div>

@@ -48,8 +48,8 @@ export default function ExamCategories() {
     return (
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh' }}>
         <div style={{ textAlign: 'center' }}>
-          <BookOpen size={48} color="#e2e8f0" style={{ marginBottom: '16px' }} />
-          <p style={{ fontSize: '16px', color: '#94a3b8' }}>Loading exam categories...</p>
+          <BookOpen size={48} color="var(--color-text-muted)" style={{ marginBottom: '16px' }} />
+          <p style={{ fontSize: '16px', color: 'var(--color-text-muted)' }}>Loading exam categories...</p>
         </div>
       </div>
     );
@@ -59,8 +59,8 @@ export default function ExamCategories() {
     return (
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh' }}>
         <div style={{ textAlign: 'center' }}>
-          <CheckCircle size={48} color="#ef4444" style={{ marginBottom: '16px' }} />
-          <p style={{ fontSize: '16px', color: '#ef4444' }}>{error}</p>
+          <CheckCircle size={48} color="var(--color-primary)" style={{ marginBottom: '16px' }} />
+          <p style={{ fontSize: '16px', color: 'var(--color-primary)' }}>{error}</p>
         </div>
       </div>
     );
@@ -86,11 +86,11 @@ export default function ExamCategories() {
             href={`/dashboard/practice?exam=${exam.id}`}
             style={{
               textDecoration: 'none',
-              backgroundColor: `${exam.color}06`,
+              backgroundColor: '#e6673c',
               borderRadius: '20px',
               padding: '24px',
-              boxShadow: `0 4px 20px ${exam.color}10`,
-              border: `1px solid ${exam.color}20`,
+              boxShadow: '0 4px 20px #e6673c10',
+              border: '1px solid #e6673c20',
               transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
               display: 'block',
               position: 'relative',
@@ -100,10 +100,10 @@ export default function ExamCategories() {
           >
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '16px' }}>
               <div>
-                <h3 style={{ fontSize: '20px', fontWeight: 700, color: exam.color, marginBottom: '4px' }}>
+                <h3 style={{ fontSize: '20px', fontWeight: 700, color: '#fff', marginBottom: '4px' }}>
                   {exam.name}
                 </h3>
-                <p style={{ fontSize: '13px', color: 'var(--color-text-muted)' }}>
+                <p style={{ fontSize: '13px', color: '#fff' }}>
                   {exam.description}
                 </p>
               </div>
@@ -122,33 +122,33 @@ export default function ExamCategories() {
 
             <div style={{ display: 'flex', gap: '16px', marginBottom: '16px', flexWrap: 'wrap' }}>
               <div>
-                <p style={{ fontSize: '11px', fontWeight: 600, color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '4px' }}>
+                <p style={{ fontSize: '11px', fontWeight: 600, color: '#fff', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '4px' }}>
                   Questions
                 </p>
-                <p style={{ fontSize: '14px', fontWeight: 600, color: 'var(--color-text-main)' }}>
+                <p style={{ fontSize: '14px', fontWeight: 600, color: '#fff' }}>
                   {exam.questions}
                 </p>
               </div>
               <div>
-                <p style={{ fontSize: '11px', fontWeight: 600, color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '4px' }}>
+                <p style={{ fontSize: '11px', fontWeight: 600, color: '#fff', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '4px' }}>
                   Years
                 </p>
-                <p style={{ fontSize: '14px', fontWeight: 600, color: 'var(--color-text-main)' }}>
+                <p style={{ fontSize: '14px', fontWeight: 600, color: '#fff' }}>
                   {exam.years}
                 </p>
               </div>
               <div>
-                <p style={{ fontSize: '11px', fontWeight: 600, color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '4px' }}>
+                <p style={{ fontSize: '11px', fontWeight: 600, color: '#fff', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '4px' }}>
                   Subjects
                 </p>
-                <p style={{ fontSize: '14px', fontWeight: 600, color: 'var(--color-text-main)' }}>
+                <p style={{ fontSize: '14px', fontWeight: 600, color: '#fff' }}>
                   {exam.subjects.length}
                 </p>
               </div>
             </div>
 
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '16px' }}>
-              {(exam.subjects || []).slice(0, 4).map((subject) => (
+              {(exam.subjects || []).slice(0, 4).map((subject: string) => (
                 <span
                   key={subject}
                   style={{
@@ -179,47 +179,47 @@ export default function ExamCategories() {
 
       {/* Subject Selection Guide */}
       <div style={{
-        backgroundColor: '#fff',
+        backgroundColor: 'var(--color-background)',
         borderRadius: '16px',
         padding: '24px',
         boxShadow: 'var(--shadow-soft)',
-        border: '1px solid var(--glass-border)'
+        border: '1px solid #e6673c'
       }}>
         <h3 style={{ fontSize: '16px', fontWeight: 700, color: 'var(--color-text-main)', marginBottom: '16px' }}>
           How to Get Started
         </h3>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 220px), 1fr))', gap: '24px' }}>
-          <div style={{ display: 'flex', gap: '12px' }}>
+          <div style={{ display: 'flex', gap: '12px', border: '1px solid #e6673c', borderRadius: '8px', padding: '8px', backgroundColor: '#e6673c' }}>
             <div style={{
               width: '32px',
               height: '32px',
               borderRadius: '8px',
-              backgroundColor: '#7B2FF7',
-              color: '#fff',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontWeight: 700,
-              fontSize: '14px',
-              flexShrink: 0
+               backgroundColor: '#e6673c',
+               color: '#fff',
+               display: 'flex',
+               alignItems: 'center',
+               justifyContent: 'center',
+               fontWeight: 700,
+               fontSize: '14px',
+               flexShrink: 0
             }}>
               1
             </div>
             <div>
-              <h4 style={{ fontSize: '14px', fontWeight: 600, color: 'var(--color-text-main)', marginBottom: '4px' }}>
+              <h4 style={{ fontSize: '14px', fontWeight: 600, color: '#fff', marginBottom: '4px' }}>
                 Select Exam Type
               </h4>
-              <p style={{ fontSize: '12px', color: 'var(--color-text-muted)' }}>
+              <p style={{ fontSize: '12px', color: '#fff' }}>
                 Choose from JAMB, WAEC, NECO, or Post UTME
               </p>
             </div>
           </div>
-          <div style={{ display: 'flex', gap: '12px' }}>
+          <div style={{ display: 'flex', gap: '12px', border: '1px solid #e6673c', borderRadius: '8px', padding: '8px', backgroundColor: '#e6673c' }}>
             <div style={{
               width: '32px',
               height: '32px',
               borderRadius: '8px',
-              backgroundColor: '#7B2FF7',
+              backgroundColor: '#e6673c',
               color: '#fff',
               display: 'flex',
               alignItems: 'center',
@@ -231,20 +231,20 @@ export default function ExamCategories() {
               2
             </div>
             <div>
-              <h4 style={{ fontSize: '14px', fontWeight: 600, color: 'var(--color-text-main)', marginBottom: '4px' }}>
+              <h4 style={{ fontSize: '14px', fontWeight: 600, color: '#fff', marginBottom: '4px' }}>
                 Choose Subjects
               </h4>
-              <p style={{ fontSize: '12px', color: 'var(--color-text-muted)' }}>
+              <p style={{ fontSize: '12px', color: '#fff' }}>
                 Pick the subjects you want to practice
               </p>
             </div>
           </div>
-          <div style={{ display: 'flex', gap: '12px' }}>
+          <div style={{ display: 'flex', gap: '12px', border: '1px solid #e6673c', borderRadius: '8px', padding: '8px', backgroundColor: '#e6673c' }}>
             <div style={{
               width: '32px',
               height: '32px',
               borderRadius: '8px',
-              backgroundColor: '#7B2FF7',
+              backgroundColor: '#e6673c',
               color: '#fff',
               display: 'flex',
               alignItems: 'center',
@@ -256,10 +256,10 @@ export default function ExamCategories() {
               3
             </div>
             <div>
-              <h4 style={{ fontSize: '14px', fontWeight: 600, color: 'var(--color-text-main)', marginBottom: '4px' }}>
+              <h4 style={{ fontSize: '14px', fontWeight: 600, color: '#fff', marginBottom: '4px' }}>
                 Start Practice
               </h4>
-              <p style={{ fontSize: '12px', color: 'var(--color-text-muted)' }}>
+              <p style={{ fontSize: '12px', color: '#fff' }}>
                 Begin answering questions and track progress
               </p>
             </div>

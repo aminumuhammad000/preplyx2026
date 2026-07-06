@@ -23,10 +23,15 @@ export const protect = async (
       // Decode token
       const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as any;
 
-      // Attach user to request
-      req.user = await User.findById(decoded.id).select('-password') as IUser;
-
+      const user = await User.findById(decoded.id).select('-password') as IUser;
+      if (!user) {
+        res.status(401);
+        return next(new Error('Not authorized, user not found'));
+      }
+      req.user = user;
       next();
+      return;
+
     } catch (error) {
       console.error(error);
       res.status(401);

@@ -35,7 +35,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         headers: { Authorization: `Bearer ${savedToken}` }
       })
       .then(res => {
-        if (!res.ok) throw new Error('Token invalid');
+        if (!res.ok) {
+          if (res.status === 401) {
+            // Token invalid or user not found – clear stored token
+            localStorage.removeItem('preplyx_token');
+            setToken(null);
+            setUser(null);
+          }
+          throw new Error('Failed to fetch profile');
+        }
         return res.json();
       })
       .then(data => setUser(data))

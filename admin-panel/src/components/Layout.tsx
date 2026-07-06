@@ -56,9 +56,9 @@ export const Layout: React.FC = () => {
       <aside className="sidebar">
         <div className="sidebar-header">
           <div className="sidebar-logo-container">
-            <img src={logoImg} alt="Preplyx Logo" className="sidebar-logo" />
+            <img src={logoImg} alt="logo.png" className="sidebar-logo" />
             <div className="sidebar-brand-text">
-              <span className="sidebar-brand-name">Preplyx</span>
+              <span className="sidebar-brand-name">swallern</span>
               <span className="sidebar-brand-subtitle">Admin Panel</span>
             </div>
           </div>
@@ -86,10 +86,10 @@ export const Layout: React.FC = () => {
             target="_blank"
             rel="noopener noreferrer"
             className="nav-item"
-            style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '12px', padding: '12px', borderRadius: '8px', color: 'rgba(255,255,255,0.7)', marginBottom: '8px' }}
+            style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '12px', padding: '12px', borderRadius: '8px', color: '#fff', marginBottom: '8px' }}
           >
             <ExternalLink size={20} />
-            <span>Go to Preplyx</span>
+            <span>Go to swallern</span>
           </a>
           <button className="logout-btn" onClick={handleLogout}>
             <LogOut size={20} />

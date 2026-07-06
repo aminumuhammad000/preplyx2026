@@ -56,8 +56,8 @@ export default function Achievements() {
     return (
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh' }}>
         <div style={{ textAlign: 'center' }}>
-          <Trophy size={48} color="#e2e8f0" style={{ marginBottom: '16px' }} />
-          <p style={{ fontSize: '16px', color: '#94a3b8' }}>Loading achievements...</p>
+          <Trophy size={48} color="var(--color-background)" style={{ marginBottom: '16px' }} />
+          <p style={{ fontSize: '16px', color: 'var(--color-neutral)' }}>Loading achievements...</p>
         </div>
       </div>
     );
@@ -78,47 +78,49 @@ export default function Achievements() {
       {/* Progress Overview */}
       <div style={{
         background: 'var(--gradient-primary)',
-        borderRadius: '20px',
-        padding: '32px',
-        marginBottom: '32px',
-        color: '#fff',
+        borderRadius: '16px',
+        padding: '16px 24px',
+        marginBottom: '24px',
+        color: 'var(--color-background)',
         boxShadow: '0 4px 16px rgba(123, 47, 247, 0.15)',
         position: 'relative',
         overflow: 'hidden'
       }}>
-        <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', gap: '24px', marginBottom: '24px', position: 'relative', zIndex: 1 }}>
+        <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', gap: '16px', marginBottom: '16px', position: 'relative', zIndex: 1 }}>
           <div style={{ flex: '1 1 300px' }}>
-            <div style={{ display: 'inline-block', padding: '6px 12px', backgroundColor: 'rgba(255,255,255,0.15)', borderRadius: '20px', fontSize: '12px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '16px', backdropFilter: 'blur(10px)' }}>
-              Current Rank
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
+              <div style={{ display: 'inline-block', padding: '4px 10px', backgroundColor: 'rgba(255,255,255,0.15)', borderRadius: '16px', fontSize: '11px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.5px', backdropFilter: 'blur(10px)' }}>
+                Current Rank
+              </div>
+              <h3 style={{ fontSize: '22px', fontWeight: 900, letterSpacing: '-0.5px', lineHeight: 1, margin: 0 }}>
+                Level {userProgress.level} Master
+              </h3>
             </div>
-            <h3 style={{ fontSize: '36px', fontWeight: 900, marginBottom: '8px', letterSpacing: '-1px', lineHeight: 1 }}>
-              Level {userProgress.level} Master
-            </h3>
-            <p style={{ fontSize: '15px', opacity: 0.9, maxWidth: '400px', lineHeight: 1.5 }}>
-              You're doing great! You have unlocked {userProgress.unlocked} out of {userProgress.totalAchievements} available achievements. Keep going to reach the next tier!
+            <p style={{ fontSize: '13px', opacity: 0.9, maxWidth: '400px', lineHeight: 1.4, margin: 0 }}>
+              You have unlocked {userProgress.unlocked} out of {userProgress.totalAchievements} achievements. Keep going!
             </p>
           </div>
           <div style={{ textAlign: 'right', flex: '1 1 150px', display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
             <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px' }}>
-              <span style={{ fontSize: '48px', fontWeight: 900, letterSpacing: '-2px', lineHeight: 1 }}>{userProgress.points}</span>
-              <span style={{ fontSize: '16px', fontWeight: 700, opacity: 0.8 }}>XP</span>
+              <span style={{ fontSize: '32px', fontWeight: 900, letterSpacing: '-1px', lineHeight: 1 }}>{userProgress.points}</span>
+              <span style={{ fontSize: '14px', fontWeight: 700, opacity: 0.8 }}>XP</span>
             </div>
-            <p style={{ fontSize: '13px', fontWeight: 600, opacity: 0.8, marginTop: '4px', textTransform: 'uppercase', letterSpacing: '1px' }}>Total Points Earned</p>
+            <p style={{ fontSize: '11px', fontWeight: 600, opacity: 0.8, marginTop: '2px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Total Points</p>
           </div>
         </div>
         
         {/* Progress Bar Container */}
         <div style={{ position: 'relative', zIndex: 1 }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px', fontSize: '13px', fontWeight: 600, opacity: 0.9 }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px', fontSize: '12px', fontWeight: 600, opacity: 0.9 }}>
             <span>Progress to Next Level</span>
             <span>{Math.round((userProgress.unlocked / userProgress.totalAchievements) * 100)}%</span>
           </div>
-          <div style={{ width: '100%', height: '12px', backgroundColor: 'rgba(0,0,0,0.2)', borderRadius: '6px', overflow: 'hidden', boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.1)' }}>
+          <div style={{ width: '100%', height: '8px', backgroundColor: 'rgba(0,0,0,0.2)', borderRadius: '4px', overflow: 'hidden', boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.1)' }}>
             <div style={{ 
               width: `${(userProgress.unlocked / userProgress.totalAchievements) * 100}%`, 
               height: '100%', 
-              background: 'linear-gradient(90deg, #fff, #f3e8ff)', 
-              borderRadius: '6px', 
+              background: 'linear-gradient(90deg, var(--color-background), var(--color-primary))', 
+              borderRadius: '4px', 
               transition: 'width 1s cubic-bezier(0.4, 0, 0.2, 1)',
               boxShadow: '0 0 10px rgba(255,255,255,0.5)'
             }} />
@@ -129,7 +131,7 @@ export default function Achievements() {
       {/* Unlocked Achievements */}
       <div style={{ marginBottom: isMobile ? '24px' : '32px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: isMobile ? '12px' : '16px' }}>
-          <Trophy size={isMobile ? 18 : 20} color="#7B2FF7" />
+          <Trophy size={isMobile ? 18 : 20} color="var(--color-primary)" />
           <h3 style={{ fontSize: isMobile ? '15px' : '16px', fontWeight: 700, color: 'var(--color-text-main)' }}>
             Unlocked Achievements
           </h3>
@@ -144,7 +146,7 @@ export default function Achievements() {
               <div
                 key={achievement.id}
                 style={{
-                  backgroundColor: '#fff',
+                  backgroundColor: 'var(--color-background)',
                   borderRadius: isMobile ? '10px' : '12px',
                   padding: isMobile ? '16px' : '20px',
                   boxShadow: 'var(--shadow-soft)',
@@ -172,7 +174,7 @@ export default function Achievements() {
                 <p style={{ fontSize: isMobile ? '11px' : '12px', color: 'var(--color-text-muted)', marginBottom: isMobile ? '6px' : '8px', minHeight: isMobile ? '28px' : '32px' }}>
                   {achievement.description}
                 </p>
-                <p style={{ fontSize: isMobile ? '10px' : '11px', color: '#10b981', fontWeight: 600 }}>
+                <p style={{ fontSize: isMobile ? '10px' : '11px', color: 'var(--color-primary)', fontWeight: 600 }}>
                   Unlocked {achievement.date}
                 </p>
               </div>
@@ -184,7 +186,7 @@ export default function Achievements() {
       {/* Locked Achievements */}
       <div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: isMobile ? '12px' : '16px' }}>
-          <Lock size={isMobile ? 18 : 20} color="#94a3b8" />
+          <Lock size={isMobile ? 18 : 20} color="var(--color-neutral)" />
           <h3 style={{ fontSize: isMobile ? '15px' : '16px', fontWeight: 700, color: 'var(--color-text-main)' }}>
             Locked Achievements
           </h3>
@@ -199,7 +201,7 @@ export default function Achievements() {
               <div
                 key={achievement.id}
                 style={{
-                  backgroundColor: '#f8fafc',
+                  backgroundColor: 'var(--color-background)',
                   borderRadius: isMobile ? '10px' : '12px',
                   padding: isMobile ? '16px' : '20px',
                   border: '1px solid var(--glass-border)',
@@ -212,24 +214,24 @@ export default function Achievements() {
                   width: isMobile ? '48px' : '56px',
                   height: isMobile ? '48px' : '56px',
                   borderRadius: isMobile ? '10px' : '12px',
-                  backgroundColor: '#e2e8f0',
+                  backgroundColor: 'var(--color-background)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   margin: '0 auto ' + (isMobile ? '10px' : '12px')
                 }}>
-                  <IconComponent size={isMobile ? 24 : 28} color="#94a3b8" />
+                  <IconComponent size={isMobile ? 24 : 28} color="var(--color-neutral)" />
                 </div>
-                <h4 style={{ fontSize: isMobile ? '13px' : '14px', fontWeight: 700, color: '#64748b', marginBottom: '4px' }}>
+                <h4 style={{ fontSize: isMobile ? '13px' : '14px', fontWeight: 700, color: 'var(--color-neutral)', marginBottom: '4px' }}>
                   {achievement.name}
                 </h4>
-                <p style={{ fontSize: isMobile ? '11px' : '12px', color: '#94a3b8', marginBottom: isMobile ? '10px' : '12px', minHeight: isMobile ? '28px' : '32px' }}>
+                <p style={{ fontSize: isMobile ? '11px' : '12px', color: 'var(--color-neutral)', marginBottom: isMobile ? '10px' : '12px', minHeight: isMobile ? '28px' : '32px' }}>
                   {achievement.description}
                 </p>
-                <div style={{ width: '100%', height: '6px', backgroundColor: '#e2e8f0', borderRadius: '3px', overflow: 'hidden' }}>
-                  <div style={{ width: `${achievement.progress || 0}%`, height: '100%', backgroundColor: '#94a3b8', borderRadius: '3px' }} />
+                <div style={{ width: '100%', height: '6px', backgroundColor: 'var(--color-background)', borderRadius: '3px', overflow: 'hidden' }}>
+                  <div style={{ width: `${achievement.progress || 0}%`, height: '100%', backgroundColor: 'var(--color-neutral)', borderRadius: '3px' }} />
                 </div>
-                <p style={{ fontSize: isMobile ? '10px' : '11px', color: '#94a3b8', marginTop: '6px' }}>
+                <p style={{ fontSize: isMobile ? '10px' : '11px', color: 'var(--color-neutral)', marginTop: '6px' }}>
                   {achievement.progress || 0}% complete
                 </p>
               </div>
@@ -240,7 +242,7 @@ export default function Achievements() {
 
       {/* Achievement Tips */}
       <div style={{
-        backgroundColor: '#fff',
+        backgroundColor: 'var(--color-background)',
         borderRadius: isMobile ? '14px' : '16px',
         padding: isMobile ? '20px' : '24px',
         boxShadow: 'var(--shadow-soft)',
@@ -248,7 +250,7 @@ export default function Achievements() {
         marginTop: isMobile ? '20px' : '24px'
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: isMobile ? '12px' : '16px' }}>
-          <TrendingUp size={isMobile ? 20 : 24} color="#7B2FF7" />
+          <TrendingUp size={isMobile ? 20 : 24} color="var(--color-primary)" />
           <h3 style={{ fontSize: isMobile ? '15px' : '16px', fontWeight: 700, color: 'var(--color-text-main)' }}>
             How to Unlock More
           </h3>
@@ -260,8 +262,8 @@ export default function Achievements() {
             { tip: 'Score high on mock exams', icon: Trophy },
             { tip: 'Try different exam types', icon: Award },
           ].map((item, idx) => (
-            <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: isMobile ? '10px' : '12px', padding: isMobile ? '10px' : '12px', borderRadius: isMobile ? '6px' : '8px', backgroundColor: '#f8fafc' }}>
-              <item.icon size={isMobile ? 16 : 18} color="#7B2FF7" />
+            <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: isMobile ? '10px' : '12px', padding: isMobile ? '10px' : '12px', borderRadius: isMobile ? '6px' : '8px', backgroundColor: 'var(--color-background)' }}>
+              <item.icon size={isMobile ? 16 : 18} color="var(--color-primary)" />
               <span style={{ fontSize: isMobile ? '12px' : '13px', color: 'var(--color-text-main)' }}>{item.tip}</span>
             </div>
           ))}

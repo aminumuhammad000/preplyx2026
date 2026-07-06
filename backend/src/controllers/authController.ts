@@ -121,7 +121,7 @@ export const getUserProfile = async (
         email: user.email,
       });
     } else {
-      res.status(404);
+      res.status(401);
       throw new Error('User not found');
     }
   } catch (error) {

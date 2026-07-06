@@ -25,12 +25,17 @@ class VtstackService {
   constructor() {
     this.baseUrl = 'https://gw.prod.girostack.com/v1';
     this.apiKey = process.env.VTSTACK_API_KEY || '';
+    if (!this.apiKey) {
+      console.error('VTSTACK_API_KEY is not set in environment variables');
+    }
   }
 
   private getHeaders() {
-    const key = this.apiKey || 'sk_live_YOUR_API_KEY_HERE';
+    if (!this.apiKey) {
+      throw new Error('VTSTACK_API_KEY is missing');
+    }
     return {
-      'x-giro-key': key,
+      'x-giro-key': this.apiKey,
       'Content-Type': 'application/json',
     };
   }

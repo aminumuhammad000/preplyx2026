@@ -49,20 +49,18 @@ export default function Dashboard() {
         ].map((exam) => (
           <Link key={exam.name} href={`/dashboard/practice?exam=${exam.name}`} className="exam-card-link" style={{
             flex: '1 1 200px', borderRadius: '14px', padding: '22px',
-            backgroundColor: `${exam.color}08`, boxShadow: `0 4px 14px ${exam.color}15`,
-            border: `1px solid ${exam.color}20`, textDecoration: 'none',
+            backgroundColor: '#e6673c', boxShadow: `0 4px 14px #e6673c15`,
+            border: `1px solid #e6673c20`, textDecoration: 'none',
             transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
             display: 'flex', flexDirection: 'column', gap: '4px',
             position: 'relative', overflow: 'hidden'
           }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', position: 'relative', zIndex: 1 }}>
-              <span style={{ fontSize: '20px', fontWeight: 900, color: exam.color, letterSpacing: '-0.5px' }}>{exam.name}</span>
-              <div style={{ padding: '8px', borderRadius: '10px', backgroundColor: '#fff', boxShadow: `0 2px 8px ${exam.color}20` }}>
-                <exam.Icon size={22} color={exam.color} />
-              </div>
+              <span style={{ fontSize: '20px', fontWeight: 900, color: '#fff', letterSpacing: '-0.5px' }}>{exam.name}</span>
+              <exam.Icon size={24} color="#000" />
             </div>
-            <span style={{ fontSize: '13px', color: 'var(--color-text-muted)', marginTop: '8px', fontWeight: 500, position: 'relative', zIndex: 1 }}>{exam.desc}</span>
-            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', marginTop: '16px', fontSize: '13px', fontWeight: 700, color: exam.color, position: 'relative', zIndex: 1 }}>
+            <span style={{ fontSize: '13px', color: '#fff', marginTop: '8px', fontWeight: 500, position: 'relative', zIndex: 1 }}>{exam.desc}</span>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', marginTop: '16px', fontSize: '13px', fontWeight: 700, color: '#fff', position: 'relative', zIndex: 1 }}>
               Practice Now <ArrowRight size={14} strokeWidth={2.5} />
             </span>
           </Link>

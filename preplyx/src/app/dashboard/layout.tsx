@@ -88,36 +88,38 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
       {/* ── Professional Sidebar ── */}
       <aside style={{
-        width: isMobile ? '85%' : '250px',
-        maxWidth: isMobile ? '320px' : '250px',
-        minWidth: isMobile ? '280px' : '250px',
-        backgroundColor: '#4B0FA3',
-        display: 'flex',
-        flexDirection: 'column',
-        height: '100vh',
-        position: isMobile ? 'fixed' : 'relative',
-        left: isMobile ? (sidebarOpen ? '0' : '-100%') : '0',
-        top: 0,
-        zIndex: isMobile ? 9999 : 1,
-        transition: isMobile ? 'left 0.3s cubic-bezier(0.4, 0, 0.2, 1)' : 'none',
-        boxShadow: isMobile ? '8px 0 32px rgba(75,15,163,0.4)' : '4px 0 24px rgba(75,15,163,0.15)',
-      }}>
+          width: isMobile ? '85%' : '200px',
+          maxWidth: isMobile ? '260px' : '200px',
+          minWidth: isMobile ? '200px' : '200px',
+          backgroundColor: 'var(--color-primary)',
+          display: 'flex',
+          flexDirection: 'column',
+          height: '100vh',
+          position: isMobile ? 'fixed' : 'relative',
+          left: isMobile ? (sidebarOpen ? '0' : '-100%') : '0',
+          top: 0,
+          zIndex: isMobile ? 9999 : 1,
+          transition: isMobile ? 'left 0.3s cubic-bezier(0.4, 0, 0.2, 1)' : 'none',
+          boxShadow: isMobile ? '8px 0 32px rgba(75,15,163,0.4)' : '4px 0 24px rgba(75,15,163,0.15)',
+        }}>
 
         {/* Logo */}
         <div style={{ padding: isMobile ? '20px 16px' : '24px 20px', borderBottom: '1px solid rgba(255,255,255,0.12)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0px' }}>
             <img 
               src="/logo.png" 
-              alt="Preplyx Logo" 
+              alt="logo.png" 
               style={{ 
-                width: isMobile ? '32px' : '28px', 
-                height: isMobile ? '32px' : '28px', 
+                width: isMobile ? '70px' : '65px', 
+                height: isMobile ? '70px' : '65px', 
                 borderRadius: '8px',
-                objectFit: 'cover'
+                objectFit: 'contain',
+                display: 'block',
+                flexShrink: 0
               }} 
             />
-            <span style={{ fontSize: isMobile ? '18px' : '16px', fontWeight: 800, color: '#fff', letterSpacing: '-0.3px' }}>
-              Preplyx
+            <span style={{ fontSize: isMobile ? '26px' : '22px', fontWeight: 800, color: '#fff', letterSpacing: '-0.3px', marginLeft: '-8px' }}>
+              wallern
             </span>
           </div>
           {isMobile && (
@@ -138,13 +140,13 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         </div>
 
         {/* Nav with scrollable area for new grouped links */}
-        <nav style={{ padding: isMobile ? '20px 16px' : '16px 12px', flex: 1, display: 'flex', flexDirection: 'column', gap: '20px', overflowY: 'auto' }}>
+        <nav style={{ padding: isMobile ? '20px 16px' : '16px 12px', flex: 1, display: 'flex', flexDirection: 'column', gap: '20px', overflowY: 'hidden' }}>
 
           {menuSections.map((section) => (
             <div key={section.title}>
               <span style={{
                 fontSize: '10px', fontWeight: 700, letterSpacing: '1.5px',
-                color: 'rgba(255,255,255,0.45)', textTransform: 'uppercase',
+                color: '#fff', textTransform: 'uppercase',
                 padding: '0 8px', marginBottom: '10px', display: 'block'
               }}>
                 {section.title}
@@ -156,18 +158,18 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                     <Link key={href} href={href} onClick={() => isMobile && setSidebarOpen(false)} style={{
                       display: 'flex', alignItems: 'center', gap: '12px',
                       padding: isMobile ? '12px 12px' : '10px 12px', borderRadius: '10px',
-                      fontSize: isMobile ? '14px' : '13px', fontWeight: isActive ? 700 : 400,
-                      color: isActive ? '#fff' : 'rgba(255,255,255,0.65)',
-                      backgroundColor: isActive ? 'rgba(255,255,255,0.18)' : 'transparent',
+                      fontSize: isMobile ? '14px' : '13px', fontWeight: 400,
+                      color: '#fff',
+                      backgroundColor: 'transparent',
                       borderLeft: 'none',
                       textDecoration: 'none',
                       transition: 'all 0.15s ease',
                       minHeight: isMobile ? '44px' : 'auto',
-                      backdropFilter: isActive ? 'blur(10px)' : 'none',
+                      backdropFilter: 'none',
                     }} className="sidebar-btn">
-                      <Icon size={isMobile ? 18 : 16} style={{ color: isActive ? '#fff' : 'rgba(255,255,255,0.55)', flexShrink: 0 }} />
+                      <Icon size={isMobile ? 18 : 16} style={{ color: '#fff', flexShrink: 0 }} />
                       <span>{name}</span>
-                      {isActive && <ChevronRight size={isMobile ? 16 : 14} style={{ marginLeft: 'auto', color: 'rgba(255,255,255,0.6)' }} />}
+                      {/* No chevron on active state */}
                     </Link>
                   );
                 })}
@@ -180,26 +182,6 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         {/* User Profile */}
         <div style={{ padding: isMobile ? '16px' : '12px', borderTop: '1px solid rgba(255,255,255,0.12)', backgroundColor: 'rgba(0,0,0,0.15)' }}>
 
-          {/* Admin Panel Link */}
-          <a
-            href="http://localhost:5173"
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{
-              display: 'flex', alignItems: 'center', gap: '12px',
-              padding: isMobile ? '12px' : '9px 12px', borderRadius: '10px', width: '100%',
-              fontSize: isMobile ? '14px' : '13px', fontWeight: 500, color: 'rgba(255,255,255,0.8)',
-              backgroundColor: 'transparent', border: 'none', cursor: 'pointer',
-              transition: 'all 0.15s ease', marginBottom: '10px', textDecoration: 'none',
-              minHeight: isMobile ? '44px' : 'auto',
-            }}
-            onMouseOver={(e) => e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.1)'}
-            onMouseOut={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
-          >
-            <Settings size={isMobile ? 18 : 16} style={{ color: 'rgba(255,255,255,0.8)', flexShrink: 0 }} />
-            <span>Admin Panel</span>
-            <ExternalLink size={isMobile ? 14 : 12} style={{ color: 'rgba(255,255,255,0.5)', marginLeft: 'auto' }} />
-          </a>
 
           {/* Logout button */}
           <button
@@ -207,7 +189,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             style={{
               display: 'flex', alignItems: 'center', gap: '12px',
               padding: isMobile ? '12px' : '9px 12px', borderRadius: '10px', width: '100%',
-              fontSize: isMobile ? '14px' : '13px', fontWeight: 500, color: 'rgba(255,180,180,1)',
+              fontSize: isMobile ? '14px' : '13px', fontWeight: 500, color: '#fff',
               backgroundColor: 'transparent', border: 'none', cursor: 'pointer',
               transition: 'all 0.15s ease', marginBottom: '10px',
               minHeight: isMobile ? '44px' : 'auto',
@@ -215,7 +197,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             onMouseOver={(e) => e.currentTarget.style.backgroundColor = 'rgba(255,100,100,0.15)'}
             onMouseOut={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
           >
-            <LogOut size={isMobile ? 18 : 16} style={{ color: 'rgba(255,180,180,1)', flexShrink: 0 }} />
+            <LogOut size={isMobile ? 18 : 16} style={{ color: '#fff', flexShrink: 0 }} />
             <span>Logout</span>
           </button>
 
@@ -242,8 +224,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               <div style={{ fontSize: isMobile ? '14px' : '13px', fontWeight: 600, color: '#fff', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                 {user?.name || 'Student'}
               </div>
-              <div style={{ fontSize: isMobile ? '12px' : '11px', color: 'rgba(255,255,255,0.55)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                {user?.email || 'student@preplyx.com'}
+              <div style={{ fontSize: isMobile ? '12px' : '11px', color: '#fff', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                {user?.email || 'student@swallern.com'}
               </div>
             </div>
             </div>
@@ -257,7 +239,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         <div style={{
           display: 'flex', justifyContent: 'space-between', alignItems: 'center',
           padding: isMobile ? '12px 16px' : '14px 32px', borderBottom: '1px solid var(--glass-border)',
-          backgroundColor: '#fff', flexWrap: 'nowrap', gap: isMobile ? '8px' : '16px',
+          backgroundColor: 'var(--color-bg-main)', flexWrap: 'nowrap', gap: isMobile ? '8px' : '16px',
           position: 'sticky', top: 0, zIndex: 10
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: isMobile ? '12px' : '16px', minWidth: 0 }}>
@@ -274,7 +256,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                   flexShrink: 0
                 }}
               >
-                <Menu size={20} color="#0f172a" />
+                <Menu size={20} color="var(--color-text)" />
               </button>
             )}
             <div style={{ minWidth: 0, overflow: 'hidden' }}>
@@ -295,19 +277,19 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             <div style={{
               display: 'flex', alignItems: 'center', gap: isMobile ? '6px' : '12px',
               padding: isMobile ? '6px 10px' : '6px 6px 6px 14px', borderRadius: '40px',
-              backgroundColor: '#fff', border: '1px solid var(--glass-border)',
+              backgroundColor: 'var(--color-bg-card)', border: '1px solid var(--glass-border)',
               boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
               flexShrink: 0,
             }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <div style={{ width: isMobile ? '20px' : '24px', height: isMobile ? '20px' : '24px', borderRadius: '50%', backgroundColor: '#ecfdf5', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <Wallet size={isMobile ? 11 : 12} style={{ color: '#10b981' }} />
+                <div style={{ width: isMobile ? '36px' : '32px', height: isMobile ? '36px' : '32px', borderRadius: '50%', backgroundColor: 'var(--color-bg-card)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <Wallet size={isMobile ? 11 : 12} style={{ color: 'var(--color-primary)' }} />
                 </div>
-                <span style={{ fontSize: isMobile ? '12px' : '14px', fontWeight: 800, color: '#0f172a', letterSpacing: '-0.3px' }}>₦500.00</span>
+                <span style={{ fontSize: isMobile ? '12px' : '14px', fontWeight: 800, color: 'var(--color-text)', letterSpacing: '-0.3px' }}>₦500.00</span>
               </div>
               {!isMobile && (
                 <Link href="/dashboard/wallet" style={{
-                  background: 'var(--gradient-primary)', color: '#fff',
+                  background: 'var(--gradient-primary)', color: 'var(--color-text-main)',
                   border: 'none', borderRadius: '30px', padding: '6px 12px',
                   fontSize: '11px', fontWeight: 700, cursor: 'pointer',
                   display: 'flex', alignItems: 'center', gap: '4px',

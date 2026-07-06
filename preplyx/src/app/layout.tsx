@@ -4,7 +4,7 @@ import { AuthProvider } from "@/context/AuthContext";
 import BackendStatus from "@/components/BackendStatus";
 
 export const metadata: Metadata = {
-  title: "Preplyx | JAMB, WAEC & NECO CBT Platform",
+  title: "Swallern | JAMB, WAEC & NECO CBT Platform",
   description: "Prepare for JAMB, WAEC, and NECO with real past questions, AI assistance, and performance analytics.",
 };
 

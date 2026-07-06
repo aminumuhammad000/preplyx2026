@@ -167,8 +167,8 @@ function PracticeSelection() {
           {/* Quick Stats Banner */}
           <div style={{
             display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 160px), 1fr))', gap: '20px', marginBottom: '28px', padding: '24px',
-            borderRadius: '16px', background: 'var(--gradient-primary)', color: '#fff',
-            boxShadow: '0 8px 24px rgba(123, 47, 247, 0.2)'
+            borderRadius: '16px', background: '#e6673c', color: '#fff',
+            boxShadow: '0 8px 24px rgba(230, 103, 60, 0.2)'
           }}>
             {[
               { icon: BookOpen, label: 'Total Subjects', value: (exam.subjects || []).length.toString() },
@@ -260,13 +260,13 @@ function PracticeSelection() {
                 borderRadius: '24px',
                 fontSize: '13px',
                 fontWeight: 700,
-                border: selectedCategory === cat ? `1px solid ${exam.color}` : '1px solid var(--glass-border)',
-                backgroundColor: selectedCategory === cat ? `${exam.color}12` : '#fff',
-                color: selectedCategory === cat ? exam.color : 'var(--color-text-muted)',
+                border: '1px solid #e6673c',
+                backgroundColor: selectedCategory === cat ? '#e6673c' : '#fff',
+                color: selectedCategory === cat ? '#fff' : '#e6673c',
                 cursor: 'pointer',
                 transition: 'all 0.2s ease',
                 whiteSpace: 'nowrap',
-                boxShadow: selectedCategory === cat ? `0 2px 8px ${exam.color}20` : '0 1px 3px rgba(0,0,0,0.02)'
+                boxShadow: selectedCategory === cat ? '0 2px 8px rgba(230,103,60,0.3)' : '0 1px 3px rgba(0,0,0,0.02)'
               }}
             >
               {cat === 'All' ? 'All Subjects' : `${cat} Class`}

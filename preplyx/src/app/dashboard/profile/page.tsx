@@ -155,7 +155,7 @@ export default function Profile() {
               width: '36px',
               height: '36px',
               borderRadius: '50%',
-              backgroundColor: '#7B2FF7',
+              backgroundColor: '#e6673c',
               border: '3px solid #fff',
               display: 'flex',
               alignItems: 'center',
@@ -180,7 +180,7 @@ export default function Profile() {
                 gap: '8px',
                 padding: '10px 20px',
                 borderRadius: '8px',
-                background: 'var(--gradient-primary)',
+                background: '#e6673c',
                 color: '#fff',
                 fontSize: '14px',
                 fontWeight: 600,
@@ -220,7 +220,7 @@ export default function Profile() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 250px), 1fr))', gap: '20px' }}>
             <div style={{ padding: '16px', borderRadius: '12px', backgroundColor: '#f8fafc', border: '1px solid var(--glass-border)' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
-                <User size={18} color="#7B2FF7" />
+                <User size={18} color="#e6673c" />
                 <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
                   Full Name
                 </span>
@@ -231,7 +231,7 @@ export default function Profile() {
             </div>
             <div style={{ padding: '16px', borderRadius: '12px', backgroundColor: '#f8fafc', border: '1px solid var(--glass-border)' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
-                <Mail size={18} color="#7B2FF7" />
+                <Mail size={18} color="#e6673c" />
                 <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
                   Email Address
                 </span>
@@ -242,7 +242,7 @@ export default function Profile() {
             </div>
             <div style={{ padding: '16px', borderRadius: '12px', backgroundColor: '#f8fafc', border: '1px solid var(--glass-border)' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
-                <Phone size={18} color="#7B2FF7" />
+                <Phone size={18} color="#e6673c" />
                 <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
                   Phone Number
                 </span>
@@ -253,7 +253,7 @@ export default function Profile() {
             </div>
             <div style={{ padding: '16px', borderRadius: '12px', backgroundColor: '#f8fafc', border: '1px solid var(--glass-border)' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
-                <Shield size={18} color="#7B2FF7" />
+                <Shield size={18} color="#e6673c" />
                 <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
                   Exam Type
                 </span>
@@ -272,7 +272,7 @@ export default function Profile() {
           </h3>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 150px), 1fr))', gap: '16px' }}>
             <div style={{ padding: '20px', borderRadius: '12px', backgroundColor: '#f8fafc', border: '1px solid var(--glass-border)', textAlign: 'center' }}>
-              <Clock size={24} color="#7B2FF7" style={{ marginBottom: '12px' }} />
+              <Clock size={24} color="#e6673c" style={{ marginBottom: '12px' }} />
               <p style={{ fontSize: '28px', fontWeight: 700, color: 'var(--color-text-main)', marginBottom: '4px' }}>
                 45
               </p>
@@ -281,7 +281,7 @@ export default function Profile() {
               </p>
             </div>
             <div style={{ padding: '20px', borderRadius: '12px', backgroundColor: '#f8fafc', border: '1px solid var(--glass-border)', textAlign: 'center' }}>
-              <Shield size={24} color="#7B2FF7" style={{ marginBottom: '12px' }} />
+              <Shield size={24} color="#e6673c" style={{ marginBottom: '12px' }} />
               <p style={{ fontSize: '28px', fontWeight: 700, color: 'var(--color-text-main)', marginBottom: '4px' }}>
                 12
               </p>
@@ -290,7 +290,7 @@ export default function Profile() {
               </p>
             </div>
             <div style={{ padding: '20px', borderRadius: '12px', backgroundColor: '#f8fafc', border: '1px solid var(--glass-border)', textAlign: 'center' }}>
-              <User size={24} color="#7B2FF7" style={{ marginBottom: '12px' }} />
+              <User size={24} color="#e6673c" style={{ marginBottom: '12px' }} />
               <p style={{ fontSize: '28px', fontWeight: 700, color: 'var(--color-text-main)', marginBottom: '4px' }}>
                 89%
               </p>

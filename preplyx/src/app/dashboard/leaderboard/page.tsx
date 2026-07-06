@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from 'react';
-import { Trophy, Medal, Award, Crown, TrendingUp, Calendar } from 'lucide-react';
+import { Trophy, Medal, Award, Crown, TrendingUp, Calendar, CheckCheck } from 'lucide-react';
 import { api } from '@/lib/api';
 import { useAuth } from '@/context/AuthContext';
 
@@ -42,7 +42,7 @@ export default function Leaderboard() {
   ];
 
   const getRankIcon = (rank: number) => {
-    if (rank === 1) return <Crown size={20} color="#f59e0b" />;
+    if (rank === 1) return <CheckCheck size={26} color="var(--color-primary)" />;
     if (rank === 2) return <Medal size={20} color="#c0c0c0" />;
     if (rank === 3) return <Medal size={20} color="#cd7f32" />;
     return <span style={{ fontSize: '14px', fontWeight: 700, color: '#64748b' }}>{rank}</span>;
@@ -59,7 +59,7 @@ export default function Leaderboard() {
     return (
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh', flexDirection: 'column', gap: '16px' }}>
         <div style={{ width: '40px', height: '40px', borderRadius: '8px', background: 'var(--gradient-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <Trophy size={20} color="#fff" />
+          <Trophy size={20} color="var(--color-primary)" />
         </div>
         <div style={{ textAlign: 'center' }}>
           <div style={{ fontSize: '16px', fontWeight: 700, color: 'var(--color-text-main)', marginBottom: '4px' }}>Loading Leaderboard...</div>
@@ -125,7 +125,7 @@ export default function Leaderboard() {
       {/* User Rank Display */}
       {userRank && userRank.rank && (
         <div style={{
-          background: 'linear-gradient(135deg, #4B0FA3, #7B2FF7)',
+          background: 'var(--gradient-primary)',
           borderRadius: '16px',
           padding: '20px',
           color: '#fff',
@@ -183,7 +183,7 @@ export default function Leaderboard() {
                 justifyContent: 'center',
                 paddingBottom: '12px'
               }}>
-                <Medal size={32} color="#fff" />
+                <Medal size={32} color="var(--color-primary)" />
               </div>
             </div>
           )}
@@ -222,7 +222,7 @@ export default function Leaderboard() {
                 justifyContent: 'center',
                 paddingBottom: '12px'
               }}>
-                <Crown size={40} color="#fff" />
+                <Crown size={40} color="var(--color-primary)" />
               </div>
             </div>
           )}
@@ -261,7 +261,7 @@ export default function Leaderboard() {
                 justifyContent: 'center',
                 paddingBottom: '12px'
               }}>
-                <Medal size={32} color="#fff" />
+                <Medal size={32} color="var(--color-primary)" />
               </div>
             </div>
           )}

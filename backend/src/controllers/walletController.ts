@@ -113,6 +113,12 @@ export const getTransactions = async (req: AuthRequest, res: Response): Promise<
  */
 export const createVirtualAccount = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
+    if (!req.user?._id) {
+      res.status(401).json({ message: 'Unauthorized' });
+      return;
+    }
+
+    console.log('createVirtualAccount: req.user', req.user);
     const user = await User.findById(req.user?._id);
     
     if (!user) {

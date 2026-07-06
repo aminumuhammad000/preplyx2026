@@ -63,7 +63,7 @@ export const Login: React.FC = () => {
       <div className="login-card">
         {/* Logo / Branding */}
         <div className="login-brand">
-          <img src={logoImg} alt="Preplyx Logo" className="login-logo-img" />
+          <img src={logoImg} alt="logo.png" className="login-logo-img" />
           <div className="login-brand-text">
             <h1 className="login-brand-name">Preplyx</h1>
             <span className="login-brand-tagline">Admin Panel</span>

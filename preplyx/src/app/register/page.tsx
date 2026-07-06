@@ -57,7 +57,7 @@ export default function RegisterPage() {
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px', marginBottom: '32px' }}>
           <img 
             src="/logo.png" 
-            alt="Preplyx Logo" 
+            alt="logo.png" 
             style={{
               width: '40px',
               height: '40px',
