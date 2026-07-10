@@ -30,7 +30,7 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
           <div className="col-span-1 lg:col-span-1">
             <a href="#" className="flex items-center gap-2 mb-6">
-              <img src="/logo.png" alt="Preplyx" className="h-12 w-auto bg-white rounded-lg p-1" />
+              <img src="/images/a.png" alt="Preplyx" className="h-12 w-auto bg-white rounded-lg p-1" />
             </a>
             <p className="text-gray-400 text-sm leading-relaxed mb-6">
               The smartest way to prepare for WAEC, NECO, and JAMB. Join thousands of successful students today.

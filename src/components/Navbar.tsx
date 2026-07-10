@@ -28,7 +28,7 @@ const Navbar = () => {
         <div className="flex items-center justify-between">
           <div className="flex-shrink-0">
             <a href="#" className="flex items-center gap-2">
-              <img src="/logo.png" alt="Preplyx" className="h-10 w-auto rounded-full object-cover shadow-sm transition-transform duration-300 hover:scale-105" />
+              <img src="/images/a.png" alt="Preplyx" className="h-10 w-auto rounded-full object-cover shadow-sm transition-transform duration-300 hover:scale-105" />
             </a>
           </div>
 
@@ -77,7 +77,7 @@ const Navbar = () => {
               className="fixed top-0 right-0 h-screen w-[85vw] max-w-sm bg-white shadow-2xl z-[70] md:hidden flex flex-col"
             >
               <div className="flex items-center justify-between p-6 border-b border-gray-100">
-                <img src="/logo.png" alt="Preplyx" className="h-8 w-auto" />
+                <img src="/images/a.png" alt="Preplyx" className="h-8 w-auto" />
                 <button
                   onClick={() => setMobileMenuOpen(false)}
                   className="p-2 rounded-full text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors"
