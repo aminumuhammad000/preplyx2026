@@ -1,151 +1,186 @@
-import { motion } from 'framer-motion';
-import { Download, ChevronRight, Award, BookOpen, TrendingUp } from 'lucide-react';
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ChevronRight, CheckCircle2, XCircle, ArrowRight, Sparkles } from 'lucide-react';
+
+const QUESTIONS = [
+  {
+    subject: "JAMB English",
+    question: "Choose the word most opposite in meaning to the capitalized word: The effect of the drug was EPHEMERAL.",
+    options: ["Transient", "Permanent", "Short-lived", "Deliberate"],
+    correct: 1,
+    explanation: "Ephemeral means lasting for a very short time. The correct opposite is 'Permanent'."
+  },
+  {
+    subject: "WAEC Biology",
+    question: "Which of the following cell organelles is responsible for cellular respiration?",
+    options: ["Chloroplast", "Nucleus", "Mitochondrion", "Ribosome"],
+    correct: 2,
+    explanation: "Mitochondria are the powerhouses of the cell, where ATP is generated via respiration."
+  },
+  {
+    subject: "JAMB Mathematics",
+    question: "If log₁₀(x²) = 2, what is the value of x?",
+    options: ["2", "10", "20", "100"],
+    correct: 1,
+    explanation: "log₁₀(x²) = 2 means x² = 10² = 100, which gives x = 10."
+  }
+];
 
 const Hero = () => {
+  const [currentQIndex, setCurrentQIndex] = useState(0);
+  const [selectedOption, setSelectedOption] = useState<number | null>(null);
+  const [answered, setAnswered] = useState(false);
+
+  const currentQ = QUESTIONS[currentQIndex];
+
+  const handleOptionClick = (idx: number) => {
+    if (answered) return;
+    setSelectedOption(idx);
+    setAnswered(true);
+  };
+
+  const handleNextQuestion = () => {
+    setSelectedOption(null);
+    setAnswered(false);
+    setCurrentQIndex((prev) => (prev + 1) % QUESTIONS.length);
+  };
+
   return (
     <section className="relative min-h-screen pt-32 pb-20 overflow-hidden flex items-center bg-background">
-      {/* Background Glow Effects */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[600px] bg-primary/5 rounded-[100%] blur-[120px] pointer-events-none" />
-      <div className="absolute top-40 right-[-10%] w-[500px] h-[500px] bg-secondary/10 rounded-full blur-[100px] pointer-events-none animate-blob" />
-      <div className="absolute bottom-[-10%] left-[-10%] w-[600px] h-[600px] bg-accent/5 rounded-full blur-[120px] pointer-events-none animate-blob animation-delay-2000" />
+      {/* Subtle Background Glows */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[500px] bg-primary/5 rounded-[100%] blur-[120px] pointer-events-none" />
+      <div className="absolute top-40 right-[-5%] w-[400px] h-[400px] bg-secondary/5 rounded-full blur-[100px] pointer-events-none" />
+      <div className="absolute bottom-[5%] left-[-5%] w-[400px] h-[400px] bg-primary/5 rounded-full blur-[100px] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
-        <div className="grid lg:grid-cols-2 gap-16 items-center">
+        <div className="grid lg:grid-cols-12 gap-12 items-center">
           
-          {/* Left Column - Content */}
+          {/* Left Column - Headline & Copy */}
           <motion.div 
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="max-w-2xl"
+            className="lg:col-span-7 pr-4"
           >
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary font-semibold text-sm mb-6">
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
-              </span>
-              Built for Nigerian Students
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/5 border border-primary/20 text-primary font-bold text-xs uppercase tracking-wider mb-6">
+              <Sparkles className="w-3.5 h-3.5" />
+              Practice Smarter, Score Higher
             </div>
             
-            <h1 className="text-5xl lg:text-7xl font-extrabold tracking-tight text-text-dark leading-[1.1] mb-6">
-              Pass WAEC, NECO & JAMB With <span className="text-gradient">Real Past Questions</span>
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-text-dark leading-[1.15] mb-6">
+              Master WAEC, NECO & JAMB with <span className="text-gradient">confidence</span>.
             </h1>
             
-            <p className="text-lg lg:text-xl text-gray-600 mb-8 leading-relaxed max-w-xl">
-              Practice thousands of verified exam questions, study smarter, and boost your confidence before exams.
+            <p className="text-lg text-gray-600 mb-8 leading-relaxed max-w-xl">
+              Get instant access to thousands of real past questions, detailed step-by-step explanations, and real-time performance analytics.
             </p>
             
-            <div className="flex flex-col sm:flex-row gap-4 mb-12">
-              <a href="#subjects" className="flex items-center justify-center gap-2 bg-primary hover:bg-secondary text-white px-8 py-4 rounded-xl font-bold text-lg transition-all duration-300 shadow-[0_8px_20px_rgba(75,15,163,0.3)] hover:shadow-[0_12px_25px_rgba(123,47,247,0.4)] hover:-translate-y-1 inline-flex">
-                Start Practicing <ChevronRight className="w-5 h-5" />
+            <div className="flex flex-col sm:flex-row gap-4">
+              <a href="#subjects" className="flex items-center justify-center gap-2 bg-primary hover:bg-secondary text-white px-8 py-4 rounded-full font-bold text-base transition-all duration-300 shadow-[0_4px_12px_rgba(75,15,163,0.2)] hover:shadow-[0_8px_20px_rgba(123,47,247,0.3)] hover:-translate-y-0.5">
+                Start Practicing <ChevronRight className="w-4 h-4" />
               </a>
-              <a href="#cta" className="flex items-center justify-center gap-2 bg-white text-text-dark border border-gray-200 hover:border-gray-300 hover:bg-gray-50 px-8 py-4 rounded-xl font-bold text-lg transition-all duration-300 shadow-sm hover:shadow-md inline-flex">
-                <Download className="w-5 h-5" /> Download App
-              </a>
-            </div>
-
-            <div className="flex items-center gap-6 text-gray-500 font-medium">
-              <span className="text-sm uppercase tracking-wider font-bold">Trusted for:</span>
-              <div className="flex gap-4 items-center">
-                <span className="px-3 py-1 rounded bg-gray-100 font-bold text-gray-700">WAEC</span>
-                <span className="px-3 py-1 rounded bg-gray-100 font-bold text-gray-700">NECO</span>
-                <span className="px-3 py-1 rounded bg-gray-100 font-bold text-gray-700">JAMB</span>
-              </div>
-            </div>
-          </motion.div>
-
-          {/* Right Column - Visuals */}
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="relative lg:h-[600px] flex items-center justify-center"
-          >
-            {/* Main App Mockup Card */}
-            <div className="absolute z-20 w-full max-w-md glass-card rounded-2xl p-6 shadow-2xl">
-              <div className="flex items-center justify-between mb-6 pb-4 border-b border-gray-100">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold">
-                    A
-                  </div>
-                  <div>
-                    <p className="font-bold text-sm">Welcome back, Amina</p>
-                    <p className="text-xs text-gray-500">Ready to crush JAMB?</p>
-                  </div>
-                </div>
-                <div className="text-right">
-                  <p className="text-xl font-bold text-primary">278</p>
-                  <p className="text-xs text-gray-500">Target Score</p>
-                </div>
-              </div>
-
-              <div className="space-y-4">
-                <div className="bg-background rounded-xl p-4 flex items-center gap-4 hover:shadow-md transition-shadow cursor-pointer">
-                  <div className="p-3 rounded-lg bg-blue-100 text-blue-600">
-                    <BookOpen className="w-5 h-5" />
-                  </div>
-                  <div className="flex-1">
-                    <h4 className="font-bold text-sm">Use of English</h4>
-                    <div className="w-full bg-gray-200 rounded-full h-1.5 mt-2">
-                      <div className="bg-blue-500 h-1.5 rounded-full" style={{ width: '85%' }}></div>
-                    </div>
-                  </div>
-                  <span className="text-xs font-bold text-gray-500">85%</span>
-                </div>
-
-                <div className="bg-background rounded-xl p-4 flex items-center gap-4 hover:shadow-md transition-shadow cursor-pointer">
-                  <div className="p-3 rounded-lg bg-purple-100 text-purple-600">
-                    <Award className="w-5 h-5" />
-                  </div>
-                  <div className="flex-1">
-                    <h4 className="font-bold text-sm">Mathematics</h4>
-                    <div className="w-full bg-gray-200 rounded-full h-1.5 mt-2">
-                      <div className="bg-purple-500 h-1.5 rounded-full" style={{ width: '60%' }}></div>
-                    </div>
-                  </div>
-                  <span className="text-xs font-bold text-gray-500">60%</span>
-                </div>
-              </div>
-
-              <a href="#subjects" className="w-full mt-6 bg-gray-900 text-white rounded-xl py-3 text-sm font-bold hover:bg-gray-800 transition-colors block text-center">
-                Continue Practice Session
+              <a href="#cta" className="flex items-center justify-center gap-2 bg-white text-text-dark border border-gray-200 hover:border-gray-300 hover:bg-gray-50 px-8 py-4 rounded-full font-bold text-base transition-all duration-300 shadow-sm">
+                Explore Subjects
               </a>
             </div>
 
-            {/* Floating Elements */}
-            <motion.div 
-              animate={{ y: [0, -15, 0] }}
-              transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
-              className="absolute -top-6 -right-6 z-30 glass-card rounded-2xl p-4 flex items-center gap-3"
-            >
-              <div className="w-10 h-10 rounded-full bg-accent flex items-center justify-center text-white shadow-lg">
-                <TrendingUp className="w-5 h-5" />
-              </div>
-              <div>
-                <p className="text-xs text-gray-500 font-medium">Performance</p>
-                <p className="font-bold text-sm text-text-dark">+24% this week</p>
-              </div>
-            </motion.div>
-
-            <motion.div 
-              animate={{ y: [0, 15, 0] }}
-              transition={{ repeat: Infinity, duration: 5, ease: "easeInOut", delay: 1 }}
-              className="absolute -bottom-8 -left-8 z-30 glass-card rounded-2xl p-4"
-            >
-              <div className="flex items-center gap-2 mb-2">
-                {[1, 2, 3, 4, 5].map((star) => (
-                  <svg key={star} className="w-4 h-4 text-accent" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                  </svg>
+            <div className="mt-10 flex items-center gap-6">
+              <span className="text-xs uppercase tracking-wider font-bold text-gray-400">Supported Exams:</span>
+              <div className="flex gap-2">
+                {["JAMB", "WAEC", "NECO"].map((exam) => (
+                  <span key={exam} className="text-xs font-extrabold text-gray-600 bg-white border border-gray-150 px-3 py-1 rounded-full shadow-xs">
+                    {exam}
+                  </span>
                 ))}
               </div>
-              <p className="text-xs font-bold">"Best CBT App!"</p>
-            </motion.div>
-            
-            {/* Decorative background shape for the mockup */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[110%] h-[110%] bg-gradient-to-tr from-primary/10 to-secondary/20 rounded-full blur-2xl -z-10" />
-
+            </div>
           </motion.div>
+
+          {/* Right Column - Interactive Quiz Widget (Instant Feedback) */}
+          <motion.div 
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.7, delay: 0.1 }}
+            className="lg:col-span-5 w-full max-w-md mx-auto"
+          >
+            <div className="glass-card bg-white/70 backdrop-blur-xl border border-gray-250/20 rounded-2xl p-6 shadow-xl relative overflow-hidden transition-all duration-350 hover:shadow-2xl">
+              {/* Card Header */}
+              <div className="flex items-center justify-between mb-4 pb-3 border-b border-gray-100">
+                <span className="px-3 py-1 rounded-full text-[10px] font-extrabold bg-primary/10 text-primary uppercase tracking-widest">
+                  {currentQ.subject}
+                </span>
+                <span className="text-xs font-bold text-gray-500">
+                  Interactive Demo
+                </span>
+              </div>
+
+              {/* Question Text */}
+              <div className="mb-6">
+                <h3 className="font-bold text-gray-800 text-base leading-snug">
+                  {currentQ.question}
+                </h3>
+              </div>
+
+              {/* Options */}
+              <div className="space-y-3 mb-6">
+                {currentQ.options.map((option, idx) => {
+                  let optionClass = "border-gray-200 bg-white hover:border-primary hover:bg-primary/5 text-gray-700";
+                  let Icon = null;
+                  
+                  if (answered) {
+                    if (idx === currentQ.correct) {
+                      optionClass = "border-emerald-500 bg-emerald-50 text-emerald-800 font-semibold shadow-xs";
+                      Icon = <CheckCircle2 className="w-5 h-5 text-emerald-600 flex-shrink-0" />;
+                    } else if (selectedOption === idx) {
+                      optionClass = "border-rose-500 bg-rose-50 text-rose-800 font-semibold shadow-xs";
+                      Icon = <XCircle className="w-5 h-5 text-rose-600 flex-shrink-0" />;
+                    } else {
+                      optionClass = "border-gray-150 bg-gray-50/50 text-gray-400 opacity-60";
+                    }
+                  }
+
+                  return (
+                    <button
+                      key={idx}
+                      onClick={() => handleOptionClick(idx)}
+                      disabled={answered}
+                      className={`w-full flex items-center justify-between p-3.5 rounded-xl border text-left text-sm font-medium transition-all duration-200 ${optionClass}`}
+                    >
+                      <span>{option}</span>
+                      {Icon}
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Explanation & Next Trigger */}
+              <AnimatePresence>
+                {answered && (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: "auto" }}
+                    exit={{ opacity: 0, height: 0 }}
+                    className="overflow-hidden"
+                  >
+                    <div className="bg-gray-50/80 rounded-xl p-4 border border-gray-150 text-xs text-gray-600 mb-4">
+                      <p className="font-bold text-gray-700 mb-1">
+                        {selectedOption === currentQ.correct ? "🎉 Correct!" : "❌ Incorrect"}
+                      </p>
+                      <p className="leading-relaxed">{currentQ.explanation}</p>
+                    </div>
+
+                    <button
+                      onClick={handleNextQuestion}
+                      className="w-full flex items-center justify-center gap-1 bg-gray-900 hover:bg-gray-800 text-white rounded-xl py-3 text-xs font-bold transition-all"
+                    >
+                      Try Another Question <ArrowRight className="w-4 h-4" />
+                    </button>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          </motion.div>
+
         </div>
       </div>
     </section>

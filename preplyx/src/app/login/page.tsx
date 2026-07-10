@@ -66,7 +66,7 @@ export default function LoginPage() {
             }} 
           />
           <span style={{ fontSize: '24px', fontWeight: 700, color: 'var(--color-text-main)' }}>
-            Swallern
+            Preplyx
           </span>
         </div>
 

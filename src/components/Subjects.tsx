@@ -21,18 +21,15 @@ const Subjects = () => {
           {subjects.map((subject, index) => (
             <motion.div
               key={index}
-              initial={{ opacity: 0, scale: 0.8 }}
-              whileInView={{ opacity: 1, scale: 1 }}
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.4, delay: index * 0.05 }}
-              whileHover={{ y: -5, scale: 1.05 }}
-              className="relative group cursor-pointer"
+              whileHover={{ y: -3 }}
+              className="cursor-pointer"
             >
-              {/* Gradient border wrapper */}
-              <div className="absolute inset-0 bg-gradient-to-r from-primary to-secondary rounded-full opacity-50 group-hover:opacity-100 blur-[2px] transition-opacity duration-300"></div>
-              
-              <div className="relative bg-white px-8 py-4 rounded-full border border-gray-100 flex items-center justify-center m-[2px]">
-                <span className="font-bold text-text-dark group-hover:text-primary transition-colors">
+              <div className="bg-white px-8 py-4 rounded-full border border-gray-200 hover:border-primary transition-all duration-300 flex items-center justify-center">
+                <span className="font-bold text-text-dark hover:text-primary transition-colors">
                   {subject}
                 </span>
               </div>

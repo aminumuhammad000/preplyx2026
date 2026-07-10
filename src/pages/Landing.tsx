@@ -4,9 +4,7 @@ import Hero from '../components/Hero';
 import About from '../components/About';
 import Features from '../components/Features';
 import Subjects from '../components/Subjects';
-import Statistics from '../components/Statistics';
 import Testimonials from '../components/Testimonials';
-import CTA from '../components/CTA';
 import FAQ from '../components/FAQ';
 import Footer from '../components/Footer';
 
@@ -18,9 +16,7 @@ const Landing = () => {
       <About />
       <Features />
       <Subjects />
-      <Statistics />
       <Testimonials />
-      <CTA />
       <FAQ />
       <Footer />
     </div>

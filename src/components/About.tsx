@@ -10,38 +10,47 @@ const About = () => {
   ];
 
   return (
-    <section id="about" className="py-24 bg-white relative overflow-hidden">
-      {/* Decorative background */}
-      <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-gray-50 to-transparent pointer-events-none" />
-      
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="grid lg:grid-cols-2 gap-16 items-center">
-          
+    <section id="about" className="relative overflow-hidden bg-white py-24">
+      <div className="absolute right-0 top-0 h-full w-1/2 bg-gradient-to-l from-slate-50 to-transparent pointer-events-none" />
+
+      <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="grid items-center gap-16 lg:grid-cols-2">
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <h2 className="text-sm font-bold text-primary uppercase tracking-widest mb-3">About Preplyx</h2>
-            <h3 className="text-4xl md:text-5xl font-extrabold text-text-dark leading-tight mb-6">
+            <div className="mb-4 inline-flex items-center rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-sm font-semibold uppercase tracking-[0.24em] text-primary">
+              About Preplyx
+            </div>
+            <h3 className="mb-6 text-4xl font-semibold leading-tight text-slate-900 md:text-5xl">
               Study Smarter, Not Harder.
             </h3>
-            <p className="text-lg text-gray-600 mb-10 leading-relaxed">
-              Preplyx helps students prepare for WAEC, NECO, and JAMB using real past questions, smart practice sessions, and performance tracking. We turn anxiety into confidence.
+            <p className="mb-8 max-w-xl text-lg leading-relaxed text-slate-600">
+              Preplyx helps students prepare for WAEC, NECO, and JAMB using realistic practice, clear progress insight, and calm study routines that build confidence.
             </p>
 
-            <div className="grid sm:grid-cols-2 gap-8">
+            <div className="grid gap-4 sm:grid-cols-2">
               {highlights.map((item, index) => (
-                <div key={index} className="flex gap-4">
-                  <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary shrink-0">
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 16 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.35, delay: index * 0.08 }}
+                  whileHover={{ y: -4, scale: 1.01, x: 2 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="flex gap-4 rounded-2xl border border-slate-200 bg-white/80 p-4 shadow-sm"
+                >
+                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
                     {item.icon}
                   </div>
                   <div>
-                    <h4 className="font-bold text-text-dark mb-1">{item.title}</h4>
-                    <p className="text-sm text-gray-500">{item.desc}</p>
+                    <h4 className="mb-1 font-semibold text-slate-900">{item.title}</h4>
+                    <p className="text-sm leading-6 text-slate-500">{item.desc}</p>
                   </div>
-                </div>
+                </motion.div>
               ))}
             </div>
           </motion.div>
@@ -51,26 +60,33 @@ const About = () => {
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
-            className="relative h-[500px] rounded-3xl bg-primary-gradient p-8 shadow-2xl flex flex-col justify-center overflow-hidden"
+            whileHover={{ y: -6, scale: 1.01, boxShadow: '0 20px 45px rgba(15, 23, 42, 0.08)' }}
+            className="relative overflow-hidden rounded-[2rem] border border-slate-200 bg-slate-50/80 p-7 shadow-[0_20px_60px_rgba(15,23,42,0.06)]"
           >
-            {/* Abstract Shapes inside the card */}
-            <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl" />
-            <div className="absolute bottom-0 left-0 w-48 h-48 bg-secondary/30 rounded-full blur-2xl" />
-
-            <div className="relative z-10">
-              <div className="glass-card bg-white/10 border-white/20 text-white rounded-2xl p-6 mb-6">
-                <h4 className="font-bold text-xl mb-2">Smart Practice Sessions</h4>
-                <p className="text-white/80 text-sm">Our algorithm adapts to your weaknesses and creates custom tests to improve your scores rapidly.</p>
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(123,47,247,0.12),transparent_42%)]" />
+            <div className="relative z-10 space-y-6">
+              <div className="flex items-center justify-between">
+                <span className="rounded-full border border-slate-200 bg-white px-3 py-1 text-sm font-medium text-slate-600">
+                  Minimal practice
+                </span>
+                <span className="text-sm font-medium text-slate-500">Instant feedback</span>
               </div>
 
-              <div className="flex gap-4">
-                <div className="glass-card bg-white/10 border-white/20 text-white rounded-2xl p-6 flex-1">
-                  <p className="text-3xl font-bold text-accent mb-1">98%</p>
-                  <p className="text-xs text-white/80 uppercase tracking-wide font-medium">Pass Rate</p>
+              <div className="space-y-3">
+                <h4 className="text-2xl font-semibold text-slate-900">Focused prep, clearer progress.</h4>
+                <p className="text-sm leading-6 text-slate-600">
+                  Each session is designed to feel calm and practical, so students can improve quickly without the noise.
+                </p>
+              </div>
+
+              <div className="grid gap-3 sm:grid-cols-2">
+                <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+                  <p className="text-3xl font-semibold text-primary">98%</p>
+                  <p className="mt-1 text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">Pass focus</p>
                 </div>
-                <div className="glass-card bg-white/10 border-white/20 text-white rounded-2xl p-6 flex-1">
-                  <p className="text-3xl font-bold text-accent mb-1">24/7</p>
-                  <p className="text-xs text-white/80 uppercase tracking-wide font-medium">Offline Access</p>
+                <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+                  <p className="text-3xl font-semibold text-primary">24/7</p>
+                  <p className="mt-1 text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">Flexible access</p>
                 </div>
               </div>
             </div>

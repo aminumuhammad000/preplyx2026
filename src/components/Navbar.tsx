@@ -23,15 +23,15 @@ const Navbar = () => {
   ];
 
   return (
-    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-white/80 backdrop-blur-md shadow-sm py-4' : 'bg-transparent py-6'}`}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <nav className={`fixed left-1/2 -translate-x-1/2 z-50 transition-all duration-500 w-[92%] max-w-6xl rounded-full backdrop-blur-md ${isScrolled ? 'top-3 bg-white/95 shadow-[0_10px_40px_rgba(15,23,42,0.06)] py-2.5 px-6' : 'top-6 bg-white/80 shadow-[0_10px_30px_rgba(15,23,42,0.05)] py-3.5 px-8'}`}>
+      <div className="w-full">
         <div className="flex items-center justify-between">
           <div className="flex-shrink-0">
             <a href="#" className="flex items-center gap-2">
-              <img src="a.jpg" alt="Preplyx" className="h-12 w-auto" />
+              <img src="a.jpg" alt="Preplyx" className="h-10 w-auto rounded-full object-cover shadow-sm transition-transform duration-300 hover:scale-105" />
             </a>
           </div>
-          
+
           <div className="hidden md:block">
             <div className="ml-10 flex items-baseline space-x-8">
               {navLinks.map((link) => (
@@ -41,7 +41,7 @@ const Navbar = () => {
               ))}
             </div>
           </div>
-          
+
           <div className="hidden md:block">
             <a href="#cta" className="bg-primary hover:bg-secondary text-white px-6 py-2.5 rounded-full font-medium transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 inline-block">
               Get Started
@@ -62,7 +62,7 @@ const Navbar = () => {
       <AnimatePresence>
         {mobileMenuOpen && (
           <>
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}

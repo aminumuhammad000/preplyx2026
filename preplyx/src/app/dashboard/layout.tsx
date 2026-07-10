@@ -225,7 +225,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 {user?.name || 'Student'}
               </div>
               <div style={{ fontSize: isMobile ? '12px' : '11px', color: '#fff', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                {user?.email || 'student@swallern.com'}
+                {user?.email || 'student@preplyx.com'}
               </div>
             </div>
             </div>

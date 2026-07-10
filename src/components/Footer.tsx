@@ -1,5 +1,25 @@
 import { Mail } from 'lucide-react';
 
+const XIcon = () => (
+  <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4" aria-hidden="true">
+    <path d="M18.901 1.153h3.68l-8.04 9.19L24 22.847h-7.406l-5.8-7.584-6.638 7.584H.876l8.6-9.823L0 1.153h7.594l5.243 6.932L18.901 1.153Zm-1.03 19.03h1.136L6.17 3.15H4.95l12.92 17.033Z" />
+  </svg>
+);
+
+const FacebookIcon = () => (
+  <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4" aria-hidden="true">
+    <path d="M13.5 22v-9h3l.45-3.5H13.5V4.2c0-1.01.28-1.7 1.73-1.7H18V.1C17.37.05 16.21 0 14.95 0c-2.43 0-4.1 1.48-4.1 4.2V9.5H7.5V13h3.35v9h2.65Z" />
+  </svg>
+);
+
+const InstagramIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4" aria-hidden="true">
+    <rect x="3" y="3" width="18" height="18" rx="5" />
+    <circle cx="12" cy="12" r="4.5" />
+    <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" />
+  </svg>
+);
+
 const Footer = () => {
   return (
     <footer className="bg-[#1a053a] text-white relative overflow-hidden">
@@ -16,14 +36,14 @@ const Footer = () => {
               The smartest way to prepare for WAEC, NECO, and JAMB. Join thousands of successful students today.
             </p>
             <div className="flex gap-4">
-              <a href="https://x.com" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-primary transition-colors text-xs font-bold">
-                X
+              <a href="https://x.com" target="_blank" rel="noopener noreferrer" aria-label="Follow us on X" className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-primary transition-colors text-white">
+                <XIcon />
               </a>
-              <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-primary transition-colors text-xs font-bold">
-                FB
+              <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" aria-label="Follow us on Facebook" className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-primary transition-colors text-white">
+                <FacebookIcon />
               </a>
-              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-primary transition-colors text-xs font-bold">
-                IG
+              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Follow us on Instagram" className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-primary transition-colors text-white">
+                <InstagramIcon />
               </a>
             </div>
           </div>
