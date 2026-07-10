@@ -3,8 +3,15 @@ import User from '../models/User';
 import Wallet from '../models/Wallet';
 
 export const connectDB = async (): Promise<void> => {
+  const mongoUri = process.env.MONGODB_URI;
+
+  if (!mongoUri) {
+    console.warn('MONGODB_URI is not set. Skipping MongoDB connection. Database features will be unavailable until it is configured.');
+    return;
+  }
+
   try {
-    const conn = await mongoose.connect(process.env.MONGODB_URI as string);
+    const conn = await mongoose.connect(mongoUri);
     console.log(`MongoDB Connected: ${conn.connection.host}`);
 
     // Seed admin user 'demo' if not exists
@@ -43,7 +50,7 @@ export const connectDB = async (): Promise<void> => {
       console.error('Error seeding/updating admin user:', seedError);
     }
   } catch (error: any) {
-    console.error(`Error: ${error.message}`);
-    process.exit(1);
+    console.error(`MongoDB connection failed: ${error.message}`);
+    console.warn('Server will continue without database connection.');
   }
 };

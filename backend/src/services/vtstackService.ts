@@ -26,7 +26,7 @@ class VtstackService {
     this.baseUrl = 'https://gw.prod.girostack.com/v1';
     this.apiKey = process.env.VTSTACK_API_KEY || '';
     if (!this.apiKey) {
-      console.error('VTSTACK_API_KEY is not set in environment variables');
+      console.warn('VTSTACK_API_KEY is not set. Virtual account features will be unavailable until configured.');
     }
   }
 

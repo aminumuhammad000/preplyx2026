@@ -56,12 +56,13 @@ export default function RegisterPage() {
         {/* Logo */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px', marginBottom: '32px' }}>
           <img 
-            src="/logo.png" 
-            alt="logo.png" 
+            src="/logo.svg" 
+            alt="Preplyx logo" 
+            loading="eager"
             style={{
-              width: '40px',
-              height: '40px',
-              borderRadius: '10px',
+              width: '44px',
+              height: '44px',
+              borderRadius: '12px',
               objectFit: 'cover'
             }} 
           />

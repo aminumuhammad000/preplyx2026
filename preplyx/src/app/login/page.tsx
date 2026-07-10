@@ -56,12 +56,13 @@ export default function LoginPage() {
         {/* Logo */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px', marginBottom: '32px' }}>
           <img 
-            src="/logo.png" 
-            alt="logo.png" 
+            src="/logo.svg" 
+            alt="Preplyx logo" 
+            loading="eager"
             style={{
-              width: '40px',
-              height: '40px',
-              borderRadius: '10px',
+              width: '44px',
+              height: '44px',
+              borderRadius: '12px',
               objectFit: 'cover'
             }} 
           />
@@ -152,14 +153,18 @@ export default function LoginPage() {
 
           {/* Forgot Password */}
           <div style={{ textAlign: 'right' }}>
-            <button type="button" style={{
-              background: 'none',
-              border: 'none',
-              color: '#7B2FF7',
-              fontSize: '13px',
-              fontWeight: 600,
-              cursor: 'pointer'
-            }}>
+            <button 
+              type="button" 
+              onClick={() => router.push('/forgot-password')}
+              style={{
+                background: 'none',
+                border: 'none',
+                color: '#7B2FF7',
+                fontSize: '13px',
+                fontWeight: 600,
+                cursor: 'pointer'
+              }}
+            >
               Forgot Password?
             </button>
           </div>
