@@ -7,12 +7,12 @@
 **For Production:**
 1. Double-click `start-backend.bat`
 2. This will build the TypeScript code and start the server
-3. Server runs on `http://localhost:5000`
+3. Server runs on `http://localhost:5004`
 
 **For Development:**
 1. Double-click `start-backend-dev.bat`
 2. This starts the server with auto-restart on file changes
-3. Server runs on `http://localhost:5000`
+3. Server runs on `http://localhost:5004`
 
 ### Option 2: Using Command Line
 
@@ -44,7 +44,7 @@ Create a `.env` file in the backend directory with:
 ```env
 MONGO_URI=mongodb://localhost:27017/cbt-database
 JWT_SECRET=your-secret-key-here
-PORT=5000
+PORT=5004
 ```
 
 ## Troubleshooting
@@ -72,12 +72,12 @@ npm run build
 
 ### Port Already in Use
 
-If port 5000 is already in use:
+If port 5004 is already in use:
 
 1. Change the PORT in your `.env` file
-2. Or kill the process using port 5000:
+2. Or kill the process using port 5004:
    ```bash
-   netstat -ano | findstr :5000
+   netstat -ano | findstr :5004
    taskkill /PID <PID> /F
    ```
 
@@ -86,7 +86,7 @@ If port 5000 is already in use:
 Once the server is running, check health:
 
 ```
-http://localhost:5000/health
+http://localhost:5004/health
 ```
 
 Should return: `{"status": "ok", "timestamp": "..."}`
@@ -95,7 +95,7 @@ Should return: `{"status": "ok", "timestamp": "..."}`
 
 The frontend is configured to connect to:
 ```
-http://localhost:5000/api
+http://localhost:5004/api
 ```
 
 If you changed the backend port, update the frontend environment variable:

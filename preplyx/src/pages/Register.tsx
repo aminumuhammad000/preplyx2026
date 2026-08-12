@@ -3,6 +3,8 @@ import { useNavigate, Link } from 'react-router-dom';
 import { Mail, Lock, User, ArrowRight, Eye, EyeOff, ShieldAlert, Phone, CheckCircle2, X } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
+const API_BASE_URL = (import.meta.env.VITE_API_URL as string) || 'http://localhost:5004/api';
+
 export default function Register() {
   const navigate = useNavigate();
   const { login } = useAuth();
@@ -22,7 +24,7 @@ export default function Register() {
     setAlert(null);
     
     try {
-      const res = await fetch('http://localhost:5000/api/auth/register', {
+      const res = await fetch(`${API_BASE_URL}/auth/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name, email, password, phone })

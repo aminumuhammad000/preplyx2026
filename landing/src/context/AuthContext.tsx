@@ -16,6 +16,8 @@ interface AuthContextType {
   isLoading: boolean;
 }
 
+const API_BASE_URL = (import.meta.env.VITE_API_URL as string) || 'http://localhost:5004/api';
+
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
@@ -29,7 +31,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     if (savedToken) {
       setToken(savedToken);
       // Fetch user profile to verify token
-      axios.get('http://localhost:5000/api/auth/profile', {
+      axios.get(`${API_BASE_URL}/auth/profile`, {
         headers: { Authorization: `Bearer ${savedToken}` }
       })
       .then(res => {

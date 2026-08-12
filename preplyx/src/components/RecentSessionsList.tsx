@@ -14,6 +14,8 @@ export interface CompletedSession {
   timeSpentSeconds?: number;
 }
 
+const API_BASE_URL = (import.meta.env.VITE_API_URL as string) || 'http://localhost:5004/api';
+
 export default function RecentSessionsList() {
   const navigate = useNavigate();
   const [sessions, setSessions] = useState<CompletedSession[] | null>(null);
@@ -23,7 +25,7 @@ export default function RecentSessionsList() {
   useEffect(() => {
     setMounted(true);
     if (token) {
-      fetch('http://localhost:5000/api/data/sessions', {
+      fetch(`${API_BASE_URL}/data/sessions`, {
         headers: { Authorization: `Bearer ${token}` }
       })
       .then(res => res.json())

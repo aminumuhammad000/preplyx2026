@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { ArrowLeft, Mail, ArrowRight, Lock, KeyRound, CheckCircle2, ShieldAlert, Eye, EyeOff } from 'lucide-react';
 
+const API_BASE_URL = (import.meta.env.VITE_API_URL as string) || 'http://localhost:5004/api';
+
 export default function ForgotPassword() {
   const navigate = useNavigate();
   const [step, setStep] = useState<1 | 2>(1); // 1: Send OTP, 2: Enter OTP & New Password
@@ -22,7 +24,7 @@ export default function ForgotPassword() {
     setAlert(null);
 
     try {
-      const res = await fetch('http://localhost:5000/api/auth/forgot-password', {
+      const res = await fetch(`${API_BASE_URL}/auth/forgot-password`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email })
@@ -66,7 +68,7 @@ export default function ForgotPassword() {
     }
 
     try {
-      const res = await fetch('http://localhost:5000/api/auth/reset-password', {
+      const res = await fetch(`${API_BASE_URL}/auth/reset-password`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, otp, newPassword })

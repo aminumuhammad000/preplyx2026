@@ -3,6 +3,8 @@ import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
+const API_BASE_URL = (import.meta.env.VITE_API_URL as string) || 'http://localhost:5004/api';
+
 const Dashboard = () => {
   const { user, token, logout } = useAuth();
   const navigate = useNavigate();
@@ -13,7 +15,7 @@ const Dashboard = () => {
     // Fetch real data from server for the dashboard
     const fetchDashboardData = async () => {
       try {
-        const { data } = await axios.get('http://localhost:5000/api/auth/profile', {
+        const { data } = await axios.get(`${API_BASE_URL}/auth/profile`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         setProfileData(data);

@@ -387,7 +387,7 @@ export default function AdminDashboard() {
               <div style={{ backgroundColor: '#0f172a', padding: '20px', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.08)' }}>
                 <div style={{ fontSize: '12px', color: '#94a3b8', fontWeight: 600, marginBottom: '6px' }}>Backend Status</div>
                 <div style={{ fontSize: '28px', fontWeight: 800, color: '#4ade80' }}>ONLINE</div>
-                <div style={{ fontSize: '11px', color: '#94a3b8', marginTop: '4px' }}>Port 5000 Active</div>
+                <div style={{ fontSize: '11px', color: '#94a3b8', marginTop: '4px' }}>Port 5004 Active</div>
               </div>
             </div>
           </div>
@@ -568,7 +568,7 @@ export default function AdminDashboard() {
             <div style={{ backgroundColor: '#0f172a', borderRadius: '20px', padding: '24px', border: '1px solid rgba(255,255,255,0.08)' }}>
               <h3 style={{ fontSize: '16px', fontWeight: 800, color: '#ffffff', marginBottom: '8px' }}>Platform Server Status</h3>
               <p style={{ fontSize: '13px', color: '#94a3b8', marginBottom: '16px' }}>
-                Connected Backend Target: <code>http://localhost:5000/api</code>
+                Connected Backend Target: <code>http://localhost:5004/api</code>
               </p>
               <div style={{ padding: '14px 16px', borderRadius: '12px', backgroundColor: '#1e293b', color: '#4ade80', fontSize: '13px', fontWeight: 600 }}>
                 ✔ All system endpoints verified & live on local MongoDB database.

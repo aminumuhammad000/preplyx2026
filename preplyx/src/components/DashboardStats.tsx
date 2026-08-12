@@ -12,6 +12,8 @@ export interface OverallStats {
   monthlyStreak: number;
 }
 
+const API_BASE_URL = (import.meta.env.VITE_API_URL as string) || 'http://localhost:5004/api';
+
 export default function DashboardStats() {
   const [stats, setStats] = useState<OverallStats | null>(null);
   const [mounted, setMounted] = useState(false);
@@ -20,7 +22,7 @@ export default function DashboardStats() {
   useEffect(() => {
     setMounted(true);
     if (token) {
-      fetch('http://localhost:5000/api/data/stats', {
+      fetch(`${API_BASE_URL}/data/stats`, {
         headers: { Authorization: `Bearer ${token}` }
       })
       .then(res => res.json())

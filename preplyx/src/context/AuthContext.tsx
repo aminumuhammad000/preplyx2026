@@ -22,6 +22,8 @@ type AuthContextType = {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+const API_BASE_URL = (import.meta.env.VITE_API_URL as string) || 'http://localhost:5004/api';
+
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState<string | null>(null);
@@ -32,7 +34,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const savedToken = localStorage.getItem('preplyx_token') || sessionStorage.getItem('preplyx_token');
     if (savedToken) {
       setToken(savedToken);
-      fetch('http://localhost:5000/api/auth/profile', {
+      fetch(`${API_BASE_URL}/auth/profile`, {
         headers: { Authorization: `Bearer ${savedToken}` }
       })
       .then(res => {
