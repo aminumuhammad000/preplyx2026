@@ -4,7 +4,7 @@ import { Lock, User as UserIcon, LogIn, Loader2, Eye, EyeOff, CheckCircle2, Aler
 import logoSvg from '../assets/logo.svg';
 import './Login.css';
 
-const API_BASE_URL = 'http://localhost:5000/api';
+const API_BASE_URL = (import.meta.env.VITE_API_URL as string) || 'http://localhost:5000/api';
 
 interface AlertState {
   type: 'success' | 'error';

@@ -7,7 +7,7 @@ import {
 } from 'lucide-react';
 import './Subjects.css';
 
-const API_BASE_URL = 'http://localhost:5000/api';
+const API_BASE_URL = (import.meta.env.VITE_API_URL as string) || 'http://localhost:5000/api';
 
 const ICON_MAP: Record<string, React.FC<any>> = {
   Calculator, BookType, Zap, FlaskConical, Leaf, BarChart3, Landmark, Vote, Sprout, BookText, Briefcase, ShoppingCart,
