@@ -25,6 +25,8 @@ import './AIAssistant.css';
 import { ChatInterface } from '../components/ChatInterface';
 import '../components/ChatInterface.css';
 
+const API_BASE_URL = (import.meta.env.VITE_API_URL as string) || 'http://localhost:5004/api';
+
 /* ── Extended Types ── */
 interface AIProvider {
   id: string;
@@ -174,8 +176,20 @@ export const AIAssistant: React.FC = () => {
     if (silent) setRefreshing(true);
     
     try {
-      const savedKeys = localStorage.getItem('ai_provider_keys');
-      const keys = savedKeys ? JSON.parse(savedKeys) : {};
+      let keys: Record<string, any> = {};
+      try {
+        const res = await fetch(`${API_BASE_URL}/admin/settings`);
+        if (res.ok) {
+          const config = await res.json();
+          keys = config.aiProviderKeys || {};
+          if (config.geminiApiKey && !keys['gemini']) keys['gemini'] = config.geminiApiKey;
+          if (config.anthropicAuthToken && !keys['anthropic']) keys['anthropic'] = config.anthropicAuthToken;
+          localStorage.setItem('ai_provider_keys', JSON.stringify(keys));
+        }
+      } catch {
+        const savedKeys = localStorage.getItem('ai_provider_keys');
+        keys = savedKeys ? JSON.parse(savedKeys) : {};
+      }
       
       const providersWithStatus: AIProvider[] = AI_PROVIDERS.map(provider => ({
         ...provider,
@@ -263,6 +277,16 @@ export const AIAssistant: React.FC = () => {
       
       localStorage.setItem('ai_provider_keys', JSON.stringify(keys));
       
+      await fetch(`${API_BASE_URL}/admin/settings`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          aiProviderKeys: keys,
+          geminiApiKey: keys['gemini'] || '',
+          anthropicAuthToken: keys['anthropic'] || ''
+        })
+      });
+      
       await fetchProviders(true);
       showToast('API key saved successfully', 'success');
       closeDrawer();
@@ -286,6 +310,16 @@ export const AIAssistant: React.FC = () => {
       delete keys[`${deleteTarget.id}_lastUsed`];
       
       localStorage.setItem('ai_provider_keys', JSON.stringify(keys));
+      
+      await fetch(`${API_BASE_URL}/admin/settings`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          aiProviderKeys: keys,
+          geminiApiKey: keys['gemini'] || '',
+          anthropicAuthToken: keys['anthropic'] || ''
+        })
+      });
       
       await fetchProviders(true);
       showToast('API key removed successfully', 'success');

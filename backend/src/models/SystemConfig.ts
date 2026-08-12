@@ -28,6 +28,7 @@ export interface ISystemConfig extends Document {
   anthropicAuthToken: string;
   anthropicBaseUrl: string;
   anthropicModel: string;
+  aiProviderKeys: Record<string, any>;
 }
 
 const systemConfigSchema = new Schema(
@@ -59,6 +60,7 @@ const systemConfigSchema = new Schema(
     anthropicAuthToken: { type: String, default: process.env.ANTHROPIC_AUTH_TOKEN || '' },
     anthropicBaseUrl: { type: String, default: process.env.ANTHROPIC_BASE_URL || 'https://agentrouter.org' },
     anthropicModel: { type: String, default: process.env.ANTHROPIC_MODEL || 'claude-opus-4-6' },
+    aiProviderKeys: { type: Schema.Types.Mixed, default: {} },
   },
   { timestamps: true }
 );

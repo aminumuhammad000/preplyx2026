@@ -92,10 +92,10 @@ export const Users: React.FC = () => {
   const [drawer, setDrawer]               = useState<User | null>(null);
   const [deleteConfirm, setDeleteConfirm] = useState<User | null>(null);
   const [deleting, setDeleting]           = useState(false);
+  const [toast, setToast]                 = useState<ToastState>(null);
 
   /* ── Credit Wallet State ── */
   const [creditModalUser, setCreditModalUser]       = useState<User | null>(null);
-  const [showAdminCreditModal, setShowAdminCreditModal] = useState(false);
   const [creditAmount, setCreditAmount]             = useState<number | string>(5000);
   const [creditDesc, setCreditDesc]                 = useState('Admin Wallet Credit Bonus');
   const [crediting, setCrediting]                   = useState(false);
@@ -123,7 +123,6 @@ export const Users: React.FC = () => {
       if (res.ok) {
         showToast(data.message || `Successfully credited ₦${amount.toLocaleString()} to wallet!`, 'success');
         setCreditModalUser(null);
-        setShowAdminCreditModal(false);
         fetchUsers(true);
       } else {
         showToast(data.message || 'Failed to credit wallet', 'error');
@@ -456,21 +455,16 @@ export const Users: React.FC = () => {
                             <Eye size={14} />
                           </button>
 
-                          {!isActive && (
-                            <button
-                              className="um-icon-btn um-btn-activate"
-                              title="Activate account"
-                              disabled={busyActivate}
-                              onClick={() => updateStatus(user._id, 'active')}
-                            >
-                              {busyActivate
-                                ? <Loader size={14} className="um-spin" />
-                                : <UserCheck size={14} />
-                              }
-                            </button>
-                          )}
+                          <button
+                            className="um-icon-btn"
+                            style={{ color: '#10b981', borderColor: 'rgba(16, 185, 129, 0.3)', background: 'rgba(16, 185, 129, 0.08)' }}
+                            title="Credit Student Wallet"
+                            onClick={() => { setCreditModalUser(user); setCreditAmount(5000); }}
+                          >
+                            <WalletIcon size={14} />
+                          </button>
 
-                          {isActive && (
+                          {isActive ? (
                             <button
                               className="um-icon-btn um-btn-suspend"
                               title="Suspend account"
@@ -480,6 +474,18 @@ export const Users: React.FC = () => {
                               {busySuspend
                                 ? <Loader size={14} className="um-spin" />
                                 : <UserX size={14} />
+                              }
+                            </button>
+                          ) : (
+                            <button
+                              className="um-icon-btn um-btn-activate"
+                              title="Activate account"
+                              disabled={busyActivate}
+                              onClick={() => updateStatus(user._id, 'active')}
+                            >
+                              {busyActivate
+                                ? <Loader size={14} className="um-spin" />
+                                : <UserCheck size={14} />
                               }
                             </button>
                           )}
@@ -626,6 +632,83 @@ export const Users: React.FC = () => {
             </div>
           </aside>
         </>
+      )}
+
+      {/* ───── CREDIT WALLET MODAL ───── */}
+      {creditModalUser && (
+        <div className="um-confirm-overlay" onClick={() => !crediting && setCreditModalUser(null)}>
+          <div className="um-confirm-card" onClick={e => e.stopPropagation()} style={{ maxWidth: 440, textAlign: 'left' }}>
+            <div className="um-confirm-icon-wrap" style={{ background: 'rgba(16, 185, 129, 0.12)', color: '#10b981' }}>
+              <WalletIcon size={24} />
+            </div>
+            <h3 className="um-confirm-title" style={{ marginTop: 12 }}>Credit Student Wallet</h3>
+            <p className="um-confirm-text" style={{ marginBottom: 16 }}>
+              Top up <strong>{creditModalUser.name}</strong>'s wallet balance directly from the admin console.
+            </p>
+            <form onSubmit={handleCreditWallet}>
+              <div style={{ marginBottom: 12 }}>
+                <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: '#94a3b8', marginBottom: 4 }}>
+                  Credit Amount (₦)
+                </label>
+                <input
+                  type="number"
+                  min="100"
+                  step="100"
+                  value={creditAmount}
+                  onChange={e => setCreditAmount(e.target.value)}
+                  style={{
+                    width: '100%',
+                    padding: '10px 12px',
+                    borderRadius: 8,
+                    background: '#0f172a',
+                    border: '1px solid #334155',
+                    color: '#f8fafc',
+                    fontSize: 14
+                  }}
+                  required
+                />
+              </div>
+              <div style={{ marginBottom: 20 }}>
+                <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: '#94a3b8', marginBottom: 4 }}>
+                  Description / Note
+                </label>
+                <input
+                  type="text"
+                  value={creditDesc}
+                  onChange={e => setCreditDesc(e.target.value)}
+                  style={{
+                    width: '100%',
+                    padding: '10px 12px',
+                    borderRadius: 8,
+                    background: '#0f172a',
+                    border: '1px solid #334155',
+                    color: '#f8fafc',
+                    fontSize: 14
+                  }}
+                />
+              </div>
+              <div className="um-confirm-actions">
+                <button
+                  type="button"
+                  className="um-confirm-btn um-confirm-no"
+                  disabled={crediting}
+                  onClick={() => setCreditModalUser(null)}
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="um-confirm-btn"
+                  style={{ background: '#10b981', color: '#fff', border: 'none' }}
+                  disabled={crediting}
+                >
+                  {crediting ? <Loader size={15} className="um-spin" /> : <WalletIcon size={15} />}
+                  <span>{crediting ? 'Crediting…' : 'Credit Wallet'}</span>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
       )}
 
       {/* ───── DELETE CONFIRMATION MODAL ───── */}
