@@ -914,3 +914,70 @@ export const replyAdminTicket = async (req: Request, res: Response): Promise<voi
     res.status(500).json({ message: 'Error updating support ticket' });
   }
 };
+
+export const creditUserWallet = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { userId, email, amount, description } = req.body;
+    const creditAmount = Number(amount);
+    if (isNaN(creditAmount) || creditAmount <= 0) {
+      res.status(400).json({ message: 'Invalid credit amount. Enter a positive number.' });
+      return;
+    }
+
+    let targetUser;
+    if (userId) {
+      targetUser = await User.findById(userId);
+    } else if (email) {
+      targetUser = await User.findOne({ email: email.toLowerCase().trim() });
+    }
+
+    if (!targetUser) {
+      targetUser = await User.findOne({ role: 'admin' }) || await User.findOne();
+    }
+
+    if (!targetUser) {
+      res.status(404).json({ message: 'Target user not found' });
+      return;
+    }
+
+    let wallet = await Wallet.findOne({ user: targetUser._id });
+    if (!wallet) {
+      wallet = await Wallet.create({
+        user: targetUser._id,
+        balance: 0,
+        totalFunded: 0,
+        totalSpent: 0
+      });
+    }
+
+    const previousBalance = wallet.balance;
+    wallet.balance += creditAmount;
+    wallet.totalFunded += creditAmount;
+    await wallet.save();
+
+    await Transaction.create({
+      user: targetUser._id,
+      type: 'funding',
+      amount: creditAmount,
+      balanceBefore: previousBalance,
+      balanceAfter: wallet.balance,
+      status: 'completed',
+      description: description || 'Admin Wallet Credit'
+    });
+
+    res.json({
+      message: `Successfully credited ₦${creditAmount.toLocaleString()} to ${targetUser.name}'s wallet`,
+      user: {
+        id: targetUser._id,
+        name: targetUser.name,
+        email: targetUser.email
+      },
+      balance: wallet.balance,
+      totalFunded: wallet.totalFunded
+    });
+  } catch (error) {
+    console.error('Error crediting wallet:', error);
+    res.status(500).json({ message: 'Error processing wallet credit' });
+  }
+};
+

@@ -21,6 +21,7 @@ import {
   CreditCard,
   Trash2,
   AlertTriangle,
+  Wallet as WalletIcon
 } from 'lucide-react';
 import './Users.css';
 
@@ -89,9 +90,50 @@ export const Users: React.FC = () => {
   const [filter, setFilter]               = useState<FilterType>('all');
   const [page, setPage]                   = useState(1);
   const [drawer, setDrawer]               = useState<User | null>(null);
-  const [toast, setToast]                 = useState<ToastState>(null);
   const [deleteConfirm, setDeleteConfirm] = useState<User | null>(null);
   const [deleting, setDeleting]           = useState(false);
+
+  /* ── Credit Wallet State ── */
+  const [creditModalUser, setCreditModalUser]       = useState<User | null>(null);
+  const [showAdminCreditModal, setShowAdminCreditModal] = useState(false);
+  const [creditAmount, setCreditAmount]             = useState<number | string>(5000);
+  const [creditDesc, setCreditDesc]                 = useState('Admin Wallet Credit Bonus');
+  const [crediting, setCrediting]                   = useState(false);
+
+  const handleCreditWallet = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const amount = Number(creditAmount);
+    if (isNaN(amount) || amount <= 0) {
+      showToast('Please enter a valid positive credit amount', 'error');
+      return;
+    }
+    setCrediting(true);
+    try {
+      const res = await fetch(`${API_BASE_URL}/admin/users/credit`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userId: creditModalUser?._id,
+          email: creditModalUser?.email,
+          amount: amount,
+          description: creditDesc
+        })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        showToast(data.message || `Successfully credited ₦${amount.toLocaleString()} to wallet!`, 'success');
+        setCreditModalUser(null);
+        setShowAdminCreditModal(false);
+        fetchUsers(true);
+      } else {
+        showToast(data.message || 'Failed to credit wallet', 'error');
+      }
+    } catch (err: any) {
+      showToast(err.message || 'Error crediting wallet', 'error');
+    } finally {
+      setCrediting(false);
+    }
+  };
 
   /* ── Fetch ── */
   const fetchUsers = useCallback(async (silent = false) => {

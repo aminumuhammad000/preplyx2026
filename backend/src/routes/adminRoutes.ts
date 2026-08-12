@@ -28,7 +28,8 @@ import {
   getAdminBroadcasts,
   sendBroadcastNotification,
   getAdminTickets,
-  replyAdminTicket
+  replyAdminTicket,
+  creditUserWallet
 } from '../controllers/adminController';
 
 const router = Router();
@@ -42,9 +43,11 @@ router.get('/wallet/stats', getAdminWalletStats);
 router.get('/wallet/transactions', getAdminTransactions);
 router.get('/wallet/config', getAdminWalletConfig);
 router.post('/wallet/config', updateAdminWalletConfig);
+router.post('/wallet/credit', creditUserWallet);
 
 // User Management
 router.get('/users', getAdminUsers);
+router.post('/users/credit', creditUserWallet);
 router.put('/users/:id/status', updateUserStatus);
 router.delete('/users/:id', deleteAdminUser);
 
