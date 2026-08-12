@@ -20,7 +20,7 @@ import {
 import './Exams.css';
 
 /* ── Config ── */
-const API_BASE_URL = (import.meta.env.VITE_API_URL as string) || 'http://localhost:5004/api';
+import { API_BASE_URL } from '../config/api';
 
 const EXAM_COLORS = [
   '#7B2FF7', '#0284c7', '#059669', '#16a34a',

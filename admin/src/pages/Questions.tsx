@@ -6,7 +6,7 @@ import {
 } from 'lucide-react';
 import './Questions.css';
 
-const API_BASE_URL = (import.meta.env.VITE_API_URL as string) || 'http://localhost:5004/api';
+import { API_BASE_URL } from '../config/api';
 
 /* ── Types ── */
 interface QuestionData {

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { ArrowLeft, Mail, ArrowRight, Lock, KeyRound, CheckCircle2, ShieldAlert, Eye, EyeOff } from 'lucide-react';
 
-const API_BASE_URL = (import.meta.env.VITE_API_URL as string) || 'http://localhost:5004/api';
+import { API_BASE_URL } from '../config/api';
 
 export default function ForgotPassword() {
   const navigate = useNavigate();

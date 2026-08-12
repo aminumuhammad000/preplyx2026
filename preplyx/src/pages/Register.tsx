@@ -3,7 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { Mail, Lock, User, ArrowRight, Eye, EyeOff, ShieldAlert, Phone, CheckCircle2, X } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
-const API_BASE_URL = (import.meta.env.VITE_API_URL as string) || 'http://localhost:5004/api';
+import { API_BASE_URL } from '../config/api';
 
 export default function Register() {
   const navigate = useNavigate();
