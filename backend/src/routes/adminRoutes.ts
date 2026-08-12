@@ -25,6 +25,8 @@ import {
   updateAdminWalletConfig,
   getAdminSettings,
   updateAdminSettings,
+  testAdminEmailConfig,
+  testAdminAiConfig,
   getAdminBroadcasts,
   sendBroadcastNotification,
   getAdminTickets,
@@ -76,6 +78,8 @@ router.get('/simulations', getAdminSimulations);
 // Settings Management
 router.get('/settings', getAdminSettings);
 router.post('/settings', updateAdminSettings);
+router.post('/settings/test-email', testAdminEmailConfig);
+router.post('/settings/test-ai', testAdminAiConfig);
 
 // Notifications Management
 router.get('/notifications', getAdminBroadcasts);

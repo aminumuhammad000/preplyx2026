@@ -46,11 +46,16 @@ interface SystemSettings {
   globalNegativeMarking: boolean;
   defaultPassMark: number;
 
-  // API Credentials
+  // API & AI Credentials
   vtstackPublicKey: string;
   vtstackSecretKey: string;
   vtstackSandbox: boolean;
   geminiApiKey: string;
+
+  // AI Assistant & Model Credentials
+  anthropicAuthToken: string;
+  anthropicBaseUrl: string;
+  anthropicModel: string;
 }
 
 type TabType = 'general' | 'email' | 'exam' | 'security' | 'integrations';
@@ -58,11 +63,12 @@ type ToastState = { message: string; type: 'success' | 'error' } | null;
 
 /* ══════════════════════════════════════
    MAIN COMPONENT
-══════════════════════════════════════ */
+ ══════════════════════════════════════ */
 export const Settings: React.FC = () => {
   const [activeTab, setActiveTab]   = useState<TabType>('general');
   const [refreshing, setRefreshing] = useState(false);
   const [saving, setSaving]         = useState(false);
+  const [testingAi, setTestingAi]       = useState(false);
   const [toast, setToast]           = useState<ToastState>(null);
 
   // System Settings state
@@ -91,12 +97,18 @@ export const Settings: React.FC = () => {
     vtstackPublicKey: 'pk_test_preplyx_847291',
     vtstackSecretKey: 'sk_test_preplyx_992104',
     vtstackSandbox: true,
-    geminiApiKey: ''
+    geminiApiKey: '',
+
+    // AI Model Settings
+    anthropicAuthToken: '',
+    anthropicBaseUrl: 'https://agentrouter.org',
+    anthropicModel: 'claude-opus-4-6'
   });
 
   // Credential visibility states
   const [showSecretKey, setShowSecretKey] = useState(false);
   const [showGeminiKey, setShowGeminiKey] = useState(false);
+  const [showAnthropicToken, setShowAnthropicToken] = useState(false);
   const [showSmtpPass, setShowSmtpPass]   = useState(false);
 
   // Toast notifier
@@ -169,6 +181,33 @@ export const Settings: React.FC = () => {
       showToast('Configuration updated locally!', 'success');
     } finally {
       setSaving(false);
+    }
+  };
+
+  const handleTestAi = async () => {
+    try {
+      setTestingAi(true);
+      const res = await fetch(`${API_BASE_URL}/admin/settings/test-ai`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          anthropicAuthToken: settings.anthropicAuthToken,
+          anthropicBaseUrl: settings.anthropicBaseUrl,
+          anthropicModel: settings.anthropicModel,
+          geminiApiKey: settings.geminiApiKey
+        })
+      });
+      const data = await res.json();
+
+      if (data.success) {
+        showToast(data.message || 'AI Model connection verified successfully!', 'success');
+      } else {
+        showToast(data.message || 'Failed to authenticate with AI Provider.', 'error');
+      }
+    } catch (err: any) {
+      showToast('Error testing AI Model connection.', 'error');
+    } finally {
+      setTestingAi(false);
     }
   };
 
@@ -583,7 +622,72 @@ export const Settings: React.FC = () => {
                       <span className="sm-form-desc">Secure key used by backend to verify transactions.</span>
                     </div>
 
-                    <div className="sm-form-group full-width">
+                    <div className="sm-form-group full-width" style={{ marginTop: '16px', paddingTop: '16px', borderTop: '1px solid var(--border-color)' }}>
+                      <h3 style={{ fontSize: '14px', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '4px' }}>
+                        🤖 AI Engine & Model Credentials
+                      </h3>
+                      <p style={{ fontSize: '12px', color: 'var(--text-secondary)', marginBottom: '14px' }}>
+                        Connect AgentRouter, Anthropic Claude, OpenAI, or Google Gemini. Just enter your API Key to start using AI Tutor and Question Scanner immediately!
+                      </p>
+                    </div>
+
+                    <div className="sm-form-group">
+                      <label className="sm-form-lbl">AgentRouter / Anthropic Auth Token</label>
+                      <div className="sm-input-wrapper">
+                        <input
+                          type={showAnthropicToken ? 'text' : 'password'}
+                          value={settings.anthropicAuthToken}
+                          onChange={(e) => setSettings({ ...settings, anthropicAuthToken: e.target.value })}
+                          className="sm-input"
+                          placeholder="ar_live_... or sk-ant-..."
+                        />
+                        <button
+                          type="button"
+                          className="sm-input-eye"
+                          onClick={() => setShowAnthropicToken(!showAnthropicToken)}
+                        >
+                          {showAnthropicToken ? <EyeOff size={14} /> : <Eye size={14} />}
+                        </button>
+                      </div>
+                      <span className="sm-form-desc">Auth token for AgentRouter or Anthropic Claude models.</span>
+                    </div>
+
+                    <div className="sm-form-group">
+                      <label className="sm-form-lbl">AgentRouter Gateway Base URL</label>
+                      <div className="sm-input-wrapper">
+                        <input
+                          type="text"
+                          value={settings.anthropicBaseUrl}
+                          onChange={(e) => setSettings({ ...settings, anthropicBaseUrl: e.target.value })}
+                          className="sm-input"
+                          placeholder="https://agentrouter.org"
+                        />
+                      </div>
+                      <span className="sm-form-desc">Default is https://agentrouter.org</span>
+                    </div>
+
+                    <div className="sm-form-group">
+                      <label className="sm-form-lbl">Active AI Model Selector</label>
+                      <div className="sm-input-wrapper">
+                        <select
+                          value={settings.anthropicModel}
+                          onChange={(e) => setSettings({ ...settings, anthropicModel: e.target.value })}
+                          className="sm-input"
+                          style={{ backgroundColor: 'var(--surface-color)', cursor: 'pointer' }}
+                        >
+                          <option value="claude-opus-4-6">Claude Opus 4.6 (AgentRouter Recommended)</option>
+                          <option value="claude-3-5-sonnet-20241022">Claude 3.5 Sonnet</option>
+                          <option value="claude-3-haiku-20240307">Claude 3 Haiku</option>
+                          <option value="gpt-4o">GPT-4o (OpenAI)</option>
+                          <option value="gpt-4o-mini">GPT-4o Mini</option>
+                          <option value="gemini-1.5-pro">Gemini 1.5 Pro</option>
+                          <option value="gemini-1.5-flash">Gemini 1.5 Flash</option>
+                        </select>
+                      </div>
+                      <span className="sm-form-desc">Select AI engine used for student tutoring and OCR questions.</span>
+                    </div>
+
+                    <div className="sm-form-group">
                       <label className="sm-form-lbl">Google Gemini API Key</label>
                       <div className="sm-input-wrapper">
                         <input
@@ -601,7 +705,41 @@ export const Settings: React.FC = () => {
                           {showGeminiKey ? <EyeOff size={14} /> : <Eye size={14} />}
                         </button>
                       </div>
-                      <span className="sm-form-desc">Powering AI question generation and scanner OCR.</span>
+                      <span className="sm-form-desc">Direct Google Gemini API Key fallback.</span>
+                    </div>
+
+                    <div className="sm-form-group full-width" style={{ marginTop: '10px' }}>
+                      <button
+                        type="button"
+                        onClick={handleTestAi}
+                        disabled={testingAi}
+                        className="btn btn-secondary"
+                        style={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '8px',
+                          padding: '10px 18px',
+                          borderRadius: '8px',
+                          background: 'var(--surface-hover)',
+                          border: '1px solid var(--border-color)',
+                          color: 'var(--text-primary)',
+                          fontWeight: 700,
+                          fontSize: '13px',
+                          cursor: 'pointer'
+                        }}
+                      >
+                        {testingAi ? (
+                          <>
+                            <RefreshCw size={14} className="um-spin" />
+                            <span>Testing AI Connection...</span>
+                          </>
+                        ) : (
+                          <>
+                            <RefreshCw size={14} />
+                            <span>Test AI Model Connection</span>
+                          </>
+                        )}
+                      </button>
                     </div>
                   </div>
                 </div>

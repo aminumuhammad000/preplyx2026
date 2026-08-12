@@ -7,6 +7,7 @@ import Question from '../models/Question';
 import ExamSession from '../models/ExamSession';
 import SystemConfig from '../models/SystemConfig';
 import { sendTestEmail, verifySmtpConnection } from '../services/emailService';
+import { testAiModelConnection } from '../services/agentRouterService';
 
 
 export const getAdminWalletStats = async (req: Request, res: Response): Promise<void> => {
@@ -816,6 +817,28 @@ export const testAdminEmailConfig = async (req: Request, res: Response): Promise
   } catch (error: any) {
     console.error('Error in testAdminEmailConfig:', error);
     res.status(500).json({ success: false, message: error?.message || 'Server error testing SMTP configuration' });
+  }
+};
+
+export const testAdminAiConfig = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { anthropicAuthToken, anthropicBaseUrl, anthropicModel, geminiApiKey } = req.body;
+    
+    const result = await testAiModelConnection({
+      anthropicAuthToken,
+      anthropicBaseUrl,
+      anthropicModel,
+      geminiApiKey
+    });
+
+    if (result.success) {
+      res.json(result);
+    } else {
+      res.status(400).json(result);
+    }
+  } catch (error: any) {
+    console.error('Error in testAdminAiConfig:', error);
+    res.status(500).json({ success: false, message: error?.message || 'Server error testing AI model credentials' });
   }
 };
 /* ══════════════════════════════════════

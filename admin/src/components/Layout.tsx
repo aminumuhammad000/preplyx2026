@@ -74,6 +74,28 @@ export const Layout: React.FC = () => {
     return localStorage.getItem('adminSidebarCollapsed') === 'true';
   });
 
+  const [isMobile, setIsMobile] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      const mobile = window.innerWidth <= 768;
+      setIsMobile(mobile);
+      if (!mobile) {
+        setMobileOpen(false);
+      }
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  useEffect(() => {
+    if (isMobile) {
+      setMobileOpen(false);
+    }
+  }, [location.pathname, isMobile]);
+
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
     document.body.className = theme === 'light' ? 'light-theme' : 'dark-theme';
@@ -85,11 +107,15 @@ export const Layout: React.FC = () => {
   };
 
   const toggleSidebar = () => {
-    setCollapsed(prev => {
-      const next = !prev;
-      localStorage.setItem('adminSidebarCollapsed', String(next));
-      return next;
-    });
+    if (isMobile) {
+      setMobileOpen(prev => !prev);
+    } else {
+      setCollapsed(prev => {
+        const next = !prev;
+        localStorage.setItem('adminSidebarCollapsed', String(next));
+        return next;
+      });
+    }
   };
 
   const handleLogout = () => {
@@ -105,13 +131,18 @@ export const Layout: React.FC = () => {
 
   return (
     <div className="app-container">
+      {/* Mobile Drawer Overlay Backdrop */}
+      {isMobile && mobileOpen && (
+        <div className="sidebar-mobile-backdrop" onClick={() => setMobileOpen(false)} />
+      )}
+
       {/* Sidebar */}
-      <aside className={`sidebar ${collapsed ? 'collapsed' : ''}`}>
+      <aside className={`sidebar ${collapsed ? 'collapsed' : ''} ${mobileOpen ? 'mobile-open' : ''}`}>
         <div className="sidebar-header">
           <div className="sidebar-logo-container">
             <img src={logoSvg} alt="Preplyx Logo" className="sidebar-logo" />
             <div className="sidebar-brand-text">
-              <span className="sidebar-brand-name">Preplyx</span>
+              <span className="sidebar-brand-name">Preplyx Admin</span>
             </div>
           </div>
         </div>
@@ -130,6 +161,7 @@ export const Layout: React.FC = () => {
                     to={item.path}
                     title={collapsed ? item.name : undefined}
                     className={`nav-item ${isActive ? 'active' : ''}`}
+                    onClick={() => { if (isMobile) setMobileOpen(false); }}
                   >
                     <Icon size={16} />
                     <span>{item.name}</span>
@@ -155,10 +187,10 @@ export const Layout: React.FC = () => {
           <div className="topbar-welcome">
             <button
               className="icon-btn sidebar-toggle-btn"
-              title={collapsed ? 'Expand Sidebar' : 'Collapse Sidebar'}
+              title={isMobile ? (mobileOpen ? 'Close Menu' : 'Open Menu') : (collapsed ? 'Expand Sidebar' : 'Collapse Sidebar')}
               onClick={toggleSidebar}
             >
-              <Menu size={15} />
+              <Menu size={16} />
             </button>
             <h2 className="welcome-title">Welcome back, {adminName}</h2>
           </div>
