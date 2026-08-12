@@ -24,6 +24,7 @@ export default function Profile() {
     if (!file) return;
 
     setUploadingAvatar(true);
+    let uploadedUrl: string | null = null;
 
     try {
       const data = new FormData();
@@ -36,23 +37,34 @@ export default function Profile() {
         body: data
       });
 
-      const json = await res.json();
-      const uploadedUrl = json.secure_url || json.url;
-
-      if (uploadedUrl) {
-        setAvatarUrl(uploadedUrl);
-        localStorage.setItem('preplyx_avatar', uploadedUrl);
-        updateUser({ avatar: uploadedUrl });
-
-        if (token) {
-          api.updateUserProfile(token, { avatar: uploadedUrl }).catch(() => {});
-        }
+      if (res.ok) {
+        const json = await res.json();
+        uploadedUrl = json.secure_url || json.url || null;
       }
     } catch (err) {
-      console.error('Cloudinary upload error:', err);
-    } finally {
-      setUploadingAvatar(false);
+      console.warn('Cloudinary upload failed, falling back to FileReader:', err);
     }
+
+    // Local Data URL fallback if Cloudinary upload returned 400 or failed
+    if (!uploadedUrl) {
+      uploadedUrl = await new Promise<string>((resolve) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result as string);
+        reader.readAsDataURL(file);
+      });
+    }
+
+    if (uploadedUrl) {
+      setAvatarUrl(uploadedUrl);
+      localStorage.setItem('preplyx_avatar', uploadedUrl);
+      updateUser({ avatar: uploadedUrl });
+
+      if (token) {
+        api.updateUserProfile(token, { avatar: uploadedUrl }).catch(() => {});
+      }
+    }
+
+    setUploadingAvatar(false);
   };
 
   useEffect(() => {
