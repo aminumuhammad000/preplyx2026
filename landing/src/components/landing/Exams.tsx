@@ -139,7 +139,7 @@ const Exams = () => {
                     {exam.stats}
                   </span>
                   <a 
-                    href="#practice"
+                    href="https://dash.preplyx.com.ng"
                     className="inline-flex items-center gap-1 text-xs font-bold text-primary group-hover:text-secondary transition-colors"
                   >
                     <span>Practice Now</span>

@@ -25,7 +25,7 @@ const Hero = () => {
           
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
             <a 
-              href="#practice" 
+              href="https://dash.preplyx.com.ng" 
               className="group inline-flex items-center justify-center gap-2 px-7 py-4 rounded-xl font-semibold text-base text-white bg-primary hover:bg-secondary transition-all duration-200 shadow-md shadow-primary/20 hover:shadow-lg hover:shadow-primary/30 hover:-translate-y-0.5 active:translate-y-0 w-full sm:w-auto"
             >
               <span>Start Practicing</span>

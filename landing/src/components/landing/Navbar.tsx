@@ -28,7 +28,7 @@ const Navbar = () => {
         <div className="flex items-center justify-between">
           <div className="flex-shrink-0">
             <a href="#" className="flex items-center gap-2">
-              <img src="/images/a.png" alt="Preplyx" className="h-10 w-auto rounded-full object-cover shadow-sm transition-transform duration-300 hover:scale-105" />
+              <img src="/logo.svg" alt="Preplyx" className="h-10 w-auto rounded-full object-cover shadow-sm transition-transform duration-300 hover:scale-105" />
             </a>
           </div>
 
@@ -43,7 +43,7 @@ const Navbar = () => {
           </div>
 
           <div className="hidden md:block">
-            <a href="#cta" className="bg-primary hover:bg-secondary text-white px-6 py-2.5 rounded-full font-medium transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 inline-block">
+            <a href="https://dash.preplyx.com.ng" className="bg-primary hover:bg-secondary text-white px-6 py-2.5 rounded-full font-medium transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 inline-block">
               Get Started
             </a>
           </div>
@@ -79,7 +79,7 @@ const Navbar = () => {
             >
               <div className="flex items-center justify-between p-6 border-b border-gray-100">
                 <div className="flex items-center gap-2">
-                  <img src="/images/a.png" alt="Preplyx" className="h-9 w-auto rounded-full" />
+                  <img src="/logo.svg" alt="Preplyx" className="h-9 w-auto rounded-full" />
                   <span className="font-bold text-gray-900 text-lg">Preplyx</span>
                 </div>
                 <button 
@@ -105,7 +105,7 @@ const Navbar = () => {
 
               <div className="p-6 border-t border-gray-100 bg-gray-50/50">
                 <a
-                  href="#cta"
+                  href="https://dash.preplyx.com.ng"
                   onClick={() => setMobileMenuOpen(false)}
                   className="block w-full bg-primary hover:bg-secondary text-white text-center py-3.5 rounded-2xl font-bold transition-all shadow-md active:scale-[0.98]"
                 >
