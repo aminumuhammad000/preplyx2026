@@ -29,6 +29,14 @@ interface SystemSettings {
   supportEmail: string;
   supportPhone: string;
 
+  // Email & SMTP Settings
+  smtpHost: string;
+  smtpPort: number;
+  smtpUser: string;
+  smtpPass: string;
+  smtpSecure: boolean;
+  smtpFrom: string;
+
   // Security settings
   requireEmailVerification: boolean;
   allowMultipleLogins: boolean;
@@ -45,7 +53,7 @@ interface SystemSettings {
   geminiApiKey: string;
 }
 
-type TabType = 'general' | 'exam' | 'security' | 'integrations';
+type TabType = 'general' | 'email' | 'exam' | 'security' | 'integrations';
 type ToastState = { message: string; type: 'success' | 'error' } | null;
 
 /* ══════════════════════════════════════
@@ -65,6 +73,16 @@ export const Settings: React.FC = () => {
     platformName: 'Preplyx Admin Console',
     supportEmail: 'support@preplyx.com',
     supportPhone: '+234 800 123 4567',
+    
+    // Email & SMTP Settings
+    smtpHost: '',
+    smtpPort: 587,
+    smtpUser: '',
+    smtpPass: '',
+    smtpSecure: false,
+    smtpFrom: '"PreplyX CBT" <support@preplyx.com>',
+
+    // Security settings
     requireEmailVerification: false,
     allowMultipleLogins: true,
     freeTrialSessions: 3,
@@ -79,6 +97,7 @@ export const Settings: React.FC = () => {
   // Credential visibility states
   const [showSecretKey, setShowSecretKey] = useState(false);
   const [showGeminiKey, setShowGeminiKey] = useState(false);
+  const [showSmtpPass, setShowSmtpPass]   = useState(false);
 
   // Toast notifier
   const showToast = (message: string, type: 'success' | 'error' = 'success') => {
@@ -169,7 +188,7 @@ export const Settings: React.FC = () => {
       <div className="dashboard-header-strip">
         <div>
           <h1 className="dashboard-page-title">System Settings</h1>
-          <p className="dashboard-page-subtitle">Customize platform defaults, CBT configurations, security rules, and API keys</p>
+          <p className="dashboard-page-subtitle">Customize platform defaults, CBT configurations, security rules, email/SMTP, and API keys</p>
         </div>
         <div className="flex gap-2">
           <button className="view-all-btn" onClick={handleRefresh} disabled={refreshing}>
@@ -189,6 +208,13 @@ export const Settings: React.FC = () => {
           >
             <Globe size={16} />
             <span>General Setup</span>
+          </button>
+          <button
+            className={`sm-tab-btn ${activeTab === 'email' ? 'active' : ''}`}
+            onClick={() => setActiveTab('email')}
+          >
+            <Mail size={16} />
+            <span>Email & SMTP</span>
           </button>
           <button
             className={`sm-tab-btn ${activeTab === 'exam' ? 'active' : ''}`}
@@ -274,6 +300,114 @@ export const Settings: React.FC = () => {
                       />
                     </div>
                     <span className="sm-form-desc">Displayed on invoice footers and contact pages.</span>
+                  </div>
+                </div>
+              </>
+            )}
+
+            {/* Email & SMTP Setup */}
+            {activeTab === 'email' && (
+              <>
+                <div className="sm-panel-header">
+                  <h2 className="sm-panel-title">Email & SMTP Gateway Configuration</h2>
+                  <p className="sm-panel-desc">Configure outbound mail server parameters for student welcome emails, system notifications, and transaction receipts.</p>
+                </div>
+
+                <div className="sm-form-grid">
+                  <div className="sm-form-group">
+                    <label className="sm-form-lbl">SMTP Host Server</label>
+                    <div className="sm-input-wrapper">
+                      <input
+                        type="text"
+                        value={settings.smtpHost || ''}
+                        onChange={(e) => setSettings({ ...settings, smtpHost: e.target.value })}
+                        className="sm-input"
+                        placeholder="e.g. smtp.gmail.com or mail.privateemail.com"
+                      />
+                    </div>
+                    <span className="sm-form-desc">Outbound mail server address.</span>
+                  </div>
+
+                  <div className="sm-form-group">
+                    <label className="sm-form-lbl">SMTP Port</label>
+                    <div className="sm-input-wrapper">
+                      <input
+                        type="number"
+                        value={settings.smtpPort || 587}
+                        onChange={(e) => setSettings({ ...settings, smtpPort: Number(e.target.value) })}
+                        className="sm-input"
+                        placeholder="587 or 465"
+                      />
+                    </div>
+                    <span className="sm-form-desc">Typically 587 (TLS) or 465 (SSL).</span>
+                  </div>
+
+                  <div className="sm-form-group">
+                    <label className="sm-form-lbl">SMTP Username / Email</label>
+                    <div className="sm-input-wrapper">
+                      <input
+                        type="text"
+                        value={settings.smtpUser || ''}
+                        onChange={(e) => setSettings({ ...settings, smtpUser: e.target.value })}
+                        className="sm-input"
+                        placeholder="e.g. support@preplyx.com"
+                      />
+                    </div>
+                    <span className="sm-form-desc">Authentication username or account email address.</span>
+                  </div>
+
+                  <div className="sm-form-group">
+                    <label className="sm-form-lbl">SMTP Password / App Key</label>
+                    <div className="sm-input-wrapper">
+                      <input
+                        type={showSmtpPass ? 'text' : 'password'}
+                        value={settings.smtpPass || ''}
+                        onChange={(e) => setSettings({ ...settings, smtpPass: e.target.value })}
+                        className="sm-input"
+                        placeholder="••••••••••••••••"
+                      />
+                      <button
+                        type="button"
+                        className="sm-input-eye"
+                        onClick={() => setShowSmtpPass(!showSmtpPass)}
+                      >
+                        {showSmtpPass ? <EyeOff size={14} /> : <Eye size={14} />}
+                      </button>
+                    </div>
+                    <span className="sm-form-desc">Mail server password or Google App Password.</span>
+                  </div>
+
+                  <div className="sm-form-group full-width">
+                    <label className="sm-form-lbl">Sender Name & From Address</label>
+                    <div className="sm-input-wrapper">
+                      <input
+                        type="text"
+                        value={settings.smtpFrom || ''}
+                        onChange={(e) => setSettings({ ...settings, smtpFrom: e.target.value })}
+                        className="sm-input"
+                        placeholder='"PreplyX CBT" <support@preplyx.com>'
+                      />
+                    </div>
+                    <span className="sm-form-desc">Format: "Sender Name" &lt;email@domain.com&gt;</span>
+                  </div>
+
+                  <div className="sm-form-group full-width" style={{ marginTop: 6 }}>
+                    <div className="sm-toggle-row">
+                      <div className="sm-toggle-left">
+                        <span className="sm-toggle-title">Use SSL / Secure Connection</span>
+                        <span className="sm-toggle-desc">
+                          Enable SSL connection (recommended for Port 465).
+                        </span>
+                      </div>
+                      <label className="sm-switch">
+                        <input
+                          type="checkbox"
+                          checked={!!settings.smtpSecure}
+                          onChange={(e) => setSettings({ ...settings, smtpSecure: e.target.checked })}
+                        />
+                        <span className="sm-slider" />
+                      </label>
+                    </div>
                   </div>
                 </div>
               </>

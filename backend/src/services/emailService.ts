@@ -1,11 +1,54 @@
+import nodemailer from 'nodemailer';
+import SystemConfig from '../models/SystemConfig';
+
 /**
- * Preplyx Email Service & Template Engine
+ * Preplyx Email Service & SMTP Delivery Engine
  */
 
 export interface EmailParams {
   to: string;
   subject: string;
   html: string;
+  text?: string;
+}
+
+/**
+ * Helper to get configured SMTP Transporter
+ */export async function getTransporter() {
+  let host = process.env.SMTP_HOST || '';
+  let port = Number(process.env.SMTP_PORT) || 587;
+  let user = process.env.SMTP_USER || '';
+  let pass = process.env.SMTP_PASS || '';
+  let secure = process.env.SMTP_SECURE === 'true' || port === 465;
+  let from = process.env.SMTP_FROM || '"PreplyX CBT" <support@preplyx.com>';
+
+  try {
+    const config = await SystemConfig.findOne();
+    if (config) {
+      if (config.smtpHost) host = config.smtpHost;
+      if (config.smtpPort) port = config.smtpPort;
+      if (config.smtpUser) user = config.smtpUser;
+      if (config.smtpPass) pass = config.smtpPass;
+      if (typeof config.smtpSecure === 'boolean') secure = config.smtpSecure;
+      if (config.smtpFrom) from = config.smtpFrom;
+    }
+  } catch (err) {
+    // Ignore database lookup error and fall back to environment variables
+  }
+
+  if (!host || !user || !pass) {
+    return { transporter: null, from };
+  }
+
+  const transporter = nodemailer.createTransport({
+    host,
+    port,
+    secure,
+    auth: { user, pass },
+    tls: { rejectUnauthorized: false }
+  });
+
+  return { transporter, from };
 }
 
 export function generateWelcomeEmailHTML(userName: string): string {
@@ -99,16 +142,42 @@ export function generateWelcomeEmailHTML(userName: string): string {
   `;
 }
 
+/**
+ * Generic Send Email function supporting Nodemailer SMTP and console logging fallback
+ */
+export async function sendEmail({ to, subject, html, text }: EmailParams): Promise<boolean> {
+  try {
+    const { transporter, from } = await getTransporter();
+
+    if (transporter) {
+      const info = await transporter.sendMail({
+        from,
+        to,
+        subject,
+        html,
+        text: text || subject
+      });
+      console.log(`📧 [SMTP EMAIL DELIVERED] Message ID: ${info.messageId} to ${to}`);
+      return true;
+    }
+
+    console.log(`\n========================================`);
+    console.log(`📧 [EMAIL DELIVERED (CONSOLE FALLBACK - NO SMTP CONFIG)]`);
+    console.log(`To: ${to}`);
+    console.log(`Subject: ${subject}`);
+    console.log(`========================================\n`);
+    return true;
+  } catch (error) {
+    console.error('Error sending email:', error);
+    return false;
+  }
+}
+
 export async function sendWelcomeEmail(userEmail: string, userName: string): Promise<boolean> {
   const htmlTemplate = generateWelcomeEmailHTML(userName);
-  
-  console.log(`\n========================================`);
-  console.log(`📧 [WELCOME EMAIL SENT]`);
-  console.log(`To: ${userEmail}`);
-  console.log(`Subject: Welcome to Preplyx CBT Platform! 🎉`);
-  console.log(`Template: Preplyx Minimalist Premium HTML Theme`);
-  console.log(`========================================\n`);
-
-  // Email delivery log generated successfully
-  return true;
+  return sendEmail({
+    to: userEmail,
+    subject: 'Welcome to Preplyx CBT Platform! 🎉',
+    html: htmlTemplate
+  });
 }

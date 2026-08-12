@@ -20,6 +20,14 @@ export interface ISystemConfig extends Document {
   globalNegativeMarking: boolean;
   defaultPassMark: number;
   
+  // Email & SMTP Configuration
+  smtpHost: string;
+  smtpPort: number;
+  smtpUser: string;
+  smtpPass: string;
+  smtpSecure: boolean;
+  smtpFrom: string;
+
   // Integrations & Credentials
   vtstackPublicKey: string;
   vtstackSecretKey: string;
@@ -42,6 +50,14 @@ const systemConfigSchema = new Schema(
     platformName: { type: String, default: 'PreplyX CBT' },
     supportEmail: { type: String, default: 'support@preplyx.com' },
     supportPhone: { type: String, default: '+234 800 123 4567' },
+
+    // Email & SMTP Settings
+    smtpHost: { type: String, default: process.env.SMTP_HOST || '' },
+    smtpPort: { type: Number, default: Number(process.env.SMTP_PORT) || 587 },
+    smtpUser: { type: String, default: process.env.SMTP_USER || '' },
+    smtpPass: { type: String, default: process.env.SMTP_PASS || '' },
+    smtpSecure: { type: Boolean, default: process.env.SMTP_SECURE === 'true' },
+    smtpFrom: { type: String, default: process.env.SMTP_FROM || '"PreplyX CBT" <support@preplyx.com>' },
     
     // Security settings
     requireEmailVerification: { type: Boolean, default: false },
