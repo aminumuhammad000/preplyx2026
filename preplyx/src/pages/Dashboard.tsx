@@ -4,10 +4,12 @@ import ResumeCard from '../components/ResumeCard';
 import RecentSessionsList from '../components/RecentSessionsList';
 import DashboardStats from '../components/DashboardStats';
 import DailyChallengeBadge from '../components/DailyChallengeBadge';
+import PwaInstallPrompt from '../components/PwaInstallPrompt';
 
 export default function Dashboard() {
   return (
     <div style={{ animation: 'fadeIn 0.4s ease-out' }}>
+      <PwaInstallPrompt />
 
       {/* Top row cards - Side-by-Side Grid for sleek compactness */}
       <div style={{

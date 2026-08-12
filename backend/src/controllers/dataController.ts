@@ -17,13 +17,12 @@ export const getStats = async (req: AuthRequest, res: Response): Promise<void> =
     const sessions = await ExamSession.find({ user: req.user._id });
     
     if (sessions.length === 0) {
-      // Return demo data when no real data exists
       res.json({
-        questionsAnswered: 156,
-        averageAccuracy: 78.5,
-        studyTimeSeconds: 14520,
-        currentStreak: 5,
-        monthlyStreak: 12
+        questionsAnswered: 0,
+        averageAccuracy: 0,
+        studyTimeSeconds: 0,
+        currentStreak: 0,
+        monthlyStreak: 0
       });
       return;
     }
@@ -65,11 +64,6 @@ export const getStats = async (req: AuthRequest, res: Response): Promise<void> =
   }
 };
 
-/**
- * @desc    Get user completed sessions
- * @route   GET /api/data/sessions
- * @access  Private
- */
 export const getSessions = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
     if (!req.user) {
@@ -79,70 +73,7 @@ export const getSessions = async (req: AuthRequest, res: Response): Promise<void
 
     const sessions = await ExamSession.find({ user: req.user._id })
       .sort({ createdAt: -1 })
-      .limit(10);
-    
-    if (sessions.length === 0) {
-      // Return demo sessions when no real data exists
-      const demoSessions = [
-        {
-          _id: 'demo1',
-          exam: 'JAMB',
-          subject: 'Mathematics',
-          total: 20,
-          score: 16,
-          percentage: 80,
-          timeSpentSeconds: 1800,
-          createdAt: new Date(Date.now() - 86400000),
-          user: req.user._id
-        },
-        {
-          _id: 'demo2',
-          exam: 'WAEC',
-          subject: 'English Language',
-          total: 15,
-          score: 12,
-          percentage: 80,
-          timeSpentSeconds: 1500,
-          createdAt: new Date(Date.now() - 172800000),
-          user: req.user._id
-        },
-        {
-          _id: 'demo3',
-          exam: 'JAMB',
-          subject: 'Physics',
-          total: 25,
-          score: 18,
-          percentage: 72,
-          timeSpentSeconds: 2400,
-          createdAt: new Date(Date.now() - 259200000),
-          user: req.user._id
-        },
-        {
-          _id: 'demo4',
-          exam: 'NECO',
-          subject: 'Chemistry',
-          total: 20,
-          score: 14,
-          percentage: 70,
-          timeSpentSeconds: 2000,
-          createdAt: new Date(Date.now() - 345600000),
-          user: req.user._id
-        },
-        {
-          _id: 'demo5',
-          exam: 'WAEC',
-          subject: 'Biology',
-          total: 18,
-          score: 15,
-          percentage: 83.3,
-          timeSpentSeconds: 1700,
-          createdAt: new Date(Date.now() - 432000000),
-          user: req.user._id
-        }
-      ];
-      res.json(demoSessions);
-      return;
-    }
+      .limit(50);
     
     res.json(sessions);
   } catch (error) {
@@ -151,11 +82,6 @@ export const getSessions = async (req: AuthRequest, res: Response): Promise<void
   }
 };
 
-/**
- * @desc    Get user subject mastery data
- * @route   GET /api/data/subject-mastery
- * @access  Private
- */
 export const getSubjectMastery = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
     if (!req.user) {
@@ -166,52 +92,7 @@ export const getSubjectMastery = async (req: AuthRequest, res: Response): Promis
     const sessions = await ExamSession.find({ user: req.user._id });
     
     if (sessions.length === 0) {
-      // Return demo subject mastery data when no real data exists
-      const demoSubjectMastery = [
-        {
-          subject: 'Mathematics',
-          mastery: 85,
-          averageScore: 78,
-          totalSessions: 8,
-          fill: '#4B0FA3'
-        },
-        {
-          subject: 'English Language',
-          mastery: 72,
-          averageScore: 75,
-          totalSessions: 6,
-          fill: '#7B2FF7'
-        },
-        {
-          subject: 'Physics',
-          mastery: 68,
-          averageScore: 70,
-          totalSessions: 4,
-          fill: '#9D4AFF'
-        },
-        {
-          subject: 'Chemistry',
-          mastery: 75,
-          averageScore: 72,
-          totalSessions: 5,
-          fill: '#C77DFF'
-        },
-        {
-          subject: 'Biology',
-          mastery: 82,
-          averageScore: 80,
-          totalSessions: 7,
-          fill: '#E0AAFF'
-        },
-        {
-          subject: 'Economics',
-          mastery: 65,
-          averageScore: 68,
-          totalSessions: 3,
-          fill: '#7B2FF7'
-        }
-      ];
-      res.json(demoSubjectMastery);
+      res.json([]);
       return;
     }
     
@@ -228,18 +109,16 @@ export const getSubjectMastery = async (req: AuthRequest, res: Response): Promis
       subjectPerformance[subject].totalScore += session.score;
       subjectPerformance[subject].totalSessions += 1;
       
-      // Calculate correct answers from percentage
       const correct = Math.round((session.percentage / 100) * session.total);
       subjectPerformance[subject].correct += correct;
     });
 
-    // Convert to mastery percentages
     const subjectMastery = Object.entries(subjectPerformance).map(([subject, data]) => ({
       subject,
       mastery: Math.round((data.correct / data.total) * 100) || 0,
       averageScore: Math.round(data.totalScore / data.totalSessions) || 0,
       totalSessions: data.totalSessions,
-      fill: '#7B2FF7' // Default color, can be customized per subject
+      fill: '#7B2FF7'
     }));
 
     res.json(subjectMastery);

@@ -612,21 +612,45 @@ export default function Leaderboard() {
                     {getRankBadge(displayRank)}
                   </div>
 
-                  <div style={{
-                    width: '32px',
-                    height: '32px',
-                    borderRadius: '50%',
-                    backgroundColor: isSelf ? '#7B2FF7' : '#f1f5f9',
-                    color: isSelf ? '#ffffff' : '#334155',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontSize: '11.5px',
-                    fontWeight: 600,
-                    flexShrink: 0
-                  }}>
-                    {student.avatar || student.name.substring(0, 2).toUpperCase()}
-                  </div>
+                  {(() => {
+                    const currentUserAvatar = user?.avatar || (typeof window !== 'undefined' ? localStorage.getItem('preplyx_avatar') : null);
+                    const avatarSrc = isSelf && currentUserAvatar ? currentUserAvatar : (student.avatar && (student.avatar.startsWith('http') || student.avatar.startsWith('data:')) ? student.avatar : null);
+
+                    if (avatarSrc) {
+                      return (
+                        <img
+                          src={avatarSrc}
+                          alt={student.name}
+                          style={{
+                            width: '32px',
+                            height: '32px',
+                            borderRadius: '50%',
+                            objectFit: 'cover',
+                            flexShrink: 0,
+                            border: isSelf ? '1.5px solid #7c3aed' : '1px solid #e2e8f0'
+                          }}
+                        />
+                      );
+                    }
+
+                    return (
+                      <div style={{
+                        width: '32px',
+                        height: '32px',
+                        borderRadius: '50%',
+                        backgroundColor: isSelf ? '#7B2FF7' : '#f1f5f9',
+                        color: isSelf ? '#ffffff' : '#334155',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        fontSize: '11.5px',
+                        fontWeight: 600,
+                        flexShrink: 0
+                      }}>
+                        {student.avatar || student.name.substring(0, 2).toUpperCase()}
+                      </div>
+                    );
+                  })()}
 
                   <div style={{ minWidth: 0 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>

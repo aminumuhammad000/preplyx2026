@@ -25,66 +25,6 @@ export const getQuestions = async (
       { $sample: { size: Number(limit) } },
     ]);
 
-    if (questions.length === 0) {
-      // Return demo questions when no real data exists
-      const targetYear = (year as string) || '2018';
-      const demoQuestions = [
-        {
-          _id: 'demo_q1',
-          exam: exam || 'JAMB',
-          subject: subject || 'Mathematics',
-          year: targetYear,
-          text: `[${exam || 'JAMB'} ${targetYear}] Solve for x: 2x + 5 = 15`,
-          options: ['x = 5', 'x = 10', 'x = 7.5', 'x = 4'],
-          correctAnswer: 'x = 5',
-          explanation: '2x + 5 = 15, subtract 5 from both sides: 2x = 10, divide by 2: x = 5'
-        },
-        {
-          _id: 'demo_q2',
-          exam: exam || 'JAMB',
-          subject: subject || 'Mathematics',
-          year: targetYear,
-          text: `[${exam || 'JAMB'} ${targetYear}] What is the derivative of f(x) = 3x² + 2x?`,
-          options: ['f\'(x) = 6x + 2', 'f\'(x) = 6x', 'f\'(x) = 3x + 2', 'f\'(x) = 6x² + 2'],
-          correctAnswer: 'f\'(x) = 6x + 2',
-          explanation: 'Using the power rule: derivative of 3x² is 6x, derivative of 2x is 2'
-        },
-        {
-          _id: 'demo_q3',
-          exam: exam || 'JAMB',
-          subject: subject || 'Mathematics',
-          year: targetYear,
-          text: `[${exam || 'JAMB'} ${targetYear}] Simplify: (2³)² × 2⁻⁴`,
-          options: ['4', '8', '16', '32'],
-          correctAnswer: '4',
-          explanation: 'Using exponent rules: (2³)² = 2⁶, then 2⁶ × 2⁻⁴ = 2² = 4'
-        },
-        {
-          _id: 'demo_q4',
-          exam: exam || 'JAMB',
-          subject: subject || 'Mathematics',
-          year: targetYear,
-          text: `[${exam || 'JAMB'} ${targetYear}] What is the area of a circle with radius 7cm? (Use π = 22/7)`,
-          options: ['154 cm²', '44 cm²', '49 cm²', '154π cm²'],
-          correctAnswer: '154 cm²',
-          explanation: 'Area = πr² = (22/7) × 7² = (22/7) × 49 = 22 × 7 = 154 cm²'
-        },
-        {
-          _id: 'demo_q5',
-          exam: exam || 'JAMB',
-          subject: subject || 'Mathematics',
-          year: targetYear,
-          text: `[${exam || 'JAMB'} ${targetYear}] If log₁₀(x) = 2, what is the value of x?`,
-          options: ['20', '100', '200', '1000'],
-          correctAnswer: '100',
-          explanation: 'log₁₀(x) = 2 means 10² = x, so x = 100'
-        }
-      ];
-      
-      res.json(demoQuestions.slice(0, Number(limit)));
-      return;
-    }
-
     res.json(questions);
   } catch (error) {
     next(error);

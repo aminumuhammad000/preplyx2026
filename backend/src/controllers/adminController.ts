@@ -6,6 +6,7 @@ import Exam from '../models/Exam';
 import Question from '../models/Question';
 import ExamSession from '../models/ExamSession';
 import SystemConfig from '../models/SystemConfig';
+import { sendTestEmail, verifySmtpConnection } from '../services/emailService';
 
 
 export const getAdminWalletStats = async (req: Request, res: Response): Promise<void> => {
@@ -776,6 +777,45 @@ export const updateAdminSettings = async (req: Request, res: Response): Promise<
   } catch (error) {
     console.error('Error updating admin settings:', error);
     res.status(500).json({ message: 'Error updating settings' });
+  }
+};
+
+export const testAdminEmailConfig = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { targetEmail, smtpHost, smtpPort, smtpUser, smtpPass, smtpSecure, smtpFrom } = req.body;
+    const recipient = targetEmail || smtpUser;
+
+    if (!recipient) {
+      res.status(400).json({ success: false, message: 'Recipient email address or SMTP Username is required' });
+      return;
+    }
+
+    const customConfig = (smtpUser || smtpPass || smtpHost) ? {
+      host: smtpHost,
+      port: smtpPort ? Number(smtpPort) : undefined,
+      user: smtpUser,
+      pass: smtpPass,
+      secure: smtpSecure,
+      from: smtpFrom
+    } : undefined;
+
+    // Verify SMTP connection first
+    const verification = await verifySmtpConnection(customConfig);
+    if (!verification.success) {
+      res.status(400).json({ success: false, message: verification.message });
+      return;
+    }
+
+    // Send actual test email
+    const sendResult = await sendTestEmail(recipient, customConfig);
+    if (sendResult.success) {
+      res.json({ success: true, message: sendResult.message });
+    } else {
+      res.status(400).json({ success: false, message: sendResult.message });
+    }
+  } catch (error: any) {
+    console.error('Error in testAdminEmailConfig:', error);
+    res.status(500).json({ success: false, message: error?.message || 'Server error testing SMTP configuration' });
   }
 };
 /* ══════════════════════════════════════

@@ -386,6 +386,21 @@ body {
   }
 }
 
+/* Mobile Header & Navigation Responsive Optimization */
+@media (max-width: 640px) {
+  .streak-label-text {
+    display: none !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .dropdown-menu-animate {
+    width: 230px !important;
+    right: -10px !important;
+  }
+}
+
+
 
 
 

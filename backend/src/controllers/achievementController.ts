@@ -31,11 +31,11 @@ export const getUserAchievements = async (
     if (user) {
       // If user has no achievements, initialize with default achievements with demo progress
       if (!user.achievements || user.achievements.length === 0) {
-        user.achievements = DEFAULT_ACHIEVEMENTS.map((achievement, index) => ({
+        user.achievements = DEFAULT_ACHIEVEMENTS.map((achievement) => ({
           ...achievement,
-          unlocked: index < 3, // Demo: unlock first 3 achievements
-          progress: index < 3 ? 100 : (index < 5 ? 50 + (index * 10) : 20),
-          date: index < 3 ? new Date(Date.now() - ((index + 1) * 864000000)).toISOString().split('T')[0] : undefined
+          unlocked: false,
+          progress: 0,
+          date: undefined
         }));
         await user.save();
       }

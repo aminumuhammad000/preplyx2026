@@ -18,6 +18,7 @@ import Wallet from './pages/Wallet';
 import Profile from './pages/Profile';
 import Settings from './pages/Settings';
 import Notifications from './pages/Notifications';
+import History from './pages/History';
 import Challenge from './pages/Challenge';
 import ProtectedRoute from './components/ProtectedRoute';
 import AdminLogin from './pages/AdminLogin';
@@ -51,6 +52,7 @@ export default function App() {
               <Route path="practice/:exam/:subject" element={<CbtExamRunner />} />
               <Route path="multi-subject-exam" element={<MultiSubjectExam />} />
               <Route path="challenge" element={<Challenge />} />
+              <Route path="history" element={<History />} />
               <Route path="result" element={<Result />} />
               <Route path="review" element={<Review />} />
               <Route path="leaderboard" element={<Leaderboard />} />

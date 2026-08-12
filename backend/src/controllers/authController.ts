@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import User from '../models/User';
 import Wallet from '../models/Wallet';
-import { sendWelcomeEmail } from '../services/emailService';
+import { sendWelcomeEmail, sendPasswordResetOTP } from '../services/emailService';
 
 const generateToken = (id: string) => {
   return jwt.sign({ id }, process.env.JWT_SECRET as string, {
@@ -167,6 +167,11 @@ export const forgotPassword = async (
     user.resetPasswordOTP = otp;
     user.resetPasswordOTPExpires = expiresAt;
     await user.save();
+
+    // Send OTP via Email
+    sendPasswordResetOTP(email, otp).catch((err) => {
+      console.error('Failed to send OTP email:', err);
+    });
 
     console.log(`\n========================================`);
     console.log(`🔑 [OTP SENT] Preplyx Password Reset OTP for ${email}: ${otp}`);

@@ -5,7 +5,7 @@ import { api } from '../lib/api';
 import { 
   LayoutDashboard, BookOpen, Wallet, LineChart, LogOut, Settings, 
   Trophy, Award, Bell, CheckSquare, Menu, X, User, Users,
-  ChevronDown, ChevronLeft, PanelLeft
+  ChevronDown, ChevronLeft, PanelLeft, History as HistoryIcon
 } from 'lucide-react';
 import StreakWidget from './StreakWidget';
 
@@ -133,6 +133,7 @@ export default function DashboardLayout() {
     if (path === '/dashboard') return { title: 'Dashboard', badge: 'Overview' };
     if (path.startsWith('/dashboard/challenge')) return { title: 'Challenge a Friend', badge: '1v1 Battle' };
     if (path.startsWith('/dashboard/practice')) return { title: 'Practice CBT', badge: 'Exam Runner' };
+    if (path.startsWith('/dashboard/history')) return { title: 'Exam History', badge: 'Sessions Log' };
     if (path.startsWith('/dashboard/analytics')) return { title: 'Analytics', badge: 'Performance' };
     if (path.startsWith('/dashboard/leaderboard')) return { title: 'Leaderboard', badge: 'Rankings' };
     if (path.startsWith('/dashboard/review')) return { title: 'Question Review', badge: 'Re-evaluation' };
@@ -149,6 +150,7 @@ export default function DashboardLayout() {
   const navLinks = [
     { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
     { name: 'Practice CBT', href: '/dashboard/practice', icon: BookOpen },
+    { name: 'Exam History', href: '/dashboard/history', icon: HistoryIcon },
     { name: 'Challenge Friend', href: '/dashboard/challenge', icon: Users },
     { name: 'Analytics', href: '/dashboard/analytics', icon: LineChart },
     { name: 'Leaderboard', href: '/dashboard/leaderboard', icon: Trophy },
@@ -169,6 +171,8 @@ export default function DashboardLayout() {
 
   // Computed Sidebar Width
   const currentSidebarWidth = isMobile ? '280px' : (isCollapsed ? '72px' : '230px');
+
+  const userAvatar = user?.avatar || (typeof window !== 'undefined' ? localStorage.getItem('preplyx_avatar') : null);
 
   return (
     <div style={{ display: 'flex', height: '100vh', background: 'linear-gradient(135deg, #f8f6ff 0%, #f5f7ff 100%)', overflow: 'hidden' }}>
@@ -557,22 +561,36 @@ export default function DashboardLayout() {
                     flexShrink: 0
                   }}
                 >
-                  <div style={{ position: 'relative' }}>
-                    <div style={{
-                      width: '28px',
-                      height: '28px',
-                      borderRadius: '50%',
-                      background: 'linear-gradient(135deg, #7c3aed 0%, #4c1d95 100%)',
-                      color: '#ffffff',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      fontSize: '11px',
-                      fontWeight: 700,
-                      flexShrink: 0
-                    }}>
-                      {userInitials}
-                    </div>
+                  <div style={{ position: 'relative', width: '28px', height: '28px' }}>
+                    {userAvatar ? (
+                      <img
+                        src={userAvatar}
+                        alt="User Profile"
+                        style={{
+                          width: '28px',
+                          height: '28px',
+                          borderRadius: '50%',
+                          objectFit: 'cover',
+                          border: '1.5px solid #7c3aed'
+                        }}
+                      />
+                    ) : (
+                      <div style={{
+                        width: '28px',
+                        height: '28px',
+                        borderRadius: '50%',
+                        background: 'linear-gradient(135deg, #7c3aed 0%, #4c1d95 100%)',
+                        color: '#ffffff',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        fontSize: '11px',
+                        fontWeight: 700,
+                        flexShrink: 0
+                      }}>
+                        {userInitials}
+                      </div>
+                    )}
                     {/* Online Dot */}
                     <span style={{
                       position: 'absolute',
@@ -616,14 +634,28 @@ export default function DashboardLayout() {
                   >
                     {/* Dropdown User Header */}
                     <div style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '6px 8px 12px', borderBottom: '1px solid #f1f5f9' }}>
-                      <div style={{
-                        width: '36px', height: '36px', borderRadius: '50%',
-                        background: 'linear-gradient(135deg, #7c3aed 0%, #4c1d95 100%)',
-                        color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                        fontSize: '13px', fontWeight: 700
-                      }}>
-                        {userInitials}
-                      </div>
+                      {userAvatar ? (
+                        <img
+                          src={userAvatar}
+                          alt="User Profile"
+                          style={{
+                            width: '36px',
+                            height: '36px',
+                            borderRadius: '50%',
+                            objectFit: 'cover',
+                            border: '1.5px solid #7c3aed'
+                          }}
+                        />
+                      ) : (
+                        <div style={{
+                          width: '36px', height: '36px', borderRadius: '50%',
+                          background: 'linear-gradient(135deg, #7c3aed 0%, #4c1d95 100%)',
+                          color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                          fontSize: '13px', fontWeight: 700
+                        }}>
+                          {userInitials}
+                        </div>
+                      )}
                       <div style={{ minWidth: 0, flex: 1 }}>
                         <div style={{ fontSize: '13px', fontWeight: 700, color: '#0f172a', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                           {user?.name || 'Student'}

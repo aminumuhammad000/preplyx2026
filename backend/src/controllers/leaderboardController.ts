@@ -36,90 +36,7 @@ export const getLeaderboard = async (req: AuthRequest, res: Response): Promise<v
     });
 
     if (sessions.length === 0) {
-      // Return demo leaderboard data when no real data exists
-      const demoLeaderboard = [
-        {
-          rank: 1,
-          name: 'Sarah Johnson',
-          avatar: 'SJ',
-          points: 2450,
-          exams: 24,
-          streak: 12
-        },
-        {
-          rank: 2,
-          name: 'Emmanuel Okafor',
-          avatar: 'EO',
-          points: 2280,
-          exams: 22,
-          streak: 8
-        },
-        {
-          rank: 3,
-          name: 'Fatima Ahmed',
-          avatar: 'FA',
-          points: 2150,
-          exams: 20,
-          streak: 15
-        },
-        {
-          rank: 4,
-          name: 'Chinedu Eze',
-          avatar: 'CE',
-          points: 1980,
-          exams: 18,
-          streak: 6
-        },
-        {
-          rank: 5,
-          name: 'Grace Adebayo',
-          avatar: 'GA',
-          points: 1850,
-          exams: 17,
-          streak: 9
-        },
-        {
-          rank: 6,
-          name: 'David Nnamdi',
-          avatar: 'DN',
-          points: 1720,
-          exams: 16,
-          streak: 4
-        },
-        {
-          rank: 7,
-          name: 'Blessing Ibrahim',
-          avatar: 'BI',
-          points: 1650,
-          exams: 15,
-          streak: 7
-        },
-        {
-          rank: 8,
-          name: 'Olusegun Peters',
-          avatar: 'OP',
-          points: 1580,
-          exams: 14,
-          streak: 5
-        },
-        {
-          rank: 9,
-          name: 'Ngozi Onwudiwe',
-          avatar: 'NO',
-          points: 1490,
-          exams: 13,
-          streak: 11
-        },
-        {
-          rank: 10,
-          name: 'Tunde Bakare',
-          avatar: 'TB',
-          points: 1420,
-          exams: 12,
-          streak: 3
-        }
-      ];
-      res.json(demoLeaderboard);
+      res.json([]);
       return;
     }
 
@@ -228,12 +145,11 @@ export const getUserRank = async (req: AuthRequest, res: Response): Promise<void
     const userSessions = await ExamSession.find({ user: req.user?._id });
     
     if (userSessions.length === 0) {
-      // Return demo user rank data when no real data exists
       res.json({
-        rank: 7,
-        points: 1650,
-        exams: 15,
-        streak: 7,
+        rank: 0,
+        points: 0,
+        exams: 0,
+        streak: 0,
       });
       return;
     }
