@@ -6,6 +6,7 @@ export interface IUser extends Document {
   email: string;
   password?: string;
   phone?: string;
+  role?: string;
   exam_type?: string;
   wallet?: mongoose.Types.ObjectId;
   status?: 'active' | 'suspended';
@@ -52,6 +53,10 @@ const userSchema: Schema = new Schema(
     password: {
       type: String,
       required: true,
+    },
+    role: {
+      type: String,
+      default: 'student',
     },
     resetPasswordOTP: {
       type: String,
