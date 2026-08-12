@@ -30,7 +30,15 @@ export default function DashboardStats() {
   }, [token]);
 
   if (!mounted || !stats) {
-    return <div style={{ display: 'flex', gap: '16px', marginBottom: '28px', opacity: 0.5 }}>Loading stats...</div>;
+    return (
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 200px), 1fr))', gap: '16px', marginBottom: '28px' }}>
+        {[1, 2, 3].map(i => (
+          <div key={i} style={{ borderRadius: '14px', padding: '16px 18px', backgroundColor: '#fff', border: '1px solid #f1f5f9', opacity: 0.6 }}>
+            <div style={{ fontSize: '12px', color: '#94a3b8' }}>Loading stat...</div>
+          </div>
+        ))}
+      </div>
+    );
   }
 
   const formatTime = (seconds: number) => {
@@ -41,25 +49,26 @@ export default function DashboardStats() {
   };
 
   const statItems = [
-    { label: 'Questions Answered', value: stats.questionsAnswered.toString(), icon: <Target size={18} color="#4B0FA3" /> },
-    { label: 'Average Accuracy', value: `${stats.averageAccuracy}%`, icon: <CheckCircle2 size={18} color="#16a34a" /> },
-    { label: 'Study Time', value: formatTime(stats.studyTimeSeconds), icon: <Clock size={18} color="#D97706" /> },
+    { label: 'Questions Answered', value: stats.questionsAnswered.toString(), icon: <Target size={18} color="#7c3aed" />, bg: '#f3e8ff' },
+    { label: 'Average Accuracy', value: `${stats.averageAccuracy}%`, icon: <CheckCircle2 size={18} color="#16a34a" />, bg: '#dcfce7' },
+    { label: 'Study Time', value: formatTime(stats.studyTimeSeconds), icon: <Clock size={18} color="#d97706" />, bg: '#fef3c7' },
   ];
 
   return (
-    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px', marginBottom: '28px' }}>
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 200px), 1fr))', gap: '16px', marginBottom: '28px' }}>
       {statItems.map(stat => (
-        <div key={stat.label} style={{
-          flex: '1 1 200px', borderRadius: '10px', padding: '16px 18px',
-          backgroundColor: '#fff', boxShadow: 'var(--shadow-soft)', border: '1px solid var(--glass-border)'
+        <div key={stat.label} className="header-hover-card" style={{
+          borderRadius: '14px', padding: '16px 18px',
+          backgroundColor: '#fff', boxShadow: 'none',
+          border: '1px solid #e2e8f0'
         }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
-            <div style={{ padding: '6px', borderRadius: '8px', backgroundColor: 'var(--color-bg-main)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '10px' }}>
+            <div style={{ padding: '7px', borderRadius: '10px', backgroundColor: stat.bg, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               {stat.icon}
             </div>
-            <div style={{ fontSize: '12px', fontWeight: 600, color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>{stat.label}</div>
+            <div style={{ fontSize: '11px', fontWeight: 800, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.5px' }}>{stat.label}</div>
           </div>
-          <div style={{ fontSize: '24px', fontWeight: 800, color: 'var(--color-primary)' }}>
+          <div style={{ fontSize: '24px', fontWeight: 900, color: '#0f172a' }}>
             {stat.value}
           </div>
         </div>

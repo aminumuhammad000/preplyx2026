@@ -1,0 +1,46 @@
+/* ═══════════════════════════════════════
+   ADMIN PROFILE — MODERN & FIT
+═══════════════════════════════════════ */
+
+.pf-page {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.pf-hero-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 20px;
+}
+
+.pf-hero-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.pf-name {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.pf-email {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.pf-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+@media (max-width: 900px) {
+  .pf-cards-grid {
+    grid-template-columns: 1fr;
+  }
+}

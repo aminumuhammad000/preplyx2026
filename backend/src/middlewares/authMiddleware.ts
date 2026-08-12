@@ -44,3 +44,26 @@ export const protect = async (
     next(new Error('Not authorized, no token'));
   }
 };
+
+export const optionalProtect = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith('Bearer')
+  ) {
+    try {
+      const token = req.headers.authorization.split(' ')[1];
+      const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as any;
+      const user = await User.findById(decoded.id).select('-password') as IUser;
+      if (user) {
+        req.user = user;
+      }
+    } catch (error) {
+      // Ignore token verification errors for optional auth
+    }
+  }
+  next();
+};

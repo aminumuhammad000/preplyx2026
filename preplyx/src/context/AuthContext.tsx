@@ -8,12 +8,13 @@ type User = {
   full_name?: string;
   phone?: string;
   exam_type?: string;
+  avatar?: string;
 };
 
 type AuthContextType = {
   user: User | null;
   token: string | null;
-  login: (userData: User, token: string) => void;
+  login: (userData: User, token: string, rememberMe?: boolean) => void;
   logout: () => void;
   updateUser: (userData: Partial<User>) => void;
   isLoading: boolean;
@@ -27,8 +28,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Check for saved token on load
-    const savedToken = localStorage.getItem('preplyx_token');
+    // Check for saved token on load (either localStorage or sessionStorage)
+    const savedToken = localStorage.getItem('preplyx_token') || sessionStorage.getItem('preplyx_token');
     if (savedToken) {
       setToken(savedToken);
       fetch('http://localhost:5000/api/auth/profile', {
@@ -37,8 +38,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       .then(res => {
         if (!res.ok) {
           if (res.status === 401) {
-            // Token invalid or user not found – clear stored token
             localStorage.removeItem('preplyx_token');
+            sessionStorage.removeItem('preplyx_token');
             setToken(null);
             setUser(null);
           }
@@ -49,6 +50,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       .then(data => setUser(data))
       .catch(() => {
         localStorage.removeItem('preplyx_token');
+        sessionStorage.removeItem('preplyx_token');
         setToken(null);
       })
       .finally(() => setIsLoading(false));
@@ -57,16 +59,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
-  const login = (userData: User, newToken: string) => {
+  const login = (userData: User, newToken: string, rememberMe: boolean = false) => {
     setUser(userData);
     setToken(newToken);
-    localStorage.setItem('preplyx_token', newToken);
+    if (rememberMe) {
+      localStorage.setItem('preplyx_token', newToken);
+      sessionStorage.removeItem('preplyx_token');
+    } else {
+      sessionStorage.setItem('preplyx_token', newToken);
+      localStorage.removeItem('preplyx_token');
+    }
   };
 
   const logout = () => {
     setUser(null);
     setToken(null);
     localStorage.removeItem('preplyx_token');
+    sessionStorage.removeItem('preplyx_token');
   };
 
   const updateUser = (userData: Partial<User>) => {

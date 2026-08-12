@@ -3,12 +3,7 @@ import User from '../models/User';
 import Wallet from '../models/Wallet';
 
 export const connectDB = async (): Promise<void> => {
-  const mongoUri = process.env.MONGODB_URI;
-
-  if (!mongoUri) {
-    console.warn('MONGODB_URI is not set. Skipping MongoDB connection. Database features will be unavailable until it is configured.');
-    return;
-  }
+  const mongoUri = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/cbt';
 
   try {
     const conn = await mongoose.connect(mongoUri);

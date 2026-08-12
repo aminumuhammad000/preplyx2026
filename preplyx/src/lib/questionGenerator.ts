@@ -1,5 +1,8 @@
 export interface Question {
   id: string;
+  year?: string;
+  title?: string;
+  description?: string;
   question: string;
   options: {
     A: string;
@@ -64,7 +67,7 @@ function shuffleOptions(options: string[], correctIndex: number): { opts: Record
   return { opts: resultOpts, correct: correctLetter };
 }
 
-export function generateQuestions(subject: string, count: number = 100): Question[] {
+export function generateQuestions(subject: string, count: number = 100, year: string = '2018'): Question[] {
   const normalizedSubject = subject.toLowerCase();
   const pool = templates[normalizedSubject] || defaultTemplates;
   const questions: Question[] = [];
@@ -122,8 +125,14 @@ export function generateQuestions(subject: string, count: number = 100): Questio
       .replace(/\{subject\}/g, subject)
       .replace(/\{ans\}/g, ((b - a) / 2).toString());
 
+    const title = (template as any).title || `${subject.toUpperCase()} (${year}) Past Question`;
+    const description = (template as any).description || `Official ${subject} CBT Past Question for ${year}. Select your answer carefully.`;
+
     questions.push({
-      id: `q_${normalizedSubject}_${i}_${Date.now()}_${Math.random().toString(36).substring(7)}`,
+      id: `q_${normalizedSubject}_${year}_${i}_${Date.now()}_${Math.random().toString(36).substring(7)}`,
+      year,
+      title,
+      description,
       question: qText,
       options: opts,
       correct_answer: correct,

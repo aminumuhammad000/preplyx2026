@@ -3,6 +3,7 @@ import mongoose, { Document, Schema } from 'mongoose';
 export interface IQuestion extends Document {
   exam: string;
   subject: string;
+  year?: string;
   text: string;
   options: string[];
   correctAnswer: string;
@@ -19,6 +20,11 @@ const questionSchema = new Schema(
     subject: {
       type: String,
       required: true,
+      trim: true,
+    },
+    year: {
+      type: String,
+      default: '2024',
       trim: true,
     },
     text: {

@@ -12,17 +12,16 @@ import vtstackService from '../services/vtstackService';
  */
 export const getWallet = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
-    const wallet = await Wallet.findOne({ user: req.user?._id });
+    let wallet = await Wallet.findOne({ user: req.user?._id });
     
     if (!wallet) {
-      // Return demo wallet data when no wallet exists
-      res.json({
-        balance: 2500,
-        totalFunded: 5000,
-        totalSpent: 2500,
+      wallet = await Wallet.create({
+        user: req.user?._id,
+        balance: 500, // 500 welcome bonus
+        totalFunded: 0,
+        totalSpent: 0,
         welcomeBonus: 500
       });
-      return;
     }
 
     res.json({
@@ -36,81 +35,67 @@ export const getWallet = async (req: AuthRequest, res: Response): Promise<void> 
   }
 };
 
-/**
- * @desc    Get wallet transaction history
- * @route   GET /api/wallet/transactions
- * @access  Private
- */
 export const getTransactions = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
     const transactions = await Transaction.find({ user: req.user?._id })
       .sort({ createdAt: -1 })
       .limit(50);
     
-    if (transactions.length === 0) {
-      // Return demo transactions when no real data exists
-      const demoTransactions = [
-        {
-          _id: 'demo_tx1',
-          type: 'funding',
-          amount: 1000,
-          description: 'Wallet funding',
-          status: 'success',
-          createdAt: new Date(Date.now() - 864000000),
-          user: req.user?._id
-        },
-        {
-          _id: 'demo_tx2',
-          type: 'purchase',
-          amount: 500,
-          description: 'Premium subscription',
-          status: 'success',
-          createdAt: new Date(Date.now() - 1728000000),
-          user: req.user?._id
-        },
-        {
-          _id: 'demo_tx3',
-          type: 'bonus',
-          amount: 500,
-          description: 'Welcome bonus',
-          status: 'success',
-          createdAt: new Date(Date.now() - 2592000000),
-          user: req.user?._id
-        },
-        {
-          _id: 'demo_tx4',
-          type: 'funding',
-          amount: 1500,
-          description: 'Wallet funding',
-          status: 'success',
-          createdAt: new Date(Date.now() - 3456000000),
-          user: req.user?._id
-        },
-        {
-          _id: 'demo_tx5',
-          type: 'purchase',
-          amount: 2000,
-          description: 'Exam package purchase',
-          status: 'success',
-          createdAt: new Date(Date.now() - 4320000000),
-          user: req.user?._id
-        }
-      ];
-      res.json(demoTransactions);
-      return;
-    }
-    
-    res.json(transactions);
+    res.json(transactions || []);
   } catch (error) {
     res.status(500).json({ message: 'Error fetching transactions' });
   }
 };
 
-/**
- * @desc    Create virtual account
- * @route   POST /api/wallet/virtual-account
- * @access  Private
- */
+export const deductWallet = async (req: AuthRequest, res: Response): Promise<void> => {
+  try {
+    const { amount, description } = req.body;
+    const deductAmount = Number(amount);
+
+    if (!deductAmount || deductAmount <= 0) {
+      res.status(400).json({ message: 'Valid deduction amount is required' });
+      return;
+    }
+
+    let wallet = await Wallet.findOne({ user: req.user?._id });
+    if (!wallet) {
+      wallet = await Wallet.create({
+        user: req.user?._id,
+        balance: 500,
+        totalFunded: 0,
+        totalSpent: 0,
+        welcomeBonus: 500
+      });
+    }
+
+    if (wallet.balance < deductAmount) {
+      res.status(400).json({ message: 'Insufficient wallet balance', balance: wallet.balance });
+      return;
+    }
+
+    wallet.balance -= deductAmount;
+    wallet.totalSpent += deductAmount;
+    await wallet.save();
+
+    await Transaction.create({
+      user: req.user?._id,
+      type: 'spending',
+      amount: deductAmount,
+      description: description || 'Result Unlock Fee',
+      status: 'completed'
+    });
+
+    res.json({
+      message: 'Wallet balance deducted successfully',
+      balance: wallet.balance,
+      totalSpent: wallet.totalSpent
+    });
+  } catch (error) {
+    console.error('Error deducting wallet balance:', error);
+    res.status(500).json({ message: 'Error processing wallet deduction' });
+  }
+};
+
 export const createVirtualAccount = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
     if (!req.user?._id) {
@@ -118,9 +103,7 @@ export const createVirtualAccount = async (req: AuthRequest, res: Response): Pro
       return;
     }
 
-    console.log('createVirtualAccount: req.user', req.user);
     const user = await User.findById(req.user?._id);
-    
     if (!user) {
       res.status(404).json({ message: 'User not found' });
       return;
@@ -130,7 +113,6 @@ export const createVirtualAccount = async (req: AuthRequest, res: Response): Pro
     const firstName = nameParts[0] || '';
     const lastName = nameParts.slice(1).join(' ') || '';
 
-    // Call vtstack service to create virtual account
     const virtualAccount = await vtstackService.createVirtualAccount({
       email: user.email,
       firstName,
@@ -138,7 +120,6 @@ export const createVirtualAccount = async (req: AuthRequest, res: Response): Pro
       phone: user.phone,
     });
 
-    // Update or create wallet with virtual account details
     let wallet = await Wallet.findOne({ user: req.user?._id });
     
     if (!wallet) {
@@ -164,7 +145,6 @@ export const createVirtualAccount = async (req: AuthRequest, res: Response): Pro
 
     await wallet.save();
     
-    // Update user's wallet reference
     user.wallet = wallet._id;
     await user.save();
 
@@ -181,30 +161,24 @@ export const createVirtualAccount = async (req: AuthRequest, res: Response): Pro
   }
 };
 
-/**
- * @desc    Get virtual account details
- * @route   GET /api/wallet/virtual-account
- * @access  Private
- */
 export const getVirtualAccount = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
     const wallet = await Wallet.findOne({ user: req.user?._id });
     
     if (!wallet || !wallet.virtualAccount?.accountNumber) {
-      // Return demo virtual account data when no wallet exists
       res.json({
-        bankName: 'Wema Bank',
-        accountName: 'CBT Demo User',
-        accountNumber: '1234567890',
+        bankName: '',
+        accountName: '',
+        accountNumber: '',
         hasVirtualAccount: false
       });
       return;
     }
 
     res.json({
-      bankName: wallet.virtualAccount.bankName || 'Wema Bank',
-      accountName: wallet.virtualAccount.accountName || 'CBT Demo User',
-      accountNumber: wallet.virtualAccount.accountNumber || '1234567890',
+      bankName: wallet.virtualAccount.bankName,
+      accountName: wallet.virtualAccount.accountName,
+      accountNumber: wallet.virtualAccount.accountNumber,
       hasVirtualAccount: true
     });
   } catch (error) {

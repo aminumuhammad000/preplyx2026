@@ -25,6 +25,9 @@ export interface ISystemConfig extends Document {
   vtstackSecretKey: string;
   vtstackSandbox: boolean;
   geminiApiKey: string;
+  anthropicAuthToken: string;
+  anthropicBaseUrl: string;
+  anthropicModel: string;
 }
 
 const systemConfigSchema = new Schema(
@@ -53,6 +56,9 @@ const systemConfigSchema = new Schema(
     vtstackSecretKey: { type: String, default: '' },
     vtstackSandbox: { type: Boolean, default: true },
     geminiApiKey: { type: String, default: '' },
+    anthropicAuthToken: { type: String, default: process.env.ANTHROPIC_AUTH_TOKEN || '' },
+    anthropicBaseUrl: { type: String, default: process.env.ANTHROPIC_BASE_URL || 'https://agentrouter.org' },
+    anthropicModel: { type: String, default: process.env.ANTHROPIC_MODEL || 'claude-opus-4-6' },
   },
   { timestamps: true }
 );

@@ -1,14 +1,15 @@
 export interface ActiveSession {
   exam: string;
   subject: string;
-  subjects?: string[]; // For multi-subject exams
-  currentSubjectIndex?: number; // For multi-subject exams
-  currentSubject?: string; // For multi-subject exams
+  subjects?: string[];
+  currentSubjectIndex?: number;
+  currentSubject?: string;
   currentQIndex: number;
-  answers: Record<number, string>;
-  flagged: string[]; // Array instead of Set for JSON serialization
-  timeLeft: number;
-  lastAccessed: number; // timestamp
+  answers: Record<string, string> | Record<number, string>;
+  flagged: string[];
+  timeLeft?: number;
+  lastAccessed?: number;
+  timestamp?: number;
   totalQ: number;
 }
 
@@ -19,8 +20,13 @@ export interface CompletedSession {
   score: number;
   total: number;
   pct: number;
-  date: number; // timestamp
+  date: number;
+  status?: 'completed' | 'timed_out' | 'in_progress' | 'abandoned_0_answers';
+  answeredCount?: number;
   timeSpentSeconds?: number;
+  answers?: Record<string, string>;
+  questions?: any[];
+  subjectResults?: Record<string, { score: number; total: number; pct: number }>;
   details?: {
     questionId: string;
     questionText: string;
@@ -39,11 +45,72 @@ export interface OverallStats {
   monthlyStreak: number;
 }
 
+export interface UserSettings {
+  darkMode: boolean;
+  notifications: boolean;
+  emailNotifications: boolean;
+  soundEffects: boolean;
+  autoSaveSession: boolean;
+  language: string;
+  fontSize: 'standard' | 'large' | 'xlarge';
+  questionCount: string;
+}
+
+const SETTINGS_KEY = 'preplyx_settings';
+
+export const DEFAULT_SETTINGS: UserSettings = {
+  darkMode: false,
+  notifications: true,
+  emailNotifications: true,
+  soundEffects: true,
+  autoSaveSession: true,
+  language: 'English',
+  fontSize: 'standard',
+  questionCount: '40'
+};
+
+export function applyDarkMode(enabled: boolean) {
+  if (typeof window === 'undefined') return;
+  if (enabled) {
+    document.documentElement.classList.add('dark');
+  } else {
+    document.documentElement.classList.remove('dark');
+  }
+}
+
+export function applyFontSize(size: 'standard' | 'large' | 'xlarge') {
+  if (typeof window === 'undefined') return;
+  document.documentElement.classList.remove('font-standard', 'font-large', 'font-xlarge');
+  document.documentElement.classList.add(`font-${size}`);
+}
+
+export function getStoredSettings(): UserSettings {
+  if (typeof window === 'undefined') return DEFAULT_SETTINGS;
+  try {
+    const raw = localStorage.getItem(SETTINGS_KEY);
+    const settings = raw ? { ...DEFAULT_SETTINGS, ...JSON.parse(raw) } : DEFAULT_SETTINGS;
+    applyDarkMode(settings.darkMode);
+    applyFontSize(settings.fontSize);
+    return settings;
+  } catch (e) {
+    return DEFAULT_SETTINGS;
+  }
+}
+
+export function saveStoredSettings(settings: Partial<UserSettings>): UserSettings {
+  const current = getStoredSettings();
+  const updated = { ...current, ...settings };
+  if (typeof window !== 'undefined') {
+    localStorage.setItem(SETTINGS_KEY, JSON.stringify(updated));
+    if (updated.darkMode !== undefined) applyDarkMode(updated.darkMode);
+    if (updated.fontSize !== undefined) applyFontSize(updated.fontSize);
+  }
+  return updated;
+}
+
 const ACTIVE_SESSION_KEY = 'preplyx_active_session';
 const COMPLETED_SESSIONS_KEY = 'preplyx_completed_sessions';
 const ACTIVE_DAYS_KEY = 'preplyx_active_days';
-
-// --- Daily Streak Tracking ---
 
 export function trackDailyActivity() {
   if (typeof window === 'undefined') return;
@@ -63,11 +130,17 @@ export function getActiveDays(): string[] {
   return activeDaysStr ? JSON.parse(activeDaysStr) : [];
 }
 
-// --- Active Session ---
-
 export function saveActiveSession(session: ActiveSession) {
   if (typeof window === 'undefined') return;
-  localStorage.setItem(ACTIVE_SESSION_KEY, JSON.stringify(session));
+  const settings = getStoredSettings();
+  if (settings.autoSaveSession !== false) {
+    const updatedSession = {
+      ...session,
+      lastAccessed: Date.now(),
+      timestamp: session.timestamp || Date.now()
+    };
+    localStorage.setItem(ACTIVE_SESSION_KEY, JSON.stringify(updatedSession));
+  }
 }
 
 export function getActiveSession(): ActiveSession | null {
@@ -81,13 +154,14 @@ export function clearActiveSession() {
   localStorage.removeItem(ACTIVE_SESSION_KEY);
 }
 
-// --- Completed Sessions ---
-
 export function saveCompletedSession(session: CompletedSession) {
   if (typeof window === 'undefined') return;
   const sessions = getCompletedSessions();
-  sessions.unshift(session); // Add to beginning
-  localStorage.setItem(COMPLETED_SESSIONS_KEY, JSON.stringify(sessions));
+  const filtered = sessions.filter(s => s.id !== session.id);
+  filtered.unshift(session);
+  localStorage.setItem(COMPLETED_SESSIONS_KEY, JSON.stringify(filtered));
+  localStorage.setItem(`completed_${session.id}`, JSON.stringify(session));
+  localStorage.setItem('preplyx_latest_session', JSON.stringify(session));
 }
 
 export function getCompletedSessions(): CompletedSession[] {
@@ -96,7 +170,34 @@ export function getCompletedSessions(): CompletedSession[] {
   return data ? JSON.parse(data) : [];
 }
 
-// --- Stats Aggregation ---
+export function getCompletedSessionById(id?: string | null): CompletedSession | null {
+  if (typeof window === 'undefined') return null;
+
+  if (id) {
+    // 1. Direct key check
+    const direct = localStorage.getItem(`completed_${id}`);
+    if (direct) {
+      try { return JSON.parse(direct); } catch (e) {}
+    }
+
+    // 2. Array search
+    const sessions = getCompletedSessions();
+    const found = sessions.find(s => s.id === id);
+    if (found) return found;
+  }
+
+  // 3. Fallback to latest session
+  const latest = localStorage.getItem('preplyx_latest_session');
+  if (latest) {
+    try { return JSON.parse(latest); } catch (e) {}
+  }
+
+  // 4. Return first session in list if any
+  const sessions = getCompletedSessions();
+  if (sessions.length > 0) return sessions[0];
+
+  return null;
+}
 
 export function getOverallStats(): OverallStats {
   const sessions = getCompletedSessions();
@@ -113,14 +214,11 @@ export function getOverallStats(): OverallStats {
   });
 
   const accuracy = totalQuestions > 0 ? Math.round((totalScore / totalQuestions) * 100) : 0;
-  // Mock study time based on total questions for now (e.g. 1 min per question)
   const studyTimeSeconds = totalQuestions * 60;
 
-  // Streak Calculation (Based on Daily Activity Tracking)
   const activeDays = getActiveDays();
   const uniqueDays = new Set<string>(activeDays);
   
-  // Also include days from completed sessions as a fallback
   sessions.forEach(s => {
     const d = new Date(s.date);
     uniqueDays.add(d.toISOString().split('T')[0]);

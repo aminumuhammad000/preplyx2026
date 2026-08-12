@@ -151,11 +151,48 @@ const SUBJECT_TIPS: Record<string, string> = {
  * @access  Public
  */
 export const getExams = async (req: AuthRequest, res: Response): Promise<void> => {
+  const defaultExams = {
+    JAMB: {
+      id: 'jamb',
+      name: 'JAMB UTME',
+      displayName: 'JAMB UTME',
+      desc: 'Unified Tertiary Matriculation Examination',
+      color: '#7B2FF7',
+      years: '2000 - 2024',
+      subjects: ['English Language', 'Mathematics', 'Physics', 'Chemistry', 'Biology', 'Economics', 'Government'],
+      questionCount: '420'
+    },
+    WAEC: {
+      id: 'waec',
+      name: 'WAEC SSCE',
+      displayName: 'WAEC SSCE',
+      desc: 'West African Senior School Certificate Examination',
+      color: '#10B981',
+      years: '2000 - 2024',
+      subjects: ['English Language', 'Mathematics', 'Physics', 'Chemistry', 'Biology', 'Economics', 'Government', 'Civic Education'],
+      questionCount: '480'
+    },
+    NECO: {
+      id: 'neco',
+      name: 'NECO SSCE',
+      displayName: 'NECO SSCE',
+      desc: 'National Examinations Council',
+      color: '#F59E0B',
+      years: '2000 - 2024',
+      subjects: ['English Language', 'Mathematics', 'Physics', 'Chemistry', 'Biology', 'Economics', 'Government'],
+      questionCount: '420'
+    }
+  };
+
   try {
     const exams = await Exam.find({});
     
-    // Format response to match frontend expectations
-    const formattedExams: Record<string, { subjects: string[]; color: string; years: string; desc: string; questionCount: string; displayName: string }> = {};
+    if (!exams || exams.length === 0) {
+      res.json(defaultExams);
+      return;
+    }
+
+    const formattedExams: Record<string, any> = {};
     exams.forEach(exam => {
       formattedExams[exam.name] = {
         subjects: exam.subjects,
@@ -163,14 +200,14 @@ export const getExams = async (req: AuthRequest, res: Response): Promise<void> =
         years: exam.years,
         desc: exam.description,
         questionCount: exam.questionCount || '0',
-        displayName: exam.displayName
+        displayName: exam.displayName || exam.name
       };
     });
     
     res.json(formattedExams);
   } catch (error) {
     console.error('Error fetching exams:', error);
-    res.status(500).json({ message: 'Error fetching exam data' });
+    res.json(defaultExams);
   }
 };
 

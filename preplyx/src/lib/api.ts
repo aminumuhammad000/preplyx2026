@@ -1,6 +1,6 @@
 // API utility functions to connect to backend server
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+const API_BASE_URL = (import.meta.env.VITE_API_URL as string) || 'http://localhost:5000/api';
 
 // Helper function to check if backend is available
 export async function checkBackendHealth(): Promise<boolean> {
@@ -36,6 +36,7 @@ export interface Question {
   id?: string;
   exam: string;
   subject: string;
+  year?: string;
   text: string;
   options: string[];
   correctAnswer: string;
@@ -109,15 +110,22 @@ class ApiClient {
   async getQuestions(params: {
     exam?: string;
     subject?: string;
+    year?: string;
     limit?: number;
-  }): Promise<Question[]> {
+  }, token?: string): Promise<Question[]> {
     const queryParams = new URLSearchParams();
     if (params.exam) queryParams.append('exam', params.exam);
     if (params.subject) queryParams.append('subject', params.subject);
+    if (params.year) queryParams.append('year', params.year);
     if (params.limit) queryParams.append('limit', params.limit.toString());
 
     const endpoint = `/questions?${queryParams.toString()}`;
-    return this.request<Question[]>(endpoint);
+    const headers: Record<string, string> = {};
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+
+    return this.request<Question[]>(endpoint, { headers });
   }
 
   // Auth endpoints
@@ -198,6 +206,16 @@ class ApiClient {
       headers: {
         Authorization: `Bearer ${token}`,
       },
+    });
+  }
+
+  async deductWallet(token: string, amount: number, description?: string): Promise<any> {
+    return this.request('/wallet/deduct', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ amount, description }),
     });
   }
 
@@ -323,6 +341,7 @@ class ApiClient {
     phone?: string;
     exam_type?: string;
     password?: string;
+    avatar?: string;
   }): Promise<any> {
     return this.request('/user/profile', {
       method: 'PUT',
@@ -340,6 +359,121 @@ class ApiClient {
         Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({ settings }),
+    });
+  }
+
+  // Admin endpoints
+  async adminLogin(data: { email?: string; password?: string; pin?: string }): Promise<{
+    token: string;
+    user: {
+      id: string;
+      name: string;
+      email: string;
+      role: string;
+      isAdmin: boolean;
+    };
+  }> {
+    return this.request('/admin/login', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
+
+  async getAdminDashboard(token?: string): Promise<any> {
+    const headers: Record<string, string> = {};
+    if (token) headers['Authorization'] = `Bearer ${token}`;
+    return this.request('/admin/dashboard', { headers });
+  }
+
+  async getAdminUsers(token?: string): Promise<any[]> {
+    const headers: Record<string, string> = {};
+    if (token) headers['Authorization'] = `Bearer ${token}`;
+    return this.request('/admin/users', { headers });
+  }
+
+  async updateUserStatus(id: string, status: string, token?: string): Promise<any> {
+    const headers: Record<string, string> = {};
+    if (token) headers['Authorization'] = `Bearer ${token}`;
+    return this.request(`/admin/users/${id}/status`, {
+      method: 'PUT',
+      headers,
+      body: JSON.stringify({ status })
+    });
+  }
+
+  async deleteAdminUser(id: string, token?: string): Promise<any> {
+    const headers: Record<string, string> = {};
+    if (token) headers['Authorization'] = `Bearer ${token}`;
+    return this.request(`/admin/users/${id}`, {
+      method: 'DELETE',
+      headers
+    });
+  }
+
+  async getAdminQuestions(params: { exam?: string; subject?: string; search?: string; page?: number; limit?: number }, token?: string): Promise<{ questions: any[]; total: number; page: number; totalPages: number }> {
+    const queryParams = new URLSearchParams();
+    if (params.exam) queryParams.append('exam', params.exam);
+    if (params.subject) queryParams.append('subject', params.subject);
+    if (params.search) queryParams.append('search', params.search);
+    if (params.page) queryParams.append('page', params.page.toString());
+    if (params.limit) queryParams.append('limit', params.limit.toString());
+
+    const headers: Record<string, string> = {};
+    if (token) headers['Authorization'] = `Bearer ${token}`;
+
+    return this.request(`/admin/questions?${queryParams.toString()}`, { headers });
+  }
+
+  async createAdminQuestion(data: {
+    exam: string;
+    subject: string;
+    text: string;
+    options: string[];
+    correctAnswer: string;
+    explanation?: string;
+  }, token?: string): Promise<any> {
+    const headers: Record<string, string> = {};
+    if (token) headers['Authorization'] = `Bearer ${token}`;
+    return this.request('/admin/questions', {
+      method: 'POST',
+      headers,
+      body: JSON.stringify(data)
+    });
+  }
+
+  async deleteAdminQuestion(id: string, token?: string): Promise<any> {
+    const headers: Record<string, string> = {};
+    if (token) headers['Authorization'] = `Bearer ${token}`;
+    return this.request(`/admin/questions/${id}`, {
+      method: 'DELETE',
+      headers
+    });
+  }
+
+  async getAdminSettings(token?: string): Promise<any> {
+    const headers: Record<string, string> = {};
+    if (token) headers['Authorization'] = `Bearer ${token}`;
+    return this.request('/admin/settings', { headers });
+  }
+
+  async updateAdminSettings(settings: any, token?: string): Promise<any> {
+    const headers: Record<string, string> = {};
+    if (token) headers['Authorization'] = `Bearer ${token}`;
+    return this.request('/admin/settings', {
+      method: 'POST',
+      headers,
+      body: JSON.stringify(settings)
+    });
+  }
+
+  // AI Tutor endpoints
+  async askAiTutor(prompt: string, context?: any, token?: string): Promise<{ response: string }> {
+    const headers: Record<string, string> = {};
+    if (token) headers['Authorization'] = `Bearer ${token}`;
+    return this.request<{ response: string }>('/ai/tutor', {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({ prompt, context })
     });
   }
 

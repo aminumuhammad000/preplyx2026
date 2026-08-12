@@ -25,15 +25,19 @@ export default function StreakWidget() {
   if (!mounted || !stats) {
     return (
       <div style={{
-        display: 'flex', alignItems: 'center', gap: '8px',
-        padding: '8px 12px', borderRadius: '999px',
-        background: 'linear-gradient(135deg, #fff7ed 0%, #ffe7e7 100%)',
-        border: '1px solid rgba(239, 68, 68, 0.16)',
-        boxShadow: '0 8px 16px rgba(239, 68, 68, 0.08)',
+        display: 'inline-flex', alignItems: 'center', gap: '6px',
+        height: '38px', padding: '0 12px', borderRadius: '999px',
+        backgroundColor: '#fff', border: '1px solid rgba(239, 68, 68, 0.18)',
+        boxShadow: '0 2px 8px rgba(239, 68, 68, 0.06)',
         opacity: 0.85
       }}>
-        <Flame size={14} style={{ color: '#ef4444' }} />
-        <span style={{ fontSize: '12px', fontWeight: 700, color: '#ef4444' }}>Loading...</span>
+        <div style={{
+          width: '24px', height: '24px', borderRadius: '50%',
+          backgroundColor: '#fef2f2', display: 'flex', alignItems: 'center', justifyContent: 'center'
+        }}>
+          <Flame size={13} style={{ color: '#ef4444' }} />
+        </div>
+        <span style={{ fontSize: '12px', fontWeight: 700, color: '#ef4444' }}>...</span>
       </div>
     );
   }
@@ -42,19 +46,28 @@ export default function StreakWidget() {
     <button 
       onClick={handleTrackStreak}
       style={{
-        display: 'flex', alignItems: 'center', gap: '8px',
-        padding: '8px 12px', borderRadius: '999px',
-        background: 'linear-gradient(135deg, #fff7ed 0%, #ffe7e7 100%)',
-        border: '1px solid rgba(239, 68, 68, 0.16)',
-        boxShadow: '0 8px 16px rgba(239, 68, 68, 0.08)', cursor: 'pointer',
-        transition: 'all 0.2s ease'
+        display: 'inline-flex', alignItems: 'center', gap: '8px',
+        height: '38px', padding: '0 12px 0 6px', borderRadius: '999px',
+        backgroundColor: '#ffffff',
+        border: '1px solid #ffedd5',
+        boxShadow: '0 1px 3px rgba(249, 115, 22, 0.06)', cursor: 'pointer',
+        transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+        outline: 'none',
+        userSelect: 'none'
       }}
-      className="streak-nav-btn"
+      className="streak-nav-btn header-hover-card"
       title="Click to track today's activity!"
     >
-      <Flame size={16} style={{ color: '#ef4444' }} />
-      <span style={{ fontSize: '13px', fontWeight: 700, color: '#ef4444' }}>
-        {stats.currentStreak} Day{stats.currentStreak !== 1 ? 's' : ''} Streak
+      <div style={{
+        width: '26px', height: '26px', borderRadius: '50%',
+        backgroundColor: '#fff7ed',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        flexShrink: 0
+      }}>
+        <Flame size={14} style={{ color: '#ea580c' }} />
+      </div>
+      <span style={{ fontSize: '12px', fontWeight: 800, color: '#c2410c', letterSpacing: '-0.2px', whiteSpace: 'nowrap' }}>
+        {stats.currentStreak} <span className="streak-label-text">Day{stats.currentStreak !== 1 ? 's' : ''} Streak</span>
       </span>
     </button>
   );

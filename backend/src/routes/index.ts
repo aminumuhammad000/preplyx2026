@@ -11,6 +11,7 @@ import userRoutes from './userRoutes';
 import achievementRoutes from './achievementRoutes';
 import notificationRoutes from './notificationRoutes';
 import adminRoutes from './adminRoutes';
+import aiRoutes from './aiRoutes';
 
 const router = Router();
 
@@ -49,5 +50,8 @@ router.use('/notifications', notificationRoutes);
 
 // Admin routes
 router.use('/admin', adminRoutes);
+
+// AI routes
+router.use('/ai', aiRoutes);
 
 export default router;

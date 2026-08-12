@@ -134,6 +134,7 @@ export const getLeaderboard = async (req: AuthRequest, res: Response): Promise<v
           totalScore: 0,
           totalQuestions: 0,
           totalExams: 0,
+          lastExam: session.exam,
           streak: 0,
         });
       }
@@ -142,6 +143,7 @@ export const getLeaderboard = async (req: AuthRequest, res: Response): Promise<v
       stats.totalScore += session.score;
       stats.totalQuestions += session.total;
       stats.totalExams += 1;
+      if (session.exam) stats.lastExam = session.exam;
     });
 
     // Calculate streaks (simplified version)
@@ -178,15 +180,21 @@ export const getLeaderboard = async (req: AuthRequest, res: Response): Promise<v
     const leaderboard = await Promise.all(
       Array.from(userStats.entries()).map(async ([userId, stats]) => {
         const user = await User.findById(userId);
-        const streak = userStreaks.get(userId) || 0;
+        const streak = userStreaks.get(userId) || 1;
+        const examName = stats.lastExam || user?.exam_type || 'JAMB';
         
         return {
           rank: 0, // Will be assigned after sorting
+          userId,
           name: user?.name || 'Unknown User',
+          email: user?.email || '',
           avatar: user?.name ? user.name.split(' ').map((n: string) => n[0]).join('').toUpperCase().substring(0, 2) : 'UN',
           points: stats.totalScore,
           exams: stats.totalExams,
           streak: streak,
+          exam: examName,
+          school: `${examName} Candidate`,
+          isCurrentUser: req.user?._id?.toString() === userId
         };
       })
     );
@@ -199,8 +207,8 @@ export const getLeaderboard = async (req: AuthRequest, res: Response): Promise<v
       entry.rank = index + 1;
     });
 
-    // Return top 10
-    res.json(leaderboard.slice(0, 10));
+    // Return top 20
+    res.json(leaderboard.slice(0, 20));
   } catch (error) {
     console.error('Error fetching leaderboard:', error);
     res.status(500).json({ message: 'Error fetching leaderboard' });

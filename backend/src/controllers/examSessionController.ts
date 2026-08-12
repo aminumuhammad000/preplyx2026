@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
+import mongoose from 'mongoose';
 import ExamSession from '../models/ExamSession';
 
 /**
@@ -190,8 +191,15 @@ export const getSessionById = async (
   next: NextFunction
 ): Promise<void> => {
   try {
+    const { id } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      res.status(404).json({ message: 'Session not found' });
+      return;
+    }
+
     const session = await ExamSession.findOne({ 
-      _id: req.params.id, 
+      _id: id, 
       user: req.user._id 
     });
     

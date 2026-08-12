@@ -15,7 +15,19 @@ export const getUserNotifications = async (
     const user = await User.findById(req.user._id);
 
     if (user) {
-      let notifications = user.notifications || [];
+      let notifications: any = user.notifications;
+      if (typeof notifications === 'string') {
+        try { notifications = JSON.parse(notifications); } catch { notifications = []; }
+      }
+      if (!Array.isArray(notifications)) notifications = [];
+      if (notifications.length > 0 && typeof notifications[0] === 'string') {
+        try {
+          const parsed = JSON.parse(notifications[0]);
+          if (Array.isArray(parsed)) notifications = parsed;
+        } catch {
+          notifications = [];
+        }
+      }
       
       // Add demo notifications if none exist
       if (notifications.length === 0) {

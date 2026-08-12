@@ -33,6 +33,8 @@ export interface IUser extends Document {
     time: string;
     unread: boolean;
   }[];
+  resetPasswordOTP?: string;
+  resetPasswordOTPExpires?: Date;
   matchPassword(enteredPassword: string): Promise<boolean>;
 }
 
@@ -50,6 +52,14 @@ const userSchema: Schema = new Schema(
     password: {
       type: String,
       required: true,
+    },
+    resetPasswordOTP: {
+      type: String,
+      default: null,
+    },
+    resetPasswordOTPExpires: {
+      type: Date,
+      default: null,
     },
     phone: {
       type: String,
@@ -86,24 +96,8 @@ const userSchema: Schema = new Schema(
         default: 'English',
       },
     },
-    achievements: [{
-      id: Number,
-      name: String,
-      description: String,
-      icon: String,
-      color: String,
-      unlocked: Boolean,
-      date: String,
-      progress: Number,
-    }],
-    notifications: [{
-      id: Number,
-      type: String,
-      title: String,
-      message: String,
-      time: String,
-      unread: Boolean,
-    }],
+    achievements: { type: Schema.Types.Mixed, default: [] },
+    notifications: { type: Schema.Types.Mixed, default: [] },
   },
   {
     timestamps: true,
