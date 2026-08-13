@@ -88,15 +88,15 @@ export default function Wallet() {
         welcomeBonus: walletData?.welcomeBonus ?? 0
       });
 
-      // Default virtual account details if null
+      // Handle virtual account details from server
       if (virtualAccountData && (virtualAccountData.accountNumber || virtualAccountData.hasVirtualAccount)) {
         setVirtualAccount(virtualAccountData);
       } else {
         setVirtualAccount({
-          bankName: 'Wema Bank',
-          accountName: user?.name ? `${user.name.toUpperCase()} (PREPLYX)` : 'STUDENT ACCOUNT',
-          accountNumber: '4820918239',
-          hasVirtualAccount: true
+          bankName: null,
+          accountName: null,
+          accountNumber: null,
+          hasVirtualAccount: false
         });
       }
 
@@ -130,9 +130,9 @@ export default function Wallet() {
     try {
       const res = await api.createVirtualAccount(token);
       setVirtualAccount({
-        bankName: res.bankName || 'Wema Bank',
+        bankName: res.bankName || 'PalmPay',
         accountName: res.accountName || (user?.name ? `${user.name.toUpperCase()} (PREPLYX)` : 'STUDENT ACCOUNT'),
-        accountNumber: res.accountNumber || '4820918239',
+        accountNumber: res.accountNumber,
         hasVirtualAccount: true
       });
       showToast('Dedicated Bank Account generated!');
@@ -214,8 +214,8 @@ export default function Wallet() {
     );
   }
 
-  const currentBankName = virtualAccount?.bankName || 'Wema Bank';
-  const currentAccountNo = virtualAccount?.accountNumber || '4820918239';
+  const currentBankName = virtualAccount?.bankName || 'PalmPay';
+  const currentAccountNo = virtualAccount?.accountNumber || '';
   const currentAccountName = virtualAccount?.accountName || (user?.name ? `${user.name.toUpperCase()} (PREPLYX)` : 'STUDENT DEDICATED ACCOUNT');
 
   return (

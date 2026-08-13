@@ -28,7 +28,7 @@ class VtstackService {
     let apiKey = process.env.VTSTACK_API_KEY || process.env.VTSTACK_SECRET_KEY || '';
     try {
       const config = await SystemConfig.findOne();
-      if (config && (config as any).vtstackSecretKey) {
+      if (config && (config as any).vtstackSecretKey && !(config as any).vtstackSecretKey.includes('test') && !(config as any).vtstackSecretKey.includes('demo')) {
         apiKey = (config as any).vtstackSecretKey;
       }
     } catch {
@@ -48,29 +48,24 @@ class VtstackService {
     const headers = await this.getHeaders();
     const apiKey = headers['x-api-key'];
 
-    // If no real API key is configured yet, return clear structure expecting API Key
-    if (!apiKey || apiKey.includes('demo') || apiKey === 'vtstack_demo_key_992104') {
-      const demoAccNum = '81' + Math.floor(10000000 + Math.random() * 90000000).toString();
-      return {
-        bankName: 'PalmPay (VTStack)',
-        accountName: accountName,
-        accountNumber: demoAccNum,
-        status: 'active',
-        username: params.email
-      };
+    let formattedPhone = params.phone?.trim() || '';
+    if (!formattedPhone || formattedPhone.length < 10) {
+      formattedPhone = '080' + Math.floor(10000000 + Math.random() * 90000000).toString();
     }
+
+    const payload = {
+      firstName: params.firstName || 'Student',
+      lastName: params.lastName || 'Preplyx',
+      email: params.email,
+      phone: formattedPhone,
+      bvn: params.bvn || '22123456789',
+      reference: params.reference || `PREPLYX_${Date.now()}_${Math.floor(Math.random() * 1000)}`
+    };
 
     try {
       const response = await axios.post(
         `${this.baseUrl}/virtual-accounts`,
-        {
-          firstName: params.firstName || 'Student',
-          lastName: params.lastName || 'Preplyx',
-          email: params.email,
-          phone: params.phone || '08000000000',
-          bvn: params.bvn || '22000000000',
-          reference: params.reference || `user_${Date.now()}`
-        },
+        payload,
         { headers, timeout: 15000 }
       );
 
@@ -80,18 +75,15 @@ class VtstackService {
         accountName: data.accountName || accountName,
         accountNumber: data.accountNumber || data.account_number,
         status: data.status || 'active',
+        reference: data.reference,
         ...data
       };
     } catch (error: any) {
-      console.error('VTStack API Error:', error?.response?.data || error.message);
-      const demoAccNum = '81' + Math.floor(10000000 + Math.random() * 90000000).toString();
-      return {
-        bankName: 'PalmPay (VTStack)',
-        accountName: accountName,
-        accountNumber: demoAccNum,
-        status: 'active',
-        username: params.email
-      };
+      const errorDetail = error?.response?.data ? JSON.stringify(error.response.data) : error.message;
+      console.error('VTStack API Error:', errorDetail);
+      
+      // If error occurs, throw so caller is aware rather than silently storing a fake number
+      throw new Error(error?.response?.data?.message || error?.message || 'Failed to create VTStack Virtual Account');
     }
   }
 

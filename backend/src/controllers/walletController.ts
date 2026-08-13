@@ -183,24 +183,78 @@ export const createVirtualAccount = async (req: AuthRequest, res: Response): Pro
 
 export const getVirtualAccount = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
-    const wallet = await Wallet.findOne({ user: req.user?._id });
+    let wallet = await Wallet.findOne({ user: req.user?._id });
     
-    if (!wallet || !wallet.virtualAccount?.accountNumber) {
+    if (wallet && wallet.virtualAccount?.accountNumber) {
+      res.json({
+        bankName: wallet.virtualAccount.bankName,
+        accountName: wallet.virtualAccount.accountName,
+        accountNumber: wallet.virtualAccount.accountNumber,
+        hasVirtualAccount: true
+      });
+      return;
+    }
+
+    // Auto-generate virtual account if user has none
+    const user = await User.findById(req.user?._id);
+    if (!user) {
+      res.status(404).json({ message: 'User not found' });
+      return;
+    }
+
+    const nameParts = user.name.split(' ');
+    const firstName = nameParts[0] || 'Student';
+    const lastName = nameParts.slice(1).join(' ') || 'Preplyx';
+
+    try {
+      const virtualAccount = await vtstackService.createVirtualAccount({
+        email: user.email,
+        firstName,
+        lastName,
+        phone: user.phone,
+        reference: `user_${user._id}`
+      });
+
+      if (!wallet) {
+        wallet = new Wallet({
+          user: req.user?._id,
+          balance: 0,
+          totalFunded: 0,
+          totalSpent: 0,
+          welcomeBonus: 500,
+          virtualAccount: {
+            bankName: virtualAccount.bankName || 'PalmPay',
+            accountName: virtualAccount.accountName,
+            accountNumber: virtualAccount.accountNumber,
+          },
+        });
+      } else {
+        wallet.virtualAccount = {
+          bankName: virtualAccount.bankName || 'PalmPay',
+          accountName: virtualAccount.accountName,
+          accountNumber: virtualAccount.accountNumber,
+        };
+      }
+
+      await wallet.save();
+      user.wallet = wallet._id;
+      await user.save();
+
+      res.json({
+        bankName: virtualAccount.bankName || 'PalmPay',
+        accountName: virtualAccount.accountName,
+        accountNumber: virtualAccount.accountNumber,
+        hasVirtualAccount: true
+      });
+    } catch (genErr) {
+      console.error('Auto virtual account generation error:', genErr);
       res.json({
         bankName: '',
         accountName: '',
         accountNumber: '',
         hasVirtualAccount: false
       });
-      return;
     }
-
-    res.json({
-      bankName: wallet.virtualAccount.bankName,
-      accountName: wallet.virtualAccount.accountName,
-      accountNumber: wallet.virtualAccount.accountNumber,
-      hasVirtualAccount: true
-    });
   } catch (error) {
     res.status(500).json({ message: 'Error fetching virtual account details' });
   }

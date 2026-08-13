@@ -94,9 +94,9 @@ export const Settings: React.FC = () => {
     freeTrialSessions: 3,
     globalNegativeMarking: false,
     defaultPassMark: 50,
-    vtstackPublicKey: 'pk_test_preplyx_847291',
-    vtstackSecretKey: 'sk_test_preplyx_992104',
-    vtstackSandbox: true,
+    vtstackPublicKey: '',
+    vtstackSecretKey: '',
+    vtstackSandbox: false,
     geminiApiKey: '',
 
     // AI Model Settings
