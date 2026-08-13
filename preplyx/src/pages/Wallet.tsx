@@ -148,30 +148,12 @@ export default function Wallet() {
     setIsFundingProcessing(true);
 
     setTimeout(() => {
-      const newBal = (balance || 0) + fundAmount;
-      setBalance(newBal);
-      if (walletSummary) {
-        setWalletSummary({
-          ...walletSummary,
-          totalFunded: walletSummary.totalFunded + fundAmount
-        });
-      }
-
-      const newTx: Transaction = {
-        id: `tx_${Date.now()}`,
-        type: 'funding',
-        amount: fundAmount,
-        description: fundMethod === 'bank_transfer' ? 'Automated Bank Transfer Deposit' : 'Instant Card Top-up',
-        createdAt: new Date().toISOString(),
-        status: 'success',
-        reference: `PRX-${Math.floor(10000000 + Math.random() * 90000000)}`
-      };
-
-      setTransactions(prev => [newTx, ...(prev || [])]);
+      handleCopy(currentAccountNo, 'PalmPay Account Number');
+      fetchWalletData(true);
       setIsFundingProcessing(false);
       setIsFundModalOpen(false);
-      showToast(`Successfully added ₦${fundAmount.toLocaleString()} to your wallet!`);
-    }, 1200);
+      showToast(`Account number ${currentAccountNo} copied! Transfer ₦${fundAmount.toLocaleString()} via your bank app. Deposit will credit automatically via VTstack.`);
+    }, 600);
   };
 
   // Filtered transactions calculation
