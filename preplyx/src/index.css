@@ -388,12 +388,25 @@ body {
 
 /* Mobile Header & Navigation Responsive Optimization */
 @media (max-width: 640px) {
+  .dashboard-header-container {
+    padding: 0 10px !important;
+  }
   .streak-label-text {
     display: none !important;
+  }
+  .wallet-pill-text {
+    font-size: 11px !important;
   }
 }
 
 @media (max-width: 480px) {
+  .header-page-title {
+    max-width: 115px !important;
+    font-size: 13px !important;
+  }
+  .streak-nav-btn {
+    padding: 0 6px 0 4px !important;
+  }
   .dropdown-menu-animate {
     width: 230px !important;
     right: -10px !important;

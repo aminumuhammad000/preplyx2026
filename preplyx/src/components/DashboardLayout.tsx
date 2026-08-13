@@ -416,8 +416,8 @@ export default function DashboardLayout() {
               </button>
 
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', minWidth: 0 }}>
-                <h1 style={{
-                  fontSize: isMobile ? '15px' : '16px',
+                <h1 className="header-page-title" style={{
+                  fontSize: isMobile ? '14px' : '16px',
                   fontWeight: 600,
                   color: '#0f172a',
                   letterSpacing: '-0.2px',
@@ -535,7 +535,7 @@ export default function DashboardLayout() {
                 }}>
                   <Wallet size={13} style={{ color: '#ffffff' }} />
                 </div>
-                <span style={{ fontSize: '12px', fontWeight: 700, color: '#0f172a', whiteSpace: 'nowrap' }}>
+                <span className="wallet-pill-text" style={{ fontSize: isMobile ? '11px' : '12px', fontWeight: 700, color: '#0f172a', whiteSpace: 'nowrap' }}>
                   {formattedBalance}
                 </span>
               </Link>
