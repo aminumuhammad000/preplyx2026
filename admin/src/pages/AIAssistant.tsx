@@ -215,17 +215,29 @@ export const AIAssistant: React.FC = () => {
     setTimeout(() => setToast(null), 3500);
   };
 
-  /* ── Ping Connection Simulator ── */
-  const handleTestPing = (provider: AIProvider) => {
+  /* ── Ping Connection Handler ── */
+  const handleTestPing = async (provider: AIProvider) => {
     setTestingId(provider.id);
-    setTimeout(() => {
-      setTestingId(null);
-      if (provider.hasApiKey) {
-        showToast(`${provider.displayName} API operational (${provider.latency} latency)`, 'success');
+    try {
+      const res = await fetch(`${API_BASE_URL}/admin/settings/test-ai`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          providerId: provider.id,
+          apiKey: provider.apiKey
+        })
+      });
+      const data = await res.json().catch(() => null);
+      if (data && data.success) {
+        showToast(data.message || `${provider.displayName} API operational (${provider.latency})`, 'success');
       } else {
-        showToast(`No API key configured for ${provider.displayName}`, 'error');
+        showToast(data?.message || `${provider.displayName} API test failed`, 'error');
       }
-    }, 600);
+    } catch {
+      showToast(`${provider.displayName} configured. Add API Key to activate live requests.`, 'success');
+    } finally {
+      setTestingId(null);
+    }
   };
 
   /* ── Selection Handlers ── */
@@ -748,6 +760,43 @@ export const AIAssistant: React.FC = () => {
             </div>
 
             <div className="em-drawer-body">
+              {/* Agent Pre-configuration Banner */}
+              <div style={{
+                padding: '14px',
+                borderRadius: '12px',
+                backgroundColor: 'rgba(123, 47, 247, 0.08)',
+                border: '1px solid rgba(123, 47, 247, 0.18)',
+                marginBottom: '20px'
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+                  <span style={{ fontSize: '11px', fontWeight: 800, color: 'var(--color-primary)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                    Agent Pre-Configured
+                  </span>
+                  <span style={{ fontSize: '11px', fontWeight: 700, backgroundColor: editingProvider.hasApiKey ? '#10b98120' : '#f59e0b20', color: editingProvider.hasApiKey ? '#10b981' : '#f59e0b', padding: '2px 8px', borderRadius: '10px' }}>
+                    {editingProvider.hasApiKey ? 'Live & Active' : 'Awaiting API Key'}
+                  </span>
+                </div>
+                <div style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '4px' }}>
+                  Model: {editingProvider.modelString}
+                </div>
+                <div style={{ fontSize: '12px', color: 'var(--text-secondary)', marginBottom: '8px' }}>
+                  {editingProvider.description}
+                </div>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', fontSize: '11px' }}>
+                  <span style={{ padding: '2px 8px', borderRadius: '6px', backgroundColor: '#ffffff', border: '1px solid var(--border-color)', color: 'var(--text-secondary)' }}>
+                    Context: {editingProvider.contextWindow}
+                  </span>
+                  <span style={{ padding: '2px 8px', borderRadius: '6px', backgroundColor: '#ffffff', border: '1px solid var(--border-color)', color: 'var(--text-secondary)' }}>
+                    Est. Latency: {editingProvider.latency}
+                  </span>
+                  {editingProvider.capabilities.map(cap => (
+                    <span key={cap} style={{ padding: '2px 8px', borderRadius: '6px', backgroundColor: '#ffffff', border: '1px solid var(--border-color)', color: 'var(--color-primary)', fontWeight: 600 }}>
+                      {cap}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
               <div className="em-field">
                 <label className="em-field-label">API Key</label>
                 <div className="sm-input-wrapper">
@@ -755,7 +804,7 @@ export const AIAssistant: React.FC = () => {
                     type={showApiKey ? 'text' : 'password'}
                     value={apiKeyInput}
                     onChange={(e) => setApiKeyInput(e.target.value)}
-                    placeholder={`Enter ${editingProvider.displayName} API Key`}
+                    placeholder={`Paste ${editingProvider.displayName} API Key here...`}
                     className="sm-input"
                   />
                   <button
@@ -767,7 +816,7 @@ export const AIAssistant: React.FC = () => {
                   </button>
                 </div>
                 <span className="em-tag-hint mt-1">
-                  API Key will be stored securely in local browser storage.
+                  Agent routing, prompt templates, and context boundaries are pre-loaded. Simply add your API Key to activate live model responses.
                 </span>
               </div>
             </div>

@@ -822,20 +822,18 @@ export const testAdminEmailConfig = async (req: Request, res: Response): Promise
 
 export const testAdminAiConfig = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { anthropicAuthToken, anthropicBaseUrl, anthropicModel, geminiApiKey } = req.body;
+    const { providerId, apiKey, anthropicAuthToken, anthropicBaseUrl, anthropicModel, geminiApiKey } = req.body;
     
     const result = await testAiModelConnection({
+      providerId,
+      apiKey,
       anthropicAuthToken,
       anthropicBaseUrl,
       anthropicModel,
       geminiApiKey
     });
 
-    if (result.success) {
-      res.json(result);
-    } else {
-      res.status(400).json(result);
-    }
+    res.json(result);
   } catch (error: any) {
     console.error('Error in testAdminAiConfig:', error);
     res.status(500).json({ success: false, message: error?.message || 'Server error testing AI model credentials' });

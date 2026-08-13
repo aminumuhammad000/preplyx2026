@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 import User from '../models/User';
 import Wallet from '../models/Wallet';
 import { sendWelcomeEmail, sendPasswordResetOTP } from '../services/emailService';
+import { DEFAULT_ACHIEVEMENTS } from './achievementController';
 
 const generateToken = (id: string) => {
   return jwt.sign({ id }, process.env.JWT_SECRET as string, {
@@ -30,11 +31,29 @@ export const registerUser = async (
       throw new Error('An account with this email address already exists');
     }
 
+    const todayStr = new Date().toISOString().split('T')[0];
+    const initialAchievements = DEFAULT_ACHIEVEMENTS.map((ach) => ({
+      ...ach,
+      date: ach.unlocked ? todayStr : undefined,
+    }));
+
+    const welcomeNotification = {
+      id: Date.now(),
+      type: 'achievement',
+      title: 'Welcome to Preplyx! 🎉',
+      message: 'Welcome aboard! You earned a 100 XP welcome bonus & unlocked your first achievement badge.',
+      time: 'Just now',
+      unread: true,
+    };
+
     const user = await User.create({
       name,
       email,
       password,
       phone: phone || '',
+      xp: 100,
+      achievements: initialAchievements,
+      notifications: [welcomeNotification],
     });
 
     // Create wallet for new user

@@ -28,57 +28,6 @@ export const getUserNotifications = async (
           notifications = [];
         }
       }
-      
-      // Add demo notifications if none exist
-      if (notifications.length === 0) {
-        notifications = [
-          {
-            id: 1,
-            type: 'achievement',
-            title: 'Achievement Unlocked! 🎉',
-            message: 'Congratulations! You\'ve earned the "First Steps" badge!',
-            time: '2 hours ago',
-            unread: true,
-          },
-          {
-            id: 2,
-            type: 'challenge',
-            title: 'Weekly Challenge Active',
-            message: 'Complete 5 exams this week to earn bonus points!',
-            time: '1 day ago',
-            unread: true,
-          },
-          {
-            id: 3,
-            type: 'info',
-            title: 'New Questions Added',
-            message: '50 new Physics questions are now available for practice.',
-            time: '2 days ago',
-            unread: false,
-          },
-          {
-            id: 4,
-            type: 'reminder',
-            title: 'Study Streak',
-            message: 'You\'re on a 5-day streak! Keep it going!',
-            time: '3 days ago',
-            unread: false,
-          },
-          {
-            id: 5,
-            type: 'promo',
-            title: 'Premium Discount',
-            message: 'Get 20% off premium subscription this week only!',
-            time: '5 days ago',
-            unread: false,
-          }
-        ];
-        
-        // Save demo notifications to user
-        user.notifications = notifications;
-        await user.save();
-      }
-      
       res.json(notifications);
     } else {
       res.status(404);

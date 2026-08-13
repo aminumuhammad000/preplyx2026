@@ -10,6 +10,7 @@ export interface IUser extends Document {
   exam_type?: string;
   wallet?: mongoose.Types.ObjectId;
   status?: 'active' | 'suspended';
+  xp?: number;
   settings?: {
     darkMode?: boolean;
     notifications?: boolean;
@@ -25,6 +26,7 @@ export interface IUser extends Document {
     unlocked: boolean;
     date?: string;
     progress?: number;
+    xp?: number;
   }[];
   notifications?: {
     id: number;
@@ -57,6 +59,10 @@ const userSchema: Schema = new Schema(
     role: {
       type: String,
       default: 'student',
+    },
+    xp: {
+      type: Number,
+      default: 100,
     },
     resetPasswordOTP: {
       type: String,

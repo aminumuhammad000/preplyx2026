@@ -1,6 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
 import mongoose from 'mongoose';
 import ExamSession from '../models/ExamSession';
+import User from '../models/User';
+import { DEFAULT_ACHIEVEMENTS } from './achievementController';
 
 /**
  * @desc    Save a completed exam session
@@ -27,6 +29,77 @@ export const saveSession = async (
     });
 
     const createdSession = await session.save();
+
+    // Check & trigger achievements for user
+    try {
+      const user = await User.findById(req.user._id);
+      if (user) {
+        if (!user.achievements || user.achievements.length === 0) {
+          const todayStr = new Date().toISOString().split('T')[0];
+          user.achievements = DEFAULT_ACHIEVEMENTS.map((a) => ({
+            ...a,
+            date: a.unlocked ? todayStr : undefined
+          }));
+        }
+
+        const totalUserSessions = await ExamSession.countDocuments({ user: user._id });
+        let updated = false;
+
+        const checkAndUnlock = (achievementId: number, xpReward: number) => {
+          const ach = user.achievements?.find((a: any) => a.id === achievementId);
+          if (ach && !ach.unlocked) {
+            ach.unlocked = true;
+            ach.progress = 100;
+            ach.date = new Date().toISOString().split('T')[0];
+            user.xp = (user.xp || 0) + xpReward;
+
+            const notif = {
+              id: Date.now() + Math.floor(Math.random() * 1000),
+              type: 'achievement',
+              title: 'Achievement Unlocked! 🎉',
+              message: `Congratulations! You unlocked "${ach.name}" and earned +${xpReward} XP!`,
+              time: 'Just now',
+              unread: true,
+            };
+            if (!user.notifications) user.notifications = [];
+            user.notifications.unshift(notif);
+            updated = true;
+          }
+        };
+
+        // 1. First Steps (Achievement ID 2)
+        if (totalUserSessions >= 1) {
+          checkAndUnlock(2, 100);
+        }
+
+        // 2. Quick Learner (Achievement ID 3)
+        if (totalUserSessions >= 10) {
+          checkAndUnlock(3, 200);
+        }
+
+        // 3. Perfect Score (Achievement ID 5)
+        if (percentage >= 100) {
+          checkAndUnlock(5, 400);
+        }
+
+        // 4. Exam Champion (Achievement ID 7)
+        if (totalUserSessions >= 50) {
+          checkAndUnlock(7, 600);
+        }
+
+        // 5. Speed Demon (Achievement ID 10)
+        if (timeSpentSeconds > 0 && timeSpentSeconds < 1800) {
+          checkAndUnlock(10, 1000);
+        }
+
+        if (updated) {
+          await user.save();
+        }
+      }
+    } catch (achErr) {
+      console.error('Failed updating achievement on saveSession:', achErr);
+    }
+
     res.status(201).json(createdSession);
   } catch (error) {
     next(error);

@@ -12,8 +12,8 @@ interface AlertState {
 }
 
 export const Login: React.FC = () => {
-  const [username, setUsername] = useState('admin@preplyx.com.ng');
-  const [password, setPassword] = useState('Admin@123456');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [alert, setAlert] = useState<AlertState | null>(null);
@@ -92,9 +92,6 @@ export const Login: React.FC = () => {
             <span className="login-brand-title">Preplyx</span>
           </div>
           <p className="login-subtitle">Enter your credentials to access the portal</p>
-          <div style={{ marginTop: 10, padding: '6px 12px', background: 'rgba(123, 47, 247, 0.1)', border: '1px solid rgba(123, 47, 247, 0.2)', borderRadius: 8, fontSize: 12, color: '#a78bfa' }}>
-            🔑 Admin Account: <strong>admin@preplyx.com.ng</strong> | Password: <strong>Admin@123456</strong>
-          </div>
         </div>
 
         {/* Professional Success / Error Alert Banner */}

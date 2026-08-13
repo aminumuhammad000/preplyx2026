@@ -73,7 +73,10 @@ export const deductWallet = async (req: AuthRequest, res: Response): Promise<voi
       return;
     }
 
-    wallet.balance -= deductAmount;
+    const balanceBefore = wallet.balance;
+    const balanceAfter = wallet.balance - deductAmount;
+
+    wallet.balance = balanceAfter;
     wallet.totalSpent += deductAmount;
     await wallet.save();
 
@@ -81,8 +84,11 @@ export const deductWallet = async (req: AuthRequest, res: Response): Promise<voi
       user: req.user?._id,
       type: 'spending',
       amount: deductAmount,
+      balanceBefore,
+      balanceAfter,
       description: description || 'Result Unlock Fee',
-      status: 'completed'
+      status: 'completed',
+      reference: `TX-UNLOCK-${Date.now()}`
     });
 
     res.json({
@@ -90,9 +96,9 @@ export const deductWallet = async (req: AuthRequest, res: Response): Promise<voi
       balance: wallet.balance,
       totalSpent: wallet.totalSpent
     });
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error deducting wallet balance:', error);
-    res.status(500).json({ message: 'Error processing wallet deduction' });
+    res.status(500).json({ message: error?.message || 'Error processing wallet deduction' });
   }
 };
 

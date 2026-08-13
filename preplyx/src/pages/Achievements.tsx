@@ -26,9 +26,9 @@ export default function Achievements() {
   const [achievements, setAchievements] = useState<AchievementItem[]>([]);
   const [userProgress, setUserProgress] = useState({
     totalAchievements: 10,
-    unlocked: 4,
-    points: 1200,
-    level: 3
+    unlocked: 1,
+    points: 100,
+    level: 1
   });
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -59,7 +59,7 @@ export default function Achievements() {
       const data = await api.getAchievements(token);
       const formatted = (data.achievements || []).map((item: any) => formatAchievementData(item));
       setAchievements(formatted);
-      setUserProgress(data.progress || { totalAchievements: 10, unlocked: 4, points: 1200, level: 3 });
+      setUserProgress(data.progress || { totalAchievements: 10, unlocked: 1, points: 100, level: 1 });
       
       if (isManualRefresh) {
         showToast('Achievements synchronized!');
@@ -83,7 +83,8 @@ export default function Achievements() {
     setClaimingId(badgeId);
 
     try {
-      await api.unlockAchievement(token, badgeId).catch(() => null);
+      const res = await api.unlockAchievement(token, badgeId).catch(() => null);
+      const earnedXp = res?.earnedXp || (badgeId === 1 ? 100 : badgeId * 100);
       setAchievements(prev =>
         prev.map(item =>
           item.id === badgeId ? { ...item, unlocked: true, progress: 100, date: new Date().toISOString().split('T')[0] } : item
@@ -92,9 +93,9 @@ export default function Achievements() {
       setUserProgress(prev => ({
         ...prev,
         unlocked: prev.unlocked + 1,
-        points: prev.points + (badgeId * 100)
+        points: res?.totalXp || (prev.points + earnedXp)
       }));
-      showToast(`Badge Unlocked! +${badgeId * 100} XP Claimed 🎉`);
+      showToast(`Badge Unlocked! +${earnedXp} XP Claimed 🎉`);
     } catch (err) {
       showToast('Reward claimed!');
     } finally {
@@ -632,9 +633,9 @@ function formatAchievementData(item: any): AchievementItem {
     unlocked: Boolean(item.unlocked),
     progress: item.progress ?? (item.unlocked ? 100 : 0),
     date: item.date,
-    xp: item.id * 100,
-    category: getCategoryName(item.id),
-    rarity: getRarityLevel(item.id)
+    xp: item.xp || (item.id === 1 ? 100 : item.id * 100),
+    category: item.category || getCategoryName(item.id),
+    rarity: item.rarity || getRarityLevel(item.id)
   };
 }
 
@@ -665,16 +666,17 @@ function getCategoryName(id: number): string {
 }
 
 function getFallbackAchievements(): AchievementItem[] {
+  const todayStr = new Date().toISOString().split('T')[0];
   return [
-    { id: 1, title: 'First Steps', description: 'Complete your first practice exam', icon: 'Star', color: '#f59e0b', unlocked: true, progress: 100, date: '2026-08-01', rarity: 'Common', xp: 100 },
-    { id: 2, title: 'Quick Learner', description: 'Complete 10 exams in one week', icon: 'Zap', color: '#7B2FF7', unlocked: true, progress: 100, date: '2026-08-03', rarity: 'Rare', xp: 200 },
-    { id: 3, title: 'Streak Master', description: 'Maintain a 7-day study streak', icon: 'Flame', color: '#ef4444', unlocked: true, progress: 100, date: '2026-08-07', rarity: 'Epic', xp: 300 },
-    { id: 4, title: 'Perfect Score', description: 'Score 100% on any exam', icon: 'Crown', color: '#10b981', unlocked: true, progress: 100, date: '2026-08-09', rarity: 'Legendary', xp: 400 },
-    { id: 5, title: 'Subject Expert', description: 'Master 5 subjects with 80%+ score', icon: 'Target', color: '#3b82f6', unlocked: false, progress: 60, rarity: 'Rare', xp: 500 },
-    { id: 6, title: 'Exam Champion', description: 'Complete 50 practice exams', icon: 'Trophy', color: '#f59e0b', unlocked: false, progress: 40, rarity: 'Epic', xp: 600 },
-    { id: 7, title: 'Month Warrior', description: 'Maintain a 30-day study streak', icon: 'Flame', color: '#ef4444', unlocked: false, progress: 20, rarity: 'Legendary', xp: 700 },
-    { id: 8, title: 'Top Ranker', description: 'Reach top 10 on global leaderboard', icon: 'Medal', color: '#7B2FF7', unlocked: false, progress: 0, rarity: 'Epic', xp: 800 },
-    { id: 9, title: 'All-Rounder', description: 'Complete exams across all subjects', icon: 'Award', color: '#10b981', unlocked: false, progress: 0, rarity: 'Rare', xp: 900 },
-    { id: 10, title: 'Speed Demon', description: 'Complete CBT exam under 30 minutes', icon: 'Zap', color: '#3b82f6', unlocked: false, progress: 0, rarity: 'Legendary', xp: 1000 }
+    { id: 1, title: 'Welcome Scholar', description: 'Join Preplyx platform and begin your learning journey', icon: 'Sparkles', color: '#7B2FF7', unlocked: true, progress: 100, date: todayStr, rarity: 'Common', xp: 100, category: 'Milestone' },
+    { id: 2, title: 'First Steps', description: 'Complete your first practice exam', icon: 'Star', color: '#f59e0b', unlocked: false, progress: 0, rarity: 'Common', xp: 100, category: 'Milestone' },
+    { id: 3, title: 'Quick Learner', description: 'Complete 10 practice exams', icon: 'Zap', color: '#7B2FF7', unlocked: false, progress: 0, rarity: 'Rare', xp: 200, category: 'Exam Speed' },
+    { id: 4, title: 'Streak Master', description: 'Maintain a 7-day study streak', icon: 'Flame', color: '#ef4444', unlocked: false, progress: 0, rarity: 'Epic', xp: 300, category: 'Streak Master' },
+    { id: 5, title: 'Perfect Score', description: 'Score 100% on any exam', icon: 'Crown', color: '#10b981', unlocked: false, progress: 0, rarity: 'Legendary', xp: 400, category: 'Milestone' },
+    { id: 6, title: 'Subject Expert', description: 'Master 5 subjects with 80%+ score', icon: 'Target', color: '#3b82f6', unlocked: false, progress: 0, rarity: 'Rare', xp: 500, category: 'Subject Expert' },
+    { id: 7, title: 'Exam Champion', description: 'Complete 50 practice exams', icon: 'Trophy', color: '#f59e0b', unlocked: false, progress: 0, rarity: 'Epic', xp: 600, category: 'Milestone' },
+    { id: 8, title: 'Month Warrior', description: 'Maintain a 30-day study streak', icon: 'Flame', color: '#ef4444', unlocked: false, progress: 0, rarity: 'Legendary', xp: 700, category: 'Streak Master' },
+    { id: 9, title: 'Top Ranker', description: 'Reach top 10 on global leaderboard', icon: 'Medal', color: '#7B2FF7', unlocked: false, progress: 0, rarity: 'Epic', xp: 800, category: 'Leaderboard' },
+    { id: 10, title: 'Speed Demon', description: 'Complete CBT exam under 30 minutes', icon: 'Zap', color: '#3b82f6', unlocked: false, progress: 0, rarity: 'Legendary', xp: 1000, category: 'Exam Speed' }
   ];
 }
