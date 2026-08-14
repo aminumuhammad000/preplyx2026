@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 import ExamSession from '../models/ExamSession';
 import User from '../models/User';
 import { DEFAULT_ACHIEVEMENTS } from './achievementController';
+import { eventBus, EVENTS } from '../events/eventBus';
 
 /**
  * @desc    Save a completed exam session
@@ -30,7 +31,20 @@ export const saveSession = async (
 
     const createdSession = await session.save();
 
-    // Check & trigger achievements for user
+    // Trigger Preplyx Automation Engine background pipeline via EventBus
+    eventBus.emitEvent(EVENTS.QUIZ_COMPLETED, {
+      session: createdSession,
+      sessionId: createdSession._id,
+      userId: req.user._id,
+      exam,
+      subject,
+      score,
+      total,
+      percentage,
+      timeSpentSeconds,
+    });
+
+    // Check & trigger achievements for user (Legacy immediate handler kept for backwards compatibility)
     try {
       const user = await User.findById(req.user._id);
       if (user) {

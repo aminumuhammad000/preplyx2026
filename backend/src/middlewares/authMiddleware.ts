@@ -67,3 +67,17 @@ export const optionalProtect = async (
   }
   next();
 };
+
+export const optionalAuth = optionalProtect;
+
+export const adminOnly = (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+): void => {
+  if (req.user && req.user.role === 'admin') {
+    next();
+  } else {
+    res.status(403).json({ message: 'Access denied: Admin privileges required.' });
+  }
+};

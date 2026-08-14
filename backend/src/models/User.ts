@@ -38,6 +38,8 @@ export interface IUser extends Document {
   }[];
   resetPasswordOTP?: string;
   resetPasswordOTPExpires?: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
   matchPassword(enteredPassword: string): Promise<boolean>;
 }
 

@@ -13,45 +13,43 @@ import notificationRoutes from './notificationRoutes';
 import adminRoutes from './adminRoutes';
 import aiRoutes from './aiRoutes';
 
+// Preplyx Automation Engine Routes
+import dailyChallengeRoutes from './dailyChallengeRoutes';
+import recommendationRoutes from './recommendationRoutes';
+import streakRoutes from './streakRoutes';
+import xpRoutes from './xpRoutes';
+import competitionRoutes from './competitionRoutes';
+import subscriptionRoutes from './subscriptionRoutes';
+import referralRoutes from './referralRoutes';
+import automationAdminRoutes from './automationAdminRoutes';
+
 const router = Router();
 
 // Health check route
 router.get('/health', getHealthStatus);
 
-// Auth routes
+// Core existing routes
 router.use('/auth', authRoutes);
-
-// Data routes
 router.use('/data', dataRoutes);
-
-// Exam routes
 router.use('/exams', examRoutes);
-
-// Question routes
 router.use('/questions', questionRoutes);
-
-// Exam Session routes
 router.use('/sessions', examSessionRoutes);
-
-// Wallet routes
 router.use('/wallet', walletRoutes);
-
-// Leaderboard routes
 router.use('/leaderboard', leaderboardRoutes);
-
-// User routes
 router.use('/user', userRoutes);
-
-// Achievement routes
 router.use('/achievements', achievementRoutes);
-
-// Notification routes
 router.use('/notifications', notificationRoutes);
-
-// Admin routes
 router.use('/admin', adminRoutes);
-
-// AI routes
 router.use('/ai', aiRoutes);
+
+// Automation Engine routes
+router.use('/daily-challenge', dailyChallengeRoutes);
+router.use('/recommendations', recommendationRoutes);
+router.use('/streaks', streakRoutes);
+router.use('/xp', xpRoutes);
+router.use('/competitions', competitionRoutes);
+router.use('/subscriptions', subscriptionRoutes);
+router.use('/referrals', referralRoutes);
+router.use('/admin/automation', automationAdminRoutes);
 
 export default router;

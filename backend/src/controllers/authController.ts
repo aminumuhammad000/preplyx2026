@@ -4,6 +4,8 @@ import User from '../models/User';
 import Wallet from '../models/Wallet';
 import { sendWelcomeEmail, sendPasswordResetOTP } from '../services/emailService';
 import { DEFAULT_ACHIEVEMENTS } from './achievementController';
+import { eventBus, EVENTS } from '../events/eventBus';
+import { SecurityAuditService } from '../services/securityAuditService';
 
 const generateToken = (id: string) => {
   return jwt.sign({ id }, process.env.JWT_SECRET as string, {
@@ -22,7 +24,7 @@ export const registerUser = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    const { name, email, password, phone } = req.body;
+    const { name, email, password, phone, referralCode } = req.body;
 
     const userExists = await User.findOne({ email });
 
@@ -74,6 +76,18 @@ export const registerUser = async (
       console.error('Failed to send welcome email:', err);
     });
 
+    // Trigger Preplyx automation onboarding and referral lifecycle
+    const clientIp = (req.headers['x-forwarded-for'] as string) || req.ip;
+    const userAgent = req.headers['user-agent'] as string;
+
+    eventBus.emitEvent(EVENTS.USER_REGISTERED, {
+      userId: user._id,
+      user,
+      referralCode,
+      clientIp,
+      userAgent,
+    });
+
     if (user) {
       res.status(201).json({
         _id: user._id,
@@ -104,6 +118,7 @@ export const authUser = async (
   try {
     const loginIdentifier = req.body.email || req.body.username;
     const { password } = req.body;
+    const clientIp = (req.headers['x-forwarded-for'] as string) || req.ip;
 
     const user = await User.findOne({
       $or: [
@@ -113,6 +128,9 @@ export const authUser = async (
     });
 
     if (user && (await user.matchPassword(password))) {
+      // Clear failed login counter
+      await SecurityAuditService.clearFailedLogins(user.email);
+
       res.json({
         _id: user._id,
         name: user.name,
@@ -120,6 +138,10 @@ export const authUser = async (
         token: generateToken(user._id.toString()),
       });
     } else {
+      // Record failed login attempt for brute force protection
+      if (loginIdentifier) {
+        await SecurityAuditService.recordFailedLogin(loginIdentifier, clientIp);
+      }
       res.status(401);
       throw new Error('Invalid username, email, or password');
     }
@@ -262,4 +284,3 @@ export const resetPassword = async (
     next(error);
   }
 };
-
