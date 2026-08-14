@@ -29,23 +29,23 @@ const FAQ = () => {
   ];
 
   return (
-    <section id="faq" className="py-12 bg-background relative">
+    <section id="faq" className="py-10 sm:py-16 bg-background relative">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-8">
+        <div className="text-center mb-8 sm:mb-12">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-sm font-bold text-primary uppercase tracking-widest mb-3">FAQ</h2>
-            <h3 className="text-4xl font-extrabold text-text-dark mb-6">Got Questions?</h3>
-            <p className="text-lg text-gray-600">
+            <h2 className="text-xs font-bold text-primary uppercase tracking-widest mb-2 sm:mb-3">FAQ</h2>
+            <h3 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-text-dark mb-3 sm:mb-4">Got Questions?</h3>
+            <p className="text-sm sm:text-base lg:text-lg text-gray-600 leading-relaxed max-w-2xl mx-auto">
               Find answers to common questions about Preplyx.
             </p>
           </motion.div>
         </div>
 
-        <div className="space-y-3.5">
+        <div className="space-y-3 sm:space-y-3.5">
           {faqs.map((faq, index) => (
             <motion.div
               key={index}
@@ -53,15 +53,15 @@ const FAQ = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.05 }}
-              className="bg-white rounded-xl border border-gray-200/80 overflow-hidden transition-colors duration-200 hover:border-gray-300"
+              className="bg-white rounded-2xl border border-gray-200/80 overflow-hidden transition-colors duration-200 hover:border-gray-300 shadow-2xs"
             >
               <button
-                className="w-full px-6 py-4.5 text-left flex justify-between items-center focus:outline-none"
+                className="w-full px-4 sm:px-6 py-3.5 sm:py-4.5 text-left flex justify-between items-center focus:outline-none"
                 onClick={() => setOpenIndex(openIndex === index ? null : index)}
               >
-                <span className="font-semibold text-base sm:text-lg text-gray-900">{faq.question}</span>
+                <span className="font-semibold text-sm sm:text-base md:text-lg text-gray-900 pr-2 leading-snug">{faq.question}</span>
                 <ChevronDown 
-                  className={`w-5 h-5 text-primary transition-transform duration-300 shrink-0 ml-4 ${openIndex === index ? 'rotate-180' : ''}`} 
+                  className={`w-5 h-5 text-primary transition-transform duration-300 shrink-0 ml-2 ${openIndex === index ? 'rotate-180' : ''}`} 
                 />
               </button>
               
@@ -73,7 +73,7 @@ const FAQ = () => {
                     exit={{ height: 0, opacity: 0 }}
                     transition={{ duration: 0.25, ease: "easeInOut" }}
                   >
-                    <div className="px-6 pb-5 text-sm sm:text-base text-gray-600 leading-relaxed border-t border-gray-100 pt-4">
+                    <div className="px-4 sm:px-6 pb-4 sm:pb-5 text-xs sm:text-sm md:text-base text-gray-600 leading-relaxed border-t border-gray-100 pt-3 sm:pt-4">
                       {faq.answer}
                     </div>
                   </motion.div>

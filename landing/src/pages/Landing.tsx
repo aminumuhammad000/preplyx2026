@@ -13,7 +13,7 @@ import {
 
 const Landing = () => {
   return (
-    <div className="font-sans text-text-dark bg-background min-h-screen">
+    <div className="font-sans text-text-dark bg-background min-h-screen overflow-x-hidden w-full">
       <Navbar />
       <Hero />
       <About />

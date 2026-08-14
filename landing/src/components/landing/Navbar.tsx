@@ -23,12 +23,12 @@ const Navbar = () => {
   ];
 
   return (
-    <nav className={`fixed left-1/2 -translate-x-1/2 z-50 transition-all duration-500 w-[92%] max-w-6xl rounded-full backdrop-blur-md ${isScrolled ? 'top-3 bg-white/95 shadow-[0_10px_40px_rgba(15,23,42,0.06)] py-2.5 px-6' : 'top-6 bg-white/80 shadow-[0_10px_30px_rgba(15,23,42,0.05)] py-3.5 px-8'}`}>
+    <nav className={`fixed left-1/2 -translate-x-1/2 z-50 transition-all duration-500 w-[94%] sm:w-[92%] max-w-6xl rounded-full backdrop-blur-md ${isScrolled ? 'top-2.5 sm:top-3 bg-white/95 shadow-[0_10px_40px_rgba(15,23,42,0.06)] py-2 sm:py-2.5 px-4 sm:px-6' : 'top-3 sm:top-6 bg-white/85 shadow-[0_10px_30px_rgba(15,23,42,0.05)] py-2.5 sm:py-3.5 px-4 sm:px-8'}`}>
       <div className="w-full">
         <div className="flex items-center justify-between">
           <div className="flex-shrink-0">
             <a href="#" className="flex items-center gap-2">
-              <img src="/logo.svg" alt="Preplyx" className="h-10 w-auto rounded-full object-cover shadow-sm transition-transform duration-300 hover:scale-105" />
+              <img src="/logo.svg" alt="Preplyx" className="h-8 sm:h-10 w-auto rounded-full object-cover shadow-xs transition-transform duration-300 hover:scale-105" />
             </a>
           </div>
 
@@ -48,12 +48,13 @@ const Navbar = () => {
             </a>
           </div>
 
-          <div className="-mr-2 flex md:hidden">
+          <div className="flex md:hidden">
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary"
+              className="inline-flex items-center justify-center p-2 rounded-full text-gray-600 hover:text-primary hover:bg-gray-100 focus:outline-none"
+              aria-label="Toggle Menu"
             >
-              {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+              {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </button>
           </div>
         </div>
@@ -67,7 +68,7 @@ const Navbar = () => {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setMobileMenuOpen(false)}
-              className="fixed inset-0 bg-black/60 z-[60] md:hidden backdrop-blur-sm"
+              className="fixed inset-0 bg-black/60 z-[60] md:hidden backdrop-blur-xs"
             />
             
             <motion.div 
@@ -75,39 +76,40 @@ const Navbar = () => {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -20, scale: 0.95 }}
               transition={{ duration: 0.2 }}
-              className="absolute top-full left-0 right-0 mt-3 mx-2 bg-white rounded-3xl shadow-2xl overflow-hidden border border-gray-100 md:hidden z-[70]"
+              className="absolute top-full left-0 right-0 mt-3 mx-1 bg-white rounded-3xl shadow-2xl overflow-hidden border border-gray-100 md:hidden z-[70] max-h-[85vh] flex flex-col"
             >
-              <div className="flex items-center justify-between p-6 border-b border-gray-100">
+              <div className="flex items-center justify-between p-5 border-b border-gray-100 flex-shrink-0">
                 <div className="flex items-center gap-2">
-                  <img src="/logo.svg" alt="Preplyx" className="h-9 w-auto rounded-full" />
-                  <span className="font-bold text-gray-900 text-lg">Preplyx</span>
+                  <img src="/logo.svg" alt="Preplyx" className="h-8 w-auto rounded-full" />
+                  <span className="font-bold text-gray-900 text-base">Preplyx</span>
                 </div>
                 <button 
                   onClick={() => setMobileMenuOpen(false)}
-                  className="p-2 rounded-full hover:bg-gray-100 text-gray-500 transition-colors"
+                  className="p-1.5 rounded-full hover:bg-gray-100 text-gray-500 transition-colors"
+                  aria-label="Close menu"
                 >
                   <X className="w-5 h-5" />
                 </button>
               </div>
 
-              <div className="px-6 py-6 space-y-4">
+              <div className="px-5 py-4 space-y-2 overflow-y-auto flex-1">
                 {navLinks.map((link) => (
                   <a
                     key={link.name}
                     href={link.href}
                     onClick={() => setMobileMenuOpen(false)}
-                    className="block text-lg font-semibold text-gray-700 hover:text-primary transition-colors py-1"
+                    className="block text-base font-semibold text-gray-700 hover:text-primary transition-colors py-2 px-3 rounded-xl hover:bg-gray-50"
                   >
                     {link.name}
                   </a>
                 ))}
               </div>
 
-              <div className="p-6 border-t border-gray-100 bg-gray-50/50">
+              <div className="p-5 border-t border-gray-100 bg-gray-50/50 flex-shrink-0">
                 <a
                   href="https://dash.preplyx.com.ng"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="block w-full bg-primary hover:bg-secondary text-white text-center py-3.5 rounded-2xl font-bold transition-all shadow-md active:scale-[0.98]"
+                  className="block w-full bg-primary hover:bg-secondary text-white text-center py-3 rounded-xl font-bold transition-all shadow-md active:scale-[0.98]"
                 >
                   Get Started
                 </a>
