@@ -545,22 +545,72 @@ export const getAdminQuestions = async (req: Request, res: Response): Promise<vo
   }
 };
 
+export const bulkCreateAdminQuestions = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const rawQuestions = Array.isArray(req.body) ? req.body : req.body.questions;
+    
+    if (!rawQuestions || !Array.isArray(rawQuestions) || rawQuestions.length === 0) {
+      res.status(400).json({ message: 'No questions provided for bulk import' });
+      return;
+    }
+
+    const formattedQuestions = rawQuestions.map((q: any) => ({
+      exam: q.exam ? String(q.exam).trim() : 'JAMB',
+      subject: q.subject ? String(q.subject).trim() : 'Physics',
+      topic: q.topic ? String(q.topic).trim() : 'General',
+      year: q.year ? String(q.year).trim() : '2024',
+      difficulty: q.difficulty || 'medium',
+      status: q.status || 'published',
+      text: q.text ? String(q.text).trim() : '',
+      options: Array.isArray(q.options) ? q.options.map((o: any) => String(o).trim()) : [],
+      correctAnswer: q.correctAnswer ? String(q.correctAnswer).trim() : '',
+      explanation: q.explanation ? String(q.explanation).trim() : '',
+      qualityFlags: Array.isArray(q.qualityFlags) ? q.qualityFlags : []
+    })).filter((q: any) => q.text && q.options.length >= 2 && q.correctAnswer);
+
+    if (formattedQuestions.length === 0) {
+      res.status(400).json({ message: 'None of the provided questions met the required validation format (text, options, correctAnswer)' });
+      return;
+    }
+
+    const inserted = await Question.insertMany(formattedQuestions, { ordered: false });
+
+    res.status(201).json({
+      message: `Successfully imported ${inserted.length} questions into question bank!`,
+      count: inserted.length,
+      questions: inserted
+    });
+  } catch (error: any) {
+    console.error('Error during bulk question import:', error);
+    res.status(500).json({ message: error?.message || 'Error importing questions in bulk' });
+  }
+};
+
 export const createAdminQuestion = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { exam, subject, text, options, correctAnswer, explanation } = req.body;
+    // If an array or batch of questions is sent to this endpoint, delegate to bulk create
+    if (Array.isArray(req.body) || (req.body && Array.isArray(req.body.questions))) {
+      return bulkCreateAdminQuestions(req, res);
+    }
+
+    const { exam, subject, topic, year, difficulty, status, text, options, correctAnswer, explanation } = req.body;
     
     if (!exam || !subject || !text || !options || !correctAnswer) {
-      res.status(400).json({ message: 'Missing required fields' });
+      res.status(400).json({ message: 'Missing required fields (exam, subject, text, options, correctAnswer)' });
       return;
     }
 
     const question = await Question.create({
-      exam,
-      subject,
-      text,
-      options,
-      correctAnswer,
-      explanation
+      exam: String(exam).trim(),
+      subject: String(subject).trim(),
+      topic: topic ? String(topic).trim() : 'General',
+      year: year ? String(year).trim() : '2024',
+      difficulty: difficulty || 'medium',
+      status: status || 'published',
+      text: String(text).trim(),
+      options: Array.isArray(options) ? options.map((o: any) => String(o).trim()) : [],
+      correctAnswer: String(correctAnswer).trim(),
+      explanation: explanation ? String(explanation).trim() : ''
     });
 
     res.status(201).json(question);

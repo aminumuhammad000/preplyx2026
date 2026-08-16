@@ -17,6 +17,7 @@ import {
   deleteAdminSubject,
   getAdminQuestions,
   createAdminQuestion,
+  bulkCreateAdminQuestions,
   updateAdminQuestion,
   deleteAdminQuestion,
   scanQuestionPaper,
@@ -68,6 +69,7 @@ router.delete('/subjects/:id', deleteAdminSubject);
 // Question Management
 router.get('/questions', getAdminQuestions);
 router.post('/questions', createAdminQuestion);
+router.post('/questions/bulk', bulkCreateAdminQuestions);
 router.put('/questions/:id', updateAdminQuestion);
 router.delete('/questions/:id', deleteAdminQuestion);
 router.post('/questions/scan', scanQuestionPaper);
