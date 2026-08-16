@@ -1,6 +1,7 @@
 import { Response } from 'express';
 import { AuthRequest } from '../middlewares/authMiddleware';
 import Exam from '../models/Exam';
+import Question from '../models/Question';
 
 const SUBJECT_CATEGORIES: Record<string, string[]> = {
   'Mathematics': ['Science', 'Art', 'Commerce'],
@@ -277,5 +278,113 @@ export const getSubjectTips = async (req: AuthRequest, res: Response): Promise<v
   } catch (error) {
     console.error('Error fetching subject tips:', error);
     res.status(500).json({ message: 'Error fetching subject tips' });
+  }
+};
+
+/**
+ * @desc    Get real availability data from question bank (years, subjects, topics per exam)
+ * @route   GET /api/exams/availability
+ * @access  Public
+ */
+export const getExamAvailability = async (req: AuthRequest, res: Response): Promise<void> => {
+  try {
+    // Aggregate all published questions by exam, subject, year, and topic
+    const pipeline = [
+      { $match: { status: { $ne: 'archived' } } },
+      {
+        $group: {
+          _id: { exam: '$exam', subject: '$subject', year: '$year', topic: '$topic' },
+          count: { $sum: 1 }
+        }
+      },
+      {
+        $group: {
+          _id: { exam: '$_id.exam', subject: '$_id.subject', year: '$_id.year' },
+          topics: { $addToSet: '$_id.topic' },
+          count: { $sum: '$count' }
+        }
+      },
+      {
+        $group: {
+          _id: { exam: '$_id.exam', subject: '$_id.subject' },
+          years: { $addToSet: '$_id.year' },
+          topics: { $push: { year: '$_id.year', topics: '$topics' } },
+          totalCount: { $sum: '$count' }
+        }
+      },
+      {
+        $group: {
+          _id: '$_id.exam',
+          subjects: {
+            $push: {
+              subject: '$_id.subject',
+              years: '$years',
+              topics: '$topics',
+              count: '$totalCount'
+            }
+          },
+          totalCount: { $sum: '$totalCount' }
+        }
+      }
+    ];
+
+    const results = await Question.aggregate(pipeline as any);
+
+    // Format into a structured response
+    const availability: Record<string, {
+      hasQuestions: boolean;
+      totalCount: number;
+      years: string[];
+      subjects: string[];
+      subjectYears: Record<string, string[]>;
+      topics: Record<string, string[]>;
+    }> = {};
+
+    for (const examResult of results) {
+      const examName = examResult._id;
+      const allYears = new Set<string>();
+      const allSubjects: string[] = [];
+      const subjectYears: Record<string, string[]> = {};
+      const topics: Record<string, string[]> = {};
+
+      for (const subjectData of examResult.subjects) {
+        const subjectName = subjectData.subject;
+        allSubjects.push(subjectName);
+
+        // Collect years for this subject
+        const subjectYearsList = (subjectData.years || []).filter((y: string) => y && y !== 'undefined');
+        subjectYears[subjectName] = subjectYearsList.sort((a: string, b: string) => Number(b) - Number(a));
+        subjectYearsList.forEach((y: string) => allYears.add(y));
+
+        // Collect all unique topics for this subject (across all years)
+        const allTopics = new Set<string>();
+        for (const yearTopics of subjectData.topics || []) {
+          for (const t of yearTopics.topics || []) {
+            if (t && t !== 'General' && t !== 'undefined') allTopics.add(t);
+          }
+        }
+        if (allTopics.size > 0) {
+          topics[subjectName] = Array.from(allTopics);
+        }
+      }
+
+      const sortedYears = Array.from(allYears)
+        .filter(y => y && y !== 'undefined')
+        .sort((a, b) => Number(b) - Number(a));
+
+      availability[examName] = {
+        hasQuestions: examResult.totalCount > 0,
+        totalCount: examResult.totalCount,
+        years: sortedYears,
+        subjects: allSubjects,
+        subjectYears,
+        topics
+      };
+    }
+
+    res.json(availability);
+  } catch (error) {
+    console.error('Error fetching exam availability:', error);
+    res.status(500).json({ message: 'Error fetching exam availability' });
   }
 };

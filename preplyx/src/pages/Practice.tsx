@@ -17,10 +17,17 @@ interface ExamData {
   desc: string;
 }
 
+interface ExamAvailability {
+  hasQuestions: boolean;
+  totalCount: number;
+  years: string[];
+  subjects: string[];
+  subjectYears: Record<string, string[]>;
+  topics: Record<string, string[]>;
+}
+
 const CATEGORIES = ['All', 'Science', 'Art', 'Commerce', 'Vocational', 'Language'] as const;
 type Category = typeof CATEGORIES[number];
-
-const YEAR_OPTIONS = Array.from({ length: 26 }, (_, i) => (2025 - i).toString());
 
 const ICON_MAP: Record<string, any> = {
   Calculator,
@@ -67,6 +74,7 @@ export default function Practice() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const [examData, setExamData] = useState<Record<string, ExamData>>({});
+  const [availability, setAvailability] = useState<Record<string, ExamAvailability>>({});
   const [subjectCategories, setSubjectCategories] = useState<Record<string, Category[]>>({});
   const [subjectIcons, setSubjectIcons] = useState<Record<string, string>>({});
   const [subjectTips, setSubjectTips] = useState<Record<string, string>>({});
@@ -75,7 +83,7 @@ export default function Practice() {
   const queryExam = searchParams.get('exam');
   const initialExam = queryExam || 'JAMB';
   const [selectedExam, setSelectedExam] = useState<string>(initialExam);
-  const [selectedYear, setSelectedYear] = useState<string>(searchParams.get('year') || '2018');
+  const [selectedYear, setSelectedYear] = useState<string>(searchParams.get('year') || 'All');
   const [selectedCategory, setSelectedCategory] = useState<Category>('All');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedSubjects, setSelectedSubjects] = useState<string[]>([]);
@@ -85,17 +93,19 @@ export default function Practice() {
     const fetchAllData = async () => {
       try {
         setLoading(true);
-        const [exams, categories, icons, tips] = await Promise.all([
+        const [exams, categories, icons, tips, avail] = await Promise.all([
           api.getExams(),
           api.getSubjectCategories(),
           api.getSubjectIcons(),
-          api.getSubjectTips()
+          api.getSubjectTips(),
+          api.getExamAvailability()
         ]);
         
         setExamData(exams);
         setSubjectCategories(categories as any);
         setSubjectIcons(icons);
         setSubjectTips(tips);
+        setAvailability(avail);
         
         if (queryExam && !exams[queryExam]) {
           setSelectedExam('JAMB');
@@ -110,9 +120,30 @@ export default function Practice() {
     fetchAllData();
   }, [queryExam]);
 
+  // Real data computed from availability
+  const currentAvail = availability[selectedExam];
+  const examHasQuestions = currentAvail?.hasQuestions ?? false;
+
+  // Years that have questions for the selected exam (sorted descending)
+  const availableYears = currentAvail?.years ?? [];
+
+  // Subjects that have questions for selected exam + selected year
+  const subjectsWithQuestions: string[] = (() => {
+    if (!currentAvail) return [];
+    if (selectedYear === 'All') {
+      return currentAvail.subjects;
+    }
+    // Only subjects where the selected year is in their subjectYears list
+    return currentAvail.subjects.filter(subject => {
+      const yearsForSubject = currentAvail.subjectYears[subject] ?? [];
+      return yearsForSubject.includes(selectedYear);
+    });
+  })();
+
   const exam = examData[selectedExam] || examData['JAMB'] || { subjects: [], color: '#7B2FF7', years: '', desc: '' };
   
-  const filteredSubjects = (exam.subjects || []).filter(subject => {
+  // Filter subjects further by category and search — but only from subjects that have actual questions
+  const filteredSubjects = subjectsWithQuestions.filter(subject => {
     const matchesCategory = selectedCategory === 'All' || (subjectCategories[subject] || []).includes(selectedCategory);
     const matchesSearch = subject.toLowerCase().includes(searchQuery.toLowerCase().trim());
     return matchesCategory && matchesSearch;
@@ -148,6 +179,7 @@ export default function Practice() {
     examParams.set('time', (customTime * 3600).toString());
     navigate(`/dashboard/multi-subject-exam?${examParams.toString()}`);
   };
+
 
   return (
     <div style={{ animation: 'fadeIn 0.4s ease-out', paddingBottom: selectedSubjects.length > 0 ? '120px' : '40px' }}>
@@ -192,10 +224,10 @@ export default function Practice() {
           borderTop: '1px solid #F1F5F9'
         }}>
           {[
-            { icon: BookOpen, label: 'Available Subjects', value: (exam.subjects || []).length.toString() },
+            { icon: BookOpen, label: 'Available Subjects', value: currentAvail ? `${currentAvail.subjects.length}` : (exam.subjects || []).length.toString() },
             { icon: Clock, label: 'Exam Duration', value: '1 – 10 hrs' },
-            { icon: BarChart2, label: 'Question Bank', value: '20+ Years' },
-            { icon: CheckCircle2, label: 'Scoring Mode', value: 'Instant Analysis' },
+            { icon: BarChart2, label: 'Question Bank', value: currentAvail && currentAvail.years.length > 0 ? `${currentAvail.years.length} Year${currentAvail.years.length !== 1 ? 's' : ''}` : 'No Data' },
+            { icon: CheckCircle2, label: 'Total Questions', value: currentAvail ? `${currentAvail.totalCount.toLocaleString()}` : '0' },
           ].map(({ icon: Icon, label, value }) => (
             <div key={label} style={{
               display: 'flex',
@@ -268,44 +300,66 @@ export default function Practice() {
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 200px), 1fr))', gap: '12px' }}>
               {Object.entries(examData || {}).map(([examKey, data]) => {
                 const isActive = selectedExam === examKey;
+                const examAvail = availability[examKey];
+                const hasQuestions = examAvail?.hasQuestions ?? false;
+                const questionCount = examAvail?.totalCount ?? 0;
+                const examYears = examAvail?.years ?? [];
+                const isDisabled = !hasQuestions;
+                const yearsLabel = examYears.length > 0
+                  ? `${examYears[examYears.length - 1]} – ${examYears[0]}`
+                  : 'No questions yet';
+
                 return (
                   <button
                     key={examKey}
                     onClick={() => {
+                      if (isDisabled) return;
                       setSelectedExam(examKey);
-                      setSelectedSubjects([]); // Reset subject selections
+                      setSelectedSubjects([]);
+                      setSelectedYear('All');
                     }}
-                    className="header-hover-card"
+                    disabled={isDisabled}
+                    className={isDisabled ? '' : 'header-hover-card'}
+                    title={isDisabled ? `${examKey} questions coming soon — no questions uploaded yet` : undefined}
                     style={{
                       padding: '16px 18px',
                       borderRadius: '14px',
                       textAlign: 'left',
-                      backgroundColor: isActive ? '#F5F3FF' : '#ffffff',
-                      border: isActive ? '1.5px solid var(--color-primary)' : '1px solid #E2E8F0',
-                      boxShadow: isActive ? '0 4px 16px rgba(123, 47, 247, 0.08)' : '0 1px 3px rgba(15,23,42,0.02)',
-                      cursor: 'pointer',
+                      backgroundColor: isDisabled ? '#F8FAFC' : isActive ? '#F5F3FF' : '#ffffff',
+                      border: isDisabled ? '1px dashed #CBD5E1' : isActive ? '1.5px solid var(--color-primary)' : '1px solid #E2E8F0',
+                      boxShadow: isDisabled ? 'none' : isActive ? '0 4px 16px rgba(123, 47, 247, 0.08)' : '0 1px 3px rgba(15,23,42,0.02)',
+                      cursor: isDisabled ? 'not-allowed' : 'pointer',
                       transition: 'all 0.2s ease',
-                      outline: 'none'
+                      outline: 'none',
+                      opacity: isDisabled ? 0.55 : 1
                     }}
                   >
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
-                      <span style={{ fontSize: '16px', fontWeight: 700, color: isActive ? 'var(--color-primary)' : 'var(--color-text-main)' }}>
+                      <span style={{ fontSize: '16px', fontWeight: 700, color: isDisabled ? '#94A3B8' : isActive ? 'var(--color-primary)' : 'var(--color-text-main)' }}>
                         {examKey}
                       </span>
-                      {isActive && (
+                      {isDisabled ? (
+                        <span style={{ fontSize: '10px', fontWeight: 700, backgroundColor: '#F1F5F9', color: '#94A3B8', padding: '2px 8px', borderRadius: '10px' }}>
+                          Coming Soon
+                        </span>
+                      ) : isActive ? (
                         <span style={{ fontSize: '10px', fontWeight: 700, backgroundColor: '#F3E8FF', color: 'var(--color-primary)', padding: '2px 8px', borderRadius: '10px' }}>
                           Active
                         </span>
-                      )}
+                      ) : null}
                     </div>
                     <div style={{ fontSize: '11px', color: 'var(--color-text-muted)', marginBottom: '8px', lineHeight: 1.3 }}>
                       {data.desc}
                     </div>
-                    <div style={{ fontSize: '11px', fontWeight: 600, color: isActive ? 'var(--color-primary)' : '#64748B' }}>
-                      {data.subjects.length} subjects · {data.years}
+                    <div style={{ fontSize: '11px', fontWeight: 600, color: isDisabled ? '#94A3B8' : isActive ? 'var(--color-primary)' : '#64748B' }}>
+                      {isDisabled
+                        ? 'No questions uploaded yet'
+                        : `${questionCount} questions · ${yearsLabel}`
+                      }
                     </div>
                   </button>
                 );
+
               })}
             </div>
           </div>
@@ -321,7 +375,12 @@ export default function Practice() {
                   alignItems: 'center', justifyContent: 'center'
                 }}>2</span>
                 <h2 style={{ fontSize: '15px', fontWeight: 700, color: 'var(--color-text-main)', letterSpacing: '-0.3px' }}>
-                  Select Exam Year (2000 – 2025)
+                  Select Exam Year
+                  {availableYears.length > 0 && (
+                    <span style={{ fontSize: '12px', fontWeight: 500, color: 'var(--color-text-muted)', marginLeft: '6px' }}>
+                      ({availableYears[availableYears.length - 1]} – {availableYears[0]})
+                    </span>
+                  )}
                 </h2>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -333,7 +392,7 @@ export default function Practice() {
                   color: 'var(--color-primary)', padding: '3px 12px', borderRadius: '16px',
                   border: '1px solid rgba(123, 47, 247, 0.2)'
                 }}>
-                  {selectedYear === 'All' ? 'All Years (Random)' : `${selectedExam} ${selectedYear}`}
+                  {selectedYear === 'All' ? 'All Years (Mixed)' : `${selectedExam} ${selectedYear}`}
                 </span>
               </div>
             </div>
@@ -352,90 +411,101 @@ export default function Practice() {
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '10px' }}>
                 <div style={{ fontSize: '12px', fontWeight: 600, color: '#64748B', display: 'flex', alignItems: 'center', gap: '6px' }}>
                   <Calendar size={15} color="var(--color-primary)" />
-                  Choose past question exam year to practice:
+                  {availableYears.length > 0
+                    ? `${availableYears.length} year${availableYears.length !== 1 ? 's' : ''} available in question bank:`
+                    : 'No questions uploaded yet for this exam board'}
                 </div>
-                
+
                 {/* Direct Dropdown Select */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--color-text-muted)' }}>Jump to Year:</span>
-                  <select
-                    value={selectedYear}
-                    onChange={(e) => setSelectedYear(e.target.value)}
-                    style={{
-                      padding: '6px 12px',
-                      borderRadius: '10px',
-                      border: '1px solid #CBD5E1',
-                      fontSize: '12px',
-                      fontWeight: 700,
-                      color: 'var(--color-primary)',
-                      backgroundColor: '#F8FAFC',
-                      cursor: 'pointer',
-                      outline: 'none'
-                    }}
-                  >
-                    <option value="All">All Years (2000 - 2025)</option>
-                    {YEAR_OPTIONS.map(yr => (
-                      <option key={yr} value={yr}>Year {yr}</option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-
-              {/* Scrollable Year Pills Ribbon */}
-              <div style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
-                overflowX: 'auto',
-                paddingBottom: '6px',
-                paddingTop: '2px'
-              }} className="custom-thin-scrollbar">
-                <button
-                  onClick={() => setSelectedYear('All')}
-                  style={{
-                    padding: '8px 16px',
-                    borderRadius: '12px',
-                    fontSize: '12px',
-                    fontWeight: 700,
-                    border: selectedYear === 'All' ? '1.5px solid var(--color-primary)' : '1px solid #E2E8F0',
-                    backgroundColor: selectedYear === 'All' ? 'var(--color-primary)' : '#F8FAFC',
-                    color: selectedYear === 'All' ? '#ffffff' : '#475569',
-                    cursor: 'pointer',
-                    whiteSpace: 'nowrap',
-                    transition: 'all 0.15s ease',
-                    boxShadow: selectedYear === 'All' ? '0 4px 12px rgba(123, 47, 247, 0.2)' : 'none'
-                  }}
-                >
-                  All Years (Mixed)
-                </button>
-
-                {YEAR_OPTIONS.map(yr => {
-                  const isYearActive = selectedYear === yr;
-                  return (
-                    <button
-                      key={yr}
-                      onClick={() => setSelectedYear(yr)}
+                {availableYears.length > 0 && (
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--color-text-muted)' }}>Jump to Year:</span>
+                    <select
+                      value={selectedYear}
+                      onChange={(e) => setSelectedYear(e.target.value)}
                       style={{
-                        padding: '8px 14px',
-                        borderRadius: '12px',
+                        padding: '6px 12px',
+                        borderRadius: '10px',
+                        border: '1px solid #CBD5E1',
                         fontSize: '12px',
-                        fontWeight: isYearActive ? 800 : 600,
-                        border: isYearActive ? '1.5px solid var(--color-primary)' : '1px solid #E2E8F0',
-                        backgroundColor: isYearActive ? 'var(--color-primary)' : '#ffffff',
-                        color: isYearActive ? '#ffffff' : '#334155',
+                        fontWeight: 700,
+                        color: 'var(--color-primary)',
+                        backgroundColor: '#F8FAFC',
                         cursor: 'pointer',
-                        whiteSpace: 'nowrap',
-                        transition: 'all 0.15s ease',
-                        boxShadow: isYearActive ? '0 4px 12px rgba(123, 47, 247, 0.25)' : 'none'
+                        outline: 'none'
                       }}
                     >
-                      {yr}
-                    </button>
-                  );
-                })}
+                      <option value="All">All Years (Mixed)</option>
+                      {availableYears.map(yr => (
+                        <option key={yr} value={yr}>Year {yr}</option>
+                      ))}
+                    </select>
+                  </div>
+                )}
               </div>
+
+              {/* Scrollable Year Pills Ribbon — only real years */}
+              {availableYears.length === 0 ? (
+                <div style={{ textAlign: 'center', padding: '20px', color: '#94A3B8', fontSize: '13px', fontWeight: 500 }}>
+                  No years available — upload questions for this exam in the admin panel first.
+                </div>
+              ) : (
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  overflowX: 'auto',
+                  paddingBottom: '6px',
+                  paddingTop: '2px'
+                }} className="custom-thin-scrollbar">
+                  <button
+                    onClick={() => setSelectedYear('All')}
+                    style={{
+                      padding: '8px 16px',
+                      borderRadius: '12px',
+                      fontSize: '12px',
+                      fontWeight: 700,
+                      border: selectedYear === 'All' ? '1.5px solid var(--color-primary)' : '1px solid #E2E8F0',
+                      backgroundColor: selectedYear === 'All' ? 'var(--color-primary)' : '#F8FAFC',
+                      color: selectedYear === 'All' ? '#ffffff' : '#475569',
+                      cursor: 'pointer',
+                      whiteSpace: 'nowrap',
+                      transition: 'all 0.15s ease',
+                      boxShadow: selectedYear === 'All' ? '0 4px 12px rgba(123, 47, 247, 0.2)' : 'none'
+                    }}
+                  >
+                    All Years (Mixed)
+                  </button>
+
+                  {availableYears.map(yr => {
+                    const isYearActive = selectedYear === yr;
+                    return (
+                      <button
+                        key={yr}
+                        onClick={() => setSelectedYear(yr)}
+                        style={{
+                          padding: '8px 14px',
+                          borderRadius: '12px',
+                          fontSize: '12px',
+                          fontWeight: isYearActive ? 800 : 600,
+                          border: isYearActive ? '1.5px solid var(--color-primary)' : '1px solid #E2E8F0',
+                          backgroundColor: isYearActive ? 'var(--color-primary)' : '#ffffff',
+                          color: isYearActive ? '#ffffff' : '#334155',
+                          cursor: 'pointer',
+                          whiteSpace: 'nowrap',
+                          transition: 'all 0.15s ease',
+                          boxShadow: isYearActive ? '0 4px 12px rgba(123, 47, 247, 0.25)' : 'none'
+                        }}
+                      >
+                        {yr}
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
             </div>
           </div>
+
 
           {/* STEP 3: PROFESSIONAL SUBJECT SELECTION */}
           <div>
@@ -542,12 +612,29 @@ export default function Practice() {
               </div>
             </div>
 
-            {/* Empty Search Result State */}
+            {/* Empty Subject State */}
             {filteredSubjects.length === 0 && (
               <div style={{ padding: '40px 20px', textAlign: 'center', backgroundColor: '#ffffff', borderRadius: '16px', border: '1px solid #E2E8F0' }}>
                 <BookOpen size={28} color="#94A3B8" style={{ marginBottom: '8px' }} />
-                <div style={{ fontSize: '14px', fontWeight: 600, color: 'var(--color-text-main)' }}>No subjects found</div>
-                <div style={{ fontSize: '12px', color: 'var(--color-text-muted)', marginTop: '2px' }}>Try adjusting your search query or category filter.</div>
+                {subjectsWithQuestions.length === 0 ? (
+                  <>
+                    <div style={{ fontSize: '14px', fontWeight: 600, color: 'var(--color-text-main)' }}>
+                      {selectedYear === 'All'
+                        ? `No questions uploaded yet for ${selectedExam}`
+                        : `No questions for ${selectedExam} ${selectedYear}`}
+                    </div>
+                    <div style={{ fontSize: '12px', color: 'var(--color-text-muted)', marginTop: '4px' }}>
+                      {selectedYear === 'All'
+                        ? 'Upload questions from the admin panel to make them available here.'
+                        : 'Try selecting "All Years" or a different year that has questions.'}
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div style={{ fontSize: '14px', fontWeight: 600, color: 'var(--color-text-main)' }}>No subjects found</div>
+                    <div style={{ fontSize: '12px', color: 'var(--color-text-muted)', marginTop: '2px' }}>Try adjusting your search query or category filter.</div>
+                  </>
+                )}
               </div>
             )}
 

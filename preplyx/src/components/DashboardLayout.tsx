@@ -170,7 +170,7 @@ export default function DashboardLayout() {
     : 'ST';
 
   // Computed Sidebar Width
-  const currentSidebarWidth = isMobile ? '280px' : (isCollapsed ? '72px' : '230px');
+  const currentSidebarWidth = isMobile ? '260px' : (isCollapsed ? '64px' : '200px');
 
   const userAvatar = user?.avatar || (typeof window !== 'undefined' ? localStorage.getItem('preplyx_avatar') : null);
 
@@ -195,13 +195,13 @@ export default function DashboardLayout() {
         />
       )}
 
-      {/* Sidebar Navigation */}
+      {/* ── Sidebar Navigation ── */}
       <aside
         style={{
           width: currentSidebarWidth,
           minWidth: currentSidebarWidth,
           maxWidth: currentSidebarWidth,
-          background: 'linear-gradient(180deg, #6d28d9 0%, #4c1d95 100%)',
+          background: 'linear-gradient(180deg, #1a1535 0%, #120f2d 60%, #0e0b24 100%)',
           display: 'flex',
           flexDirection: 'column',
           height: '100vh',
@@ -209,39 +209,41 @@ export default function DashboardLayout() {
           left: isMobile ? (sidebarOpen ? '0' : '-100%') : '0',
           top: 0,
           zIndex: isMobile ? 9999 : 10,
-          transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-          boxShadow: isMobile ? '12px 0 36px rgba(30, 10, 76, 0.35)' : '10px 0 30px rgba(76, 29, 149, 0.16)',
-          overflow: 'hidden'
+          transition: 'width 0.28s cubic-bezier(0.4, 0, 0.2, 1), min-width 0.28s cubic-bezier(0.4, 0, 0.2, 1), max-width 0.28s cubic-bezier(0.4, 0, 0.2, 1), left 0.28s cubic-bezier(0.4, 0, 0.2, 1)',
+          boxShadow: isMobile
+            ? '12px 0 40px rgba(0,0,0,0.45)'
+            : '4px 0 24px rgba(0,0,0,0.18)',
+          overflow: 'hidden',
+          borderRight: '1px solid rgba(255,255,255,0.05)'
         }}
       >
-        {/* Brand Header */}
+        {/* ── Brand Header ── */}
         <div style={{
           height: '60px',
           minHeight: '60px',
-          padding: isMobile ? '0 16px' : (isCollapsed ? '0 12px' : '0 18px'),
-          borderBottom: '1px solid rgba(255,255,255,0.12)',
+          padding: isMobile ? '0 16px' : (isCollapsed ? '0 12px' : '0 16px'),
+          borderBottom: '1px solid rgba(255,255,255,0.06)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: isCollapsed && !isMobile ? 'center' : 'space-between',
           boxSizing: 'border-box'
         }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', overflow: 'hidden' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '9px', overflow: 'hidden' }}>
             <img
               src={logoSvg}
               alt="Preplyx logo"
               style={{
-                width: isCollapsed && !isMobile ? '34px' : (isMobile ? '36px' : '34px'),
-                height: isCollapsed && !isMobile ? '34px' : (isMobile ? '36px' : '34px'),
-                borderRadius: '10px',
+                width: '30px',
+                height: '30px',
+                borderRadius: '9px',
                 objectFit: 'contain',
-                boxShadow: '0 8px 20px rgba(0,0,0,0.2)',
                 flexShrink: 0,
-                transition: 'all 0.3s ease'
+                transition: 'all 0.28s ease'
               }}
             />
             {(!isCollapsed || isMobile) && (
-              <div style={{ whiteSpace: 'nowrap' }}>
-                <div style={{ fontSize: isMobile ? '18px' : '17px', fontWeight: 600, color: '#fff', letterSpacing: '-0.3px' }}>Preplyx</div>
+              <div style={{ whiteSpace: 'nowrap', overflow: 'hidden' }}>
+                <div style={{ fontSize: '15px', fontWeight: 700, color: '#fff', letterSpacing: '-0.3px', lineHeight: 1 }}>Preplyx</div>
               </div>
             )}
           </div>
@@ -253,14 +255,16 @@ export default function DashboardLayout() {
               title="Collapse Sidebar"
               style={{
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                width: '28px', height: '28px', borderRadius: '8px',
-                backgroundColor: 'rgba(255,255,255,0.12)', border: '1px solid rgba(255,255,255,0.16)',
-                cursor: 'pointer', color: '#fff', transition: 'all 0.2s ease',
-                flexShrink: 0
+                width: '26px', height: '26px', borderRadius: '7px',
+                backgroundColor: 'rgba(255,255,255,0.07)',
+                border: '1px solid rgba(255,255,255,0.09)',
+                cursor: 'pointer', color: 'rgba(255,255,255,0.5)',
+                transition: 'all 0.18s ease', flexShrink: 0
               }}
-              className="header-hover-card"
+              onMouseEnter={e => { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.13)'; e.currentTarget.style.color = '#fff'; }}
+              onMouseLeave={e => { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.07)'; e.currentTarget.style.color = 'rgba(255,255,255,0.5)'; }}
             >
-              <ChevronLeft size={16} />
+              <ChevronLeft size={14} />
             </button>
           )}
 
@@ -270,26 +274,29 @@ export default function DashboardLayout() {
               onClick={() => setSidebarOpen(false)}
               style={{
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                padding: '8px', borderRadius: '10px', backgroundColor: 'rgba(255,255,255,0.12)',
-                border: '1px solid rgba(255,255,255,0.16)', cursor: 'pointer', color: '#fff',
-                transition: 'background-color 0.2s ease',
+                padding: '7px', borderRadius: '9px',
+                backgroundColor: 'rgba(255,255,255,0.07)',
+                border: '1px solid rgba(255,255,255,0.09)',
+                cursor: 'pointer', color: 'rgba(255,255,255,0.6)',
+                transition: 'all 0.18s ease',
               }}
             >
-              <X size={20} />
+              <X size={17} />
             </button>
           )}
         </div>
 
-        {/* Navigation Items */}
+        {/* ── Navigation Items ── */}
         <nav
           className="custom-thin-scrollbar"
           style={{
-            padding: isCollapsed && !isMobile ? '16px 8px' : '16px 12px',
+            padding: isCollapsed && !isMobile ? '12px 8px' : '12px 8px',
             flex: 1,
             display: 'flex',
             flexDirection: 'column',
-            gap: '6px',
-            overflowY: 'auto'
+            gap: '2px',
+            overflowY: 'auto',
+            overflowX: 'hidden'
           }}
         >
           {navLinks.map(({ name, href, icon: Icon }) => {
@@ -306,35 +313,73 @@ export default function DashboardLayout() {
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: isMini ? 'center' : 'flex-start',
-                  gap: '12px',
-                  padding: isMini ? '10px 0' : (isMobile ? '12px 12px' : '10px 12px'),
-                  borderRadius: '12px',
-                  fontSize: isMobile ? '14px' : '13px',
+                  gap: '10px',
+                  padding: isMini ? '9px 0' : (isMobile ? '10px 10px' : '9px 10px'),
+                  borderRadius: '10px',
+                  fontSize: isMobile ? '13.5px' : '12.5px',
                   fontWeight: isActive ? 600 : 400,
-                  color: '#fff',
-                  backgroundColor: isActive ? 'rgba(255,255,255,0.22)' : 'transparent',
-                  border: isActive ? '1px solid rgba(255,255,255,0.25)' : '1px solid transparent',
+                  color: isActive ? '#ffffff' : 'rgba(255,255,255,0.48)',
+                  backgroundColor: isActive ? 'rgba(255,255,255,0.1)' : 'transparent',
                   textDecoration: 'none',
-                  transition: 'all 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
-                  transform: isActive && !isMini ? 'translateX(3px)' : 'translateX(0)',
-                  boxShadow: isActive ? '0 8px 20px rgba(0,0,0,0.15)' : 'none',
-                  position: 'relative'
+                  transition: 'all 0.18s cubic-bezier(0.4, 0, 0.2, 1)',
+                  position: 'relative',
+                  overflow: 'hidden',
                 }}
-                className="header-hover-card"
+                onMouseEnter={e => {
+                  if (!isActive) {
+                    e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.06)';
+                    e.currentTarget.style.color = 'rgba(255,255,255,0.8)';
+                  }
+                }}
+                onMouseLeave={e => {
+                  if (!isActive) {
+                    e.currentTarget.style.backgroundColor = 'transparent';
+                    e.currentTarget.style.color = 'rgba(255,255,255,0.48)';
+                  }
+                }}
               >
-                <Icon size={isMobile ? 18 : (isMini ? 20 : 17)} style={{ color: '#fff', flexShrink: 0 }} />
-                
+                {/* Active left accent bar */}
+                {isActive && (
+                  <span style={{
+                    position: 'absolute',
+                    left: 0,
+                    top: '20%',
+                    bottom: '20%',
+                    width: '3px',
+                    borderRadius: '0 3px 3px 0',
+                    backgroundColor: '#a78bfa',
+                    animation: 'slideInBar 0.22s cubic-bezier(0.4, 0, 0.2, 1)',
+                  }} />
+                )}
+
+                {/* Icon */}
+                <Icon
+                  size={isMobile ? 17 : (isMini ? 19 : 16)}
+                  style={{
+                    color: isActive ? '#c4b5fd' : 'rgba(255,255,255,0.4)',
+                    flexShrink: 0,
+                    transition: 'color 0.18s ease, transform 0.18s ease',
+                  }}
+                />
+
+                {/* Label */}
                 {(!isMini || isMobile) && (
-                  <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                  <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', flex: 1 }}>
                     {name}
                   </span>
                 )}
 
-                {/* Mini Active Indicator Dot */}
+                {/* Mini active dot */}
                 {isMini && isActive && (
-                  <div style={{
-                    position: 'absolute', right: '4px', top: '50%', transform: 'translateY(-50%)',
-                    width: '5px', height: '5px', borderRadius: '50%', backgroundColor: '#fff'
+                  <span style={{
+                    position: 'absolute',
+                    right: '5px',
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    width: '4px',
+                    height: '4px',
+                    borderRadius: '50%',
+                    backgroundColor: '#a78bfa',
                   }} />
                 )}
               </Link>
@@ -342,33 +387,50 @@ export default function DashboardLayout() {
           })}
         </nav>
 
-        {/* Footer Logout Area */}
+        {/* ── Footer: User Chip + Logout ── */}
         <div style={{
-          padding: isCollapsed && !isMobile ? '14px 8px' : (isMobile ? '16px 12px' : '14px 12px'),
-          borderTop: '1px solid rgba(255,255,255,0.12)',
-          backgroundColor: 'rgba(0,0,0,0.12)'
+          padding: isCollapsed && !isMobile ? '10px 8px' : '10px 8px',
+          borderTop: '1px solid rgba(255,255,255,0.06)',
         }}>
+          {/* Muted ghost logout button */}
           <button
             onClick={handleLogout}
             title={isCollapsed && !isMobile ? 'Logout' : undefined}
             style={{
-              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px',
-              padding: isCollapsed && !isMobile ? '10px 0' : (isMobile ? '12px' : '10px 14px'),
-              borderRadius: '12px', width: '100%',
-              fontSize: isMobile ? '14px' : '13px', fontWeight: 600, color: '#fff',
-              background: 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)',
-              border: '1px solid rgba(239, 68, 68, 0.4)', cursor: 'pointer',
-              boxShadow: '0 4px 14px rgba(239, 68, 68, 0.35)',
-              transition: 'all 0.2s ease',
-              minHeight: isMobile ? '44px' : 'auto',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: isCollapsed && !isMobile ? 'center' : 'flex-start',
+              gap: '9px',
+              padding: isCollapsed && !isMobile ? '9px 0' : (isMobile ? '10px 10px' : '9px 10px'),
+              borderRadius: '10px',
+              width: '100%',
+              fontSize: isMobile ? '13px' : '12.5px',
+              fontWeight: 500,
+              color: 'rgba(248,113,113,0.55)',
+              background: 'transparent',
+              border: 'none',
+              cursor: 'pointer',
+              transition: 'all 0.18s ease',
+              letterSpacing: '0.01em',
             }}
-            className="header-hover-card"
+            onMouseEnter={e => {
+              e.currentTarget.style.backgroundColor = 'rgba(239,68,68,0.08)';
+              e.currentTarget.style.color = 'rgba(248,113,113,0.85)';
+            }}
+            onMouseLeave={e => {
+              e.currentTarget.style.backgroundColor = 'transparent';
+              e.currentTarget.style.color = 'rgba(248,113,113,0.55)';
+            }}
           >
-            <LogOut size={isMobile ? 18 : (isCollapsed && !isMobile ? 18 : 16)} style={{ color: '#fff', flexShrink: 0 }} />
-            {(!isCollapsed || isMobile) && <span>Logout</span>}
+            <LogOut
+              size={isMobile ? 16 : (isCollapsed && !isMobile ? 16 : 14)}
+              style={{ flexShrink: 0, opacity: 0.7 }}
+            />
+            {(!isCollapsed || isMobile) && <span>Log out</span>}
           </button>
         </div>
       </aside>
+
 
       {/* Main App Workspace */}
       <main style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden', width: '100%' }}>

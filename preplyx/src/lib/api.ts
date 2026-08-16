@@ -106,6 +106,17 @@ class ApiClient {
     return this.request<Record<string, string>>('/exams/tips');
   }
 
+  async getExamAvailability(): Promise<Record<string, {
+    hasQuestions: boolean;
+    totalCount: number;
+    years: string[];
+    subjects: string[];
+    subjectYears: Record<string, string[]>;
+    topics: Record<string, string[]>;
+  }>> {
+    return this.request('/exams/availability');
+  }
+
   // Question endpoints
   async getQuestions(params: {
     exam?: string;
