@@ -259,7 +259,7 @@ export default function Analytics() {
           <BarChart3 size={24} color="#ffffff" />
         </div>
         <div style={{ textAlign: 'center' }}>
-          <h3 style={{ fontSize: '16px', fontWeight: 700, color: '#0f172a', marginBottom: '4px' }}>Compiling Performance Analytics</h3>
+          <h3 style={{ fontSize: '14px', fontWeight: 600, color: '#0f172a', marginBottom: '4px' }}>Compiling Performance Analytics</h3>
           <p style={{ fontSize: '13px', color: '#64748b' }}>Analyzing test scores, subject mastery & speed metrics...</p>
         </div>
       </div>
@@ -273,7 +273,7 @@ export default function Analytics() {
           <AlertCircle size={32} color="#ef4444" />
         </div>
         <div style={{ textAlign: 'center', maxWidth: '400px' }}>
-          <h3 style={{ fontSize: '16px', fontWeight: 700, color: '#0f172a', marginBottom: '6px' }}>Unable to load analytics</h3>
+          <h3 style={{ fontSize: '14px', fontWeight: 600, color: '#0f172a', marginBottom: '6px' }}>Unable to load analytics</h3>
           <p style={{ fontSize: '13px', color: '#64748b', marginBottom: '16px' }}>{error}</p>
           <button
             onClick={() => fetchData()}
@@ -312,7 +312,7 @@ export default function Analytics() {
               <Activity size={13} color="#10b981" /> Live Sync
             </span>
           </div>
-          <h1 style={{ fontSize: '22px', fontWeight: 600, color: '#0f172a', letterSpacing: '-0.3px', margin: 0 }}>
+          <h1 style={{ fontSize: '18px', fontWeight: 600, color: '#0f172a', letterSpacing: '-0.3px', margin: 0 }}>
             Performance & Insights
           </h1>
           <p style={{ fontSize: '13.5px', color: '#64748b', margin: '4px 0 0' }}>
@@ -670,7 +670,7 @@ export default function Analytics() {
           <div>
             <div style={{ marginBottom: '16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <div>
-                <h3 style={{ fontSize: '15px', fontWeight: 600, color: '#0f172a' }}>Exam Score Trajectory</h3>
+                <h3 style={{ fontSize: '14px', fontWeight: 600, color: '#0f172a' }}>Exam Score Trajectory</h3>
                 <p style={{ fontSize: '12.5px', color: '#64748b' }}>Percentage performance over chronological test attempts</p>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '16px', fontSize: '12px' }}>
@@ -747,7 +747,7 @@ export default function Analytics() {
         {activeTab === 'subjects' && (
           <div>
             <div style={{ marginBottom: '20px' }}>
-              <h3 style={{ fontSize: '15px', fontWeight: 600, color: '#0f172a' }}>Subject Breakdown & Proficiency</h3>
+              <h3 style={{ fontSize: '14px', fontWeight: 600, color: '#0f172a' }}>Subject Breakdown & Proficiency</h3>
               <p style={{ fontSize: '12.5px', color: '#64748b' }}>Mastery percentages calculated from past practice sessions</p>
             </div>
 
@@ -835,7 +835,7 @@ export default function Analytics() {
         {activeTab === 'speed' && (
           <div>
             <div style={{ marginBottom: '20px' }}>
-              <h3 style={{ fontSize: '15px', fontWeight: 600, color: '#0f172a' }}>Time Efficiency & Pacing</h3>
+              <h3 style={{ fontSize: '14px', fontWeight: 600, color: '#0f172a' }}>Time Efficiency & Pacing</h3>
               <p style={{ fontSize: '12.5px', color: '#64748b' }}>Average time spent per question compared to standard CBT speed goals (Target: &lt;60s)</p>
             </div>
 
@@ -885,7 +885,7 @@ export default function Analytics() {
           <div>
             <div style={{ marginBottom: '16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <div>
-                <h3 style={{ fontSize: '15px', fontWeight: 600, color: '#0f172a' }}>Recent Practice Sessions</h3>
+                <h3 style={{ fontSize: '14px', fontWeight: 600, color: '#0f172a' }}>Recent Practice Sessions</h3>
                 <p style={{ fontSize: '12.5px', color: '#64748b' }}>Log of past examinations and score breakdown</p>
               </div>
               <button

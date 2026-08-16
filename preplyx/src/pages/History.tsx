@@ -191,7 +191,7 @@ export default function History() {
       
       {/* Page Header */}
       <div style={{ marginBottom: '24px' }}>
-        <h1 style={{ fontSize: '22px', fontWeight: 900, color: '#0f172a', margin: 0, letterSpacing: '-0.4px' }}>
+        <h1 style={{ fontSize: '17px', fontWeight: 600, color: '#0f172a', margin: 0, letterSpacing: '-0.3px' }}>
           Exam History & Log
         </h1>
         <p style={{ fontSize: '13px', color: '#64748b', marginTop: '4px' }}>
@@ -207,28 +207,28 @@ export default function History() {
         marginBottom: '28px'
       }}>
         <div style={{ padding: '18px', borderRadius: '16px', backgroundColor: '#ffffff', border: '1px solid #e2e8f0' }}>
-          <div style={{ fontSize: '11px', fontWeight: 800, textTransform: 'uppercase', color: '#64748b', letterSpacing: '0.5px' }}>Total Attempts</div>
-          <div style={{ fontSize: '26px', fontWeight: 900, color: '#0f172a', marginTop: '6px' }}>{totalAttempts}</div>
+          <div style={{ fontSize: '11px', fontWeight: 600, textTransform: 'uppercase', color: '#64748b', letterSpacing: '0.5px' }}>Total Attempts</div>
+          <div style={{ fontSize: '20px', fontWeight: 700, color: '#0f172a', marginTop: '6px' }}>{totalAttempts}</div>
         </div>
 
         <div style={{ padding: '18px', borderRadius: '16px', backgroundColor: '#ffffff', border: '1px solid #e2e8f0' }}>
-          <div style={{ fontSize: '11px', fontWeight: 800, textTransform: 'uppercase', color: '#16a34a', letterSpacing: '0.5px' }}>Completed</div>
-          <div style={{ fontSize: '26px', fontWeight: 900, color: '#16a34a', marginTop: '6px' }}>{completedCount}</div>
+          <div style={{ fontSize: '11px', fontWeight: 600, textTransform: 'uppercase', color: '#16a34a', letterSpacing: '0.5px' }}>Completed</div>
+          <div style={{ fontSize: '20px', fontWeight: 700, color: '#16a34a', marginTop: '6px' }}>{completedCount}</div>
         </div>
 
         <div style={{ padding: '18px', borderRadius: '16px', backgroundColor: '#ffffff', border: '1px solid #e2e8f0' }}>
-          <div style={{ fontSize: '11px', fontWeight: 800, textTransform: 'uppercase', color: '#d97706', letterSpacing: '0.5px' }}>Timed Out</div>
-          <div style={{ fontSize: '26px', fontWeight: 900, color: '#d97706', marginTop: '6px' }}>{timedOutCount}</div>
+          <div style={{ fontSize: '11px', fontWeight: 600, textTransform: 'uppercase', color: '#d97706', letterSpacing: '0.5px' }}>Timed Out</div>
+          <div style={{ fontSize: '20px', fontWeight: 700, color: '#d97706', marginTop: '6px' }}>{timedOutCount}</div>
         </div>
 
         <div style={{ padding: '18px', borderRadius: '16px', backgroundColor: '#ffffff', border: '1px solid #e2e8f0' }}>
-          <div style={{ fontSize: '11px', fontWeight: 800, textTransform: 'uppercase', color: '#dc2626', letterSpacing: '0.5px' }}>Exited / Incomplete</div>
-          <div style={{ fontSize: '26px', fontWeight: 900, color: '#dc2626', marginTop: '6px' }}>{abandonedCount}</div>
+          <div style={{ fontSize: '11px', fontWeight: 600, textTransform: 'uppercase', color: '#dc2626', letterSpacing: '0.5px' }}>Exited / Incomplete</div>
+          <div style={{ fontSize: '20px', fontWeight: 700, color: '#dc2626', marginTop: '6px' }}>{abandonedCount}</div>
         </div>
 
         <div style={{ padding: '18px', borderRadius: '16px', backgroundColor: '#ffffff', border: '1px solid #e2e8f0' }}>
-          <div style={{ fontSize: '11px', fontWeight: 800, textTransform: 'uppercase', color: '#7c3aed', letterSpacing: '0.5px' }}>Average Accuracy</div>
-          <div style={{ fontSize: '26px', fontWeight: 900, color: '#7c3aed', marginTop: '6px' }}>{avgAccuracy}%</div>
+          <div style={{ fontSize: '11px', fontWeight: 600, textTransform: 'uppercase', color: '#7c3aed', letterSpacing: '0.5px' }}>Average Accuracy</div>
+          <div style={{ fontSize: '20px', fontWeight: 700, color: '#7c3aed', marginTop: '6px' }}>{avgAccuracy}%</div>
         </div>
       </div>
 
@@ -334,7 +334,7 @@ export default function History() {
           textAlign: 'center'
         }}>
           <BookOpen size={44} color="#cbd5e1" style={{ marginBottom: '12px' }} />
-          <h3 style={{ fontSize: '16px', fontWeight: 800, color: '#0f172a', margin: '0 0 6px 0' }}>
+          <h3 style={{ fontSize: '13px', fontWeight: 600, color: '#0f172a', margin: '0 0 6px 0' }}>
             No Exam Sessions Found
           </h3>
           <p style={{ fontSize: '13px', color: '#64748b', margin: '0 0 20px 0' }}>
@@ -378,7 +378,7 @@ export default function History() {
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  fontWeight: 900,
+                  fontWeight: 700,
                   fontSize: '13px',
                   flexShrink: 0
                 }}>
@@ -386,7 +386,7 @@ export default function History() {
                 </div>
 
                 <div>
-                  <div style={{ fontSize: '15px', fontWeight: 800, color: '#0f172a' }}>
+                  <div style={{ fontSize: '15px', fontWeight: 600, color: '#0f172a' }}>
                     {session.subject} {session.year ? `(${session.year})` : ''}
                   </div>
                   <div style={{ fontSize: '12px', color: '#64748b', marginTop: '3px', display: 'flex', alignItems: 'center', gap: '12px' }}>
@@ -403,7 +403,7 @@ export default function History() {
                 {getStatusBadge(session.status)}
 
                 <div style={{ textAlign: 'right' }}>
-                  <div style={{ fontSize: '18px', fontWeight: 900, color: '#0f172a' }}>
+                  <div style={{ fontSize: '15px', fontWeight: 600, color: '#0f172a' }}>
                     {session.score} / {session.total}
                   </div>
                   <div style={{ fontSize: '12px', fontWeight: 700, color: session.pct >= 70 ? '#16a34a' : (session.pct >= 50 ? '#d97706' : '#dc2626') }}>

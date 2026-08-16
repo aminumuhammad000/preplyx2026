@@ -140,7 +140,7 @@ export default function Result() {
         }}>
           <Award size={28} />
         </div>
-        <h2 style={{ fontSize: '18px', fontWeight: 800, color: 'var(--color-text-main)', marginBottom: '8px' }}>
+        <h2 style={{ fontSize: '15px', fontWeight: 600, color: 'var(--color-text-main)', marginBottom: '8px' }}>
           No Server Session Results Found
         </h2>
         <p style={{ fontSize: '13px', color: 'var(--color-text-muted)', marginBottom: '24px', lineHeight: 1.5 }}>
@@ -205,7 +205,7 @@ export default function Result() {
           <ArrowLeft size={16} /> Back to Practice
         </button>
         <div>
-          <h1 style={{ fontSize: '22px', fontWeight: 800, color: 'var(--color-text-main)', margin: 0 }}>
+          <h1 style={{ fontSize: '17px', fontWeight: 600, color: 'var(--color-text-main)', margin: 0 }}>
             {exam} Exam Performance Breakdown
           </h1>
           <p style={{ fontSize: '13px', color: 'var(--color-text-muted)', margin: 0 }}>
@@ -235,7 +235,7 @@ export default function Result() {
                 backgroundColor: '#fff', display: 'flex', flexDirection: 'column',
                 alignItems: 'center', justifyContent: 'center'
               }}>
-                <span style={{ fontSize: '26px', fontWeight: 900, color: '#7B2FF7', lineHeight: 1 }}>
+                <span style={{ fontSize: '17px', fontWeight: 700, color: '#7B2FF7', lineHeight: 1 }}>
                   {pct}%
                 </span>
                 <span style={{ fontSize: '11px', color: '#64748b', fontWeight: 600, marginTop: '2px' }}>
@@ -262,7 +262,7 @@ export default function Result() {
                 <CheckCircle2 size={16} />
                 <span style={{ fontSize: '12px', fontWeight: 700 }}>Correct Answers</span>
               </div>
-              <div style={{ fontSize: '20px', fontWeight: 800, color: '#15803d' }}>
+              <div style={{ fontSize: '17px', fontWeight: 600, color: '#15803d' }}>
                 {correctCount} <span style={{ fontSize: '13px', fontWeight: 500, color: '#475569' }}>/ {total}</span>
               </div>
             </div>
@@ -272,7 +272,7 @@ export default function Result() {
                 <XCircle size={16} />
                 <span style={{ fontSize: '12px', fontWeight: 700 }}>Incorrect Answers</span>
               </div>
-              <div style={{ fontSize: '20px', fontWeight: 800, color: '#b91c1c' }}>
+              <div style={{ fontSize: '17px', fontWeight: 600, color: '#b91c1c' }}>
                 {incorrectCount} <span style={{ fontSize: '13px', fontWeight: 500, color: '#475569' }}>/ {total}</span>
               </div>
             </div>
@@ -282,7 +282,7 @@ export default function Result() {
                 <MinusCircle size={16} />
                 <span style={{ fontSize: '12px', fontWeight: 700 }}>Skipped Questions</span>
               </div>
-              <div style={{ fontSize: '20px', fontWeight: 800, color: '#334155' }}>
+              <div style={{ fontSize: '17px', fontWeight: 600, color: '#334155' }}>
                 {skippedCount} <span style={{ fontSize: '13px', fontWeight: 500, color: '#475569' }}>/ {total}</span>
               </div>
             </div>
@@ -292,7 +292,7 @@ export default function Result() {
                 <Clock size={16} />
                 <span style={{ fontSize: '12px', fontWeight: 700 }}>Time Spent</span>
               </div>
-              <div style={{ fontSize: '20px', fontWeight: 800, color: '#4c1d95' }}>
+              <div style={{ fontSize: '17px', fontWeight: 600, color: '#4c1d95' }}>
                 {formatTimeSpent(timeSpentSeconds)}
               </div>
             </div>
@@ -310,7 +310,7 @@ export default function Result() {
               {Object.entries(subjectResults).map(([subjName, res]: [string, any]) => (
                 <div key={subjName} style={{ padding: '10px 14px', borderRadius: '10px', backgroundColor: '#f8fafc', border: '1px solid #e2e8f0' }}>
                   <div style={{ fontSize: '12px', fontWeight: 700, color: '#1e293b', marginBottom: '2px' }}>{subjName}</div>
-                  <div style={{ fontSize: '14px', fontWeight: 800, color: '#7B2FF7' }}>
+                  <div style={{ fontSize: '14px', fontWeight: 600, color: '#7B2FF7' }}>
                     {res.score}/{res.total} ({res.pct}%)
                   </div>
                 </div>
@@ -337,7 +337,7 @@ export default function Result() {
             <Lock size={28} />
           </div>
 
-          <h3 style={{ fontSize: '20px', fontWeight: 800, color: '#0f172a', marginBottom: '8px' }}>
+          <h3 style={{ fontSize: '13px', fontWeight: 600, color: '#0f172a', marginBottom: '8px' }}>
             Unlock Detailed Question Breakdown
           </h3>
           <p style={{ fontSize: '14px', color: '#64748b', maxWidth: '500px', margin: '0 auto 20px', lineHeight: 1.5 }}>
@@ -351,12 +351,12 @@ export default function Result() {
           }}>
             <div>
               <div style={{ fontSize: '11px', fontWeight: 700, color: '#64748b', textTransform: 'uppercase' }}>Unlock Fee</div>
-              <div style={{ fontSize: '18px', fontWeight: 800, color: '#7B2FF7' }}>10 Credits</div>
+              <div style={{ fontSize: '18px', fontWeight: 600, color: '#7B2FF7' }}>10 Credits</div>
             </div>
             <div style={{ width: '1px', height: '30px', backgroundColor: '#cbd5e1' }} />
             <div>
               <div style={{ fontSize: '11px', fontWeight: 700, color: '#64748b', textTransform: 'uppercase' }}>Your Wallet Balance</div>
-              <div style={{ fontSize: '18px', fontWeight: 800, color: (walletBalance ?? 0) >= 10 ? '#16a34a' : '#dc2626' }}>
+              <div style={{ fontSize: '18px', fontWeight: 600, color: (walletBalance ?? 0) >= 10 ? '#16a34a' : '#dc2626' }}>
                 {walletBalance !== null ? `${walletBalance} Credits` : 'Loading...'}
               </div>
             </div>
@@ -405,23 +405,26 @@ export default function Result() {
           </div>
         </div>
       ) : (
-        /* Unlocked Question-by-Question Review Breakdown */
+        /* ── Unlocked: Full Answer Reveal ── */
         <div style={{ backgroundColor: '#fff', borderRadius: '20px', padding: '28px', border: '1px solid var(--glass-border)', marginBottom: '40px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', flexWrap: 'wrap', gap: '12px' }}>
+
+          {/* Header */}
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '20px', flexWrap: 'wrap', gap: '12px' }}>
             <div>
-              <h3 style={{ fontSize: '16px', fontWeight: 800, color: '#0f172a', margin: 0, display: 'flex', alignItems: 'center', gap: '6px' }}>
-                Question Review & Analysis
-                <span style={{ fontSize: '10px', backgroundColor: '#dcfce7', color: '#15803d', padding: '2px 8px', borderRadius: '6px', fontWeight: 800 }}>
+              <h3 style={{ fontSize: '13px', fontWeight: 600, color: '#0f172a', margin: '0 0 4px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <Eye size={15} color="#16a34a" />
+                Full Question Breakdown
+                <span style={{ fontSize: '10px', backgroundColor: '#dcfce7', color: '#15803d', padding: '2px 8px', borderRadius: '6px', fontWeight: 600 }}>
                   UNLOCKED
                 </span>
               </h3>
               <p style={{ fontSize: '12px', color: '#64748b', margin: 0 }}>
-                Click "Reveal Correct Answer" on any question to view the correct option key and solution.
+                All correct answers are shown below. Your selections are highlighted.
               </p>
             </div>
 
-            {/* Question Filters */}
-            <div style={{ display: 'flex', gap: '6px' }}>
+            {/* Filter tabs */}
+            <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
               {[
                 { id: 'all', label: `All (${questions.length})` },
                 { id: 'correct', label: `Correct (${correctCount})` },
@@ -435,7 +438,8 @@ export default function Result() {
                     padding: '6px 12px', borderRadius: '8px',
                     backgroundColor: filter === f.id ? '#7B2FF7' : '#f1f5f9',
                     color: filter === f.id ? '#fff' : '#475569',
-                    border: 'none', fontSize: '12px', fontWeight: 600, cursor: 'pointer'
+                    border: 'none', fontSize: '12px', fontWeight: 600, cursor: 'pointer',
+                    transition: 'all 0.15s ease'
                   }}
                 >
                   {f.label}
@@ -444,79 +448,114 @@ export default function Result() {
             </div>
           </div>
 
-          {/* Filtered Questions List */}
+          {/* Colour Legend */}
+          <div style={{
+            display: 'flex', alignItems: 'center', gap: '16px', flexWrap: 'wrap',
+            padding: '10px 14px', borderRadius: '10px', backgroundColor: '#f8fafc',
+            border: '1px solid #e2e8f0', marginBottom: '20px'
+          }}>
+            <span style={{ fontSize: '11px', fontWeight: 600, color: '#64748b' }}>Legend:</span>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', fontSize: '11px', fontWeight: 600, color: '#15803d' }}>
+              <span style={{ width: '12px', height: '12px', borderRadius: '3px', backgroundColor: '#dcfce7', border: '1.5px solid #16a34a', display: 'inline-block' }} />
+              Correct Answer
+            </span>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', fontSize: '11px', fontWeight: 600, color: '#b91c1c' }}>
+              <span style={{ width: '12px', height: '12px', borderRadius: '3px', backgroundColor: '#fee2e2', border: '1.5px solid #dc2626', display: 'inline-block' }} />
+              Your Wrong Pick
+            </span>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', fontSize: '11px', fontWeight: 600, color: '#475569' }}>
+              <span style={{ width: '12px', height: '12px', borderRadius: '3px', backgroundColor: '#f1f5f9', border: '1.5px solid #cbd5e1', display: 'inline-block' }} />
+              Not Selected
+            </span>
+          </div>
+
+          {/* Questions */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
             {filteredQuestions.map((q: any, idx: number) => {
               const userAns = answers[q.id];
               const isCorrect = userAns === q.correctAnswer;
               const isSkipped = !userAns;
-              const isRevealed = revealedQuestions.has(q.id);
+
+              // Determine question card border colour
+              const cardBorderColor = isSkipped ? '#e2e8f0' : isCorrect ? '#86efac' : '#fca5a5';
+              const cardBgColor = isSkipped ? '#ffffff' : isCorrect ? '#f0fdf4' : '#fff5f5';
+
+              const opts: any[] = Array.isArray(q.options)
+                ? q.options
+                : Object.entries(q.options || {}).map(([id, text]) => ({
+                    id,
+                    text: typeof text === 'string' ? text : (text as any)?.text || String(text)
+                  }));
 
               return (
                 <div
                   key={q.id || idx}
                   style={{
-                    padding: '20px', borderRadius: '14px',
-                    backgroundColor: '#ffffff',
-                    border: '1px solid #e2e8f0'
+                    padding: '18px 20px',
+                    borderRadius: '14px',
+                    backgroundColor: cardBgColor,
+                    border: `1px solid ${cardBorderColor}`,
+                    transition: 'all 0.2s ease'
                   }}
                 >
-                  {/* Question Header & Status */}
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+                  {/* Question header */}
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <span style={{ fontSize: '13px', fontWeight: 800, color: '#7B2FF7' }}>
-                        Question {idx + 1}
-                      </span>
-                      {!isRevealed ? (
-                        <span style={{ fontSize: '11px', fontWeight: 700, backgroundColor: '#f1f5f9', color: '#64748b', padding: '2px 8px', borderRadius: '6px', border: '1px solid #cbd5e1', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
-                          <EyeOff size={12} /> NO ANSWER REVEALED
+                      <span style={{ fontSize: '12px', fontWeight: 600, color: '#7B2FF7' }}>Q{idx + 1}</span>
+                      {isSkipped ? (
+                        <span style={{ fontSize: '10px', fontWeight: 600, backgroundColor: '#f1f5f9', color: '#64748b', padding: '2px 8px', borderRadius: '6px', display: 'inline-flex', alignItems: 'center', gap: '3px' }}>
+                          <MinusCircle size={10} /> Skipped
                         </span>
                       ) : isCorrect ? (
-                        <span style={{ fontSize: '11px', fontWeight: 700, backgroundColor: '#dcfce7', color: '#15803d', padding: '2px 8px', borderRadius: '6px', border: '1px solid #86efac', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
-                          <CheckCircle2 size={12} /> CORRECT
+                        <span style={{ fontSize: '10px', fontWeight: 600, backgroundColor: '#dcfce7', color: '#15803d', padding: '2px 8px', borderRadius: '6px', display: 'inline-flex', alignItems: 'center', gap: '3px' }}>
+                          <CheckCircle2 size={10} /> Correct
                         </span>
                       ) : (
-                        <span style={{ fontSize: '11px', fontWeight: 700, backgroundColor: '#fee2e2', color: '#b91c1c', padding: '2px 8px', borderRadius: '6px', border: '1px solid #fca5a5', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
-                          <XCircle size={12} /> INCORRECT
+                        <span style={{ fontSize: '10px', fontWeight: 600, backgroundColor: '#fee2e2', color: '#b91c1c', padding: '2px 8px', borderRadius: '6px', display: 'inline-flex', alignItems: 'center', gap: '3px' }}>
+                          <XCircle size={10} /> Wrong
                         </span>
                       )}
                     </div>
+                    {/* Correct answer key badge — always visible */}
+                    <span style={{
+                      fontSize: '11px', fontWeight: 600, color: '#15803d',
+                      backgroundColor: '#dcfce7', padding: '3px 10px', borderRadius: '20px',
+                      border: '1px solid #86efac', display: 'inline-flex', alignItems: 'center', gap: '4px'
+                    }}>
+                      <CheckCircle2 size={11} /> Answer: {q.correctAnswer}
+                    </span>
                   </div>
 
-                  <p style={{ fontSize: '14px', fontWeight: 600, color: '#0f172a', marginBottom: '16px', lineHeight: 1.5 }}>
+                  {/* Question text */}
+                  <p style={{ fontSize: '13px', fontWeight: 500, color: '#0f172a', marginBottom: '14px', lineHeight: 1.6 }}>
                     {q.question}
                   </p>
 
-                  {/* Options List */}
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '8px', marginBottom: '16px' }}>
-                    {(Array.isArray(q.options)
-                      ? q.options
-                      : Object.entries(q.options || {}).map(([id, text]) => ({
-                          id,
-                          text: typeof text === 'string' ? text : (text as any)?.text || String(text)
-                        }))
-                    ).map((opt: any) => {
+                  {/* Options — all shown, colour-coded */}
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '8px', marginBottom: '14px' }}>
+                    {opts.map((opt: any) => {
                       const isUserChoice = userAns === opt.id;
                       const isRightChoice = q.correctAnswer === opt.id;
 
-                      let optBg = '#fff';
-                      let optBorder = '#e2e8f0';
-                      let optColor = '#334155';
+                      // Priority: correct answer always green; user's wrong pick red; rest neutral
+                      let bg = '#ffffff';
+                      let border = '#e2e8f0';
+                      let color = '#64748b';
+                      let weight = 400;
+                      let icon: React.ReactNode = null;
 
-                      if (isRevealed && isRightChoice) {
-                        optBg = '#dcfce7';
-                        optBorder = '#16a34a';
-                        optColor = '#15803d';
-                      } else if (isUserChoice) {
-                        if (isRevealed) {
-                          optBg = isCorrect ? '#dcfce7' : '#fee2e2';
-                          optBorder = isCorrect ? '#16a34a' : '#dc2626';
-                          optColor = isCorrect ? '#15803d' : '#b91c1c';
-                        } else {
-                          optBg = '#f1f5f9';
-                          optBorder = '#cbd5e1';
-                          optColor = '#334155';
-                        }
+                      if (isRightChoice) {
+                        bg = '#dcfce7';
+                        border = '#16a34a';
+                        color = '#15803d';
+                        weight = 600;
+                        icon = <CheckCircle2 size={13} style={{ flexShrink: 0 }} />;
+                      } else if (isUserChoice && !isRightChoice) {
+                        bg = '#fee2e2';
+                        border = '#dc2626';
+                        color = '#b91c1c';
+                        weight = 600;
+                        icon = <XCircle size={13} style={{ flexShrink: 0 }} />;
                       }
 
                       return (
@@ -524,48 +563,35 @@ export default function Result() {
                           key={opt.id}
                           style={{
                             padding: '10px 14px', borderRadius: '10px',
-                            backgroundColor: optBg, border: `1px solid ${optBorder}`,
-                            color: optColor, fontSize: '13px', fontWeight: (isUserChoice || (isRevealed && isRightChoice)) ? 600 : 400,
-                            display: 'flex', alignItems: 'center', gap: '8px'
+                            backgroundColor: bg, border: `1.5px solid ${border}`,
+                            color, fontSize: '13px', fontWeight: weight,
+                            display: 'flex', alignItems: 'center', gap: '8px',
+                            transition: 'all 0.15s ease'
                           }}
                         >
-                          <span style={{ fontWeight: 700 }}>{opt.id}.</span>
-                          <span>{opt.text}</span>
-                          {isUserChoice && <span style={{ fontSize: '10px', marginLeft: 'auto', fontWeight: 700 }}>(Your Selection)</span>}
-                          {isRevealed && isRightChoice && !isUserChoice && <span style={{ fontSize: '10px', marginLeft: 'auto', color: '#16a34a', fontWeight: 800 }}>(Correct Key)</span>}
+                          <span style={{ fontWeight: 700, flexShrink: 0, fontSize: '12px' }}>{opt.id}.</span>
+                          <span style={{ flex: 1 }}>{opt.text}</span>
+                          {icon}
+                          {isUserChoice && isRightChoice && (
+                            <span style={{ fontSize: '10px', fontWeight: 600, color: '#15803d', marginLeft: 'auto', whiteSpace: 'nowrap' }}>✓ Your Pick</span>
+                          )}
+                          {isUserChoice && !isRightChoice && (
+                            <span style={{ fontSize: '10px', fontWeight: 600, color: '#b91c1c', marginLeft: 'auto', whiteSpace: 'nowrap' }}>Your Pick</span>
+                          )}
                         </div>
                       );
                     })}
                   </div>
 
-                  {/* Reveal Correct Answer Toggle & Explanation */}
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '10px', marginTop: '12px' }}>
-                    <button
-                      onClick={() => toggleRevealQuestion(q.id)}
-                      style={{
-                        padding: '6px 14px', borderRadius: '8px',
-                        backgroundColor: isRevealed ? '#f3e8ff' : '#ffffff',
-                        border: isRevealed ? '1px solid #c4b5fd' : '1px solid #cbd5e1',
-                        color: isRevealed ? '#6b21a8' : '#334155',
-                        fontSize: '12px', fontWeight: 700, cursor: 'pointer',
-                        display: 'inline-flex', alignItems: 'center', gap: '6px'
-                      }}
-                    >
-                      {isRevealed ? <EyeOff size={14} /> : <Eye size={14} />}
-                      <span>{isRevealed ? 'Hide Correct Answer' : 'Reveal Correct Answer & Explanation'}</span>
-                    </button>
-                  </div>
-
-                  {/* Explanation Box (Visible when revealed) */}
-                  {isRevealed && (
-                    <div style={{ marginTop: '12px', padding: '14px 16px', borderRadius: '10px', backgroundColor: '#ffffff', border: '1px solid #e2e8f0', fontSize: '13px', color: '#475569', lineHeight: 1.5, animation: 'fadeIn 0.2s ease-out' }}>
-                      <div style={{ fontWeight: 700, color: '#16a34a', marginBottom: '4px', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                        <CheckCircle2 size={15} /> Correct Answer Key: Option {q.correctAnswer}
-                      </div>
-                      <div style={{ color: '#334155' }}>
-                        <strong>Explanation: </strong>
-                        {q.explanation || 'Refer to standard subject formulas and rules for this question.'}
-                      </div>
+                  {/* Explanation — always visible when unlocked */}
+                  {q.explanation && (
+                    <div style={{
+                      marginTop: '4px', padding: '12px 14px', borderRadius: '10px',
+                      backgroundColor: '#fffbeb', border: '1px solid #fde68a',
+                      fontSize: '12px', color: '#78350f', lineHeight: 1.6
+                    }}>
+                      <span style={{ fontWeight: 600, color: '#92400e', marginRight: '4px' }}>💡 Explanation:</span>
+                      {q.explanation}
                     </div>
                   )}
                 </div>
@@ -574,6 +600,7 @@ export default function Result() {
           </div>
         </div>
       )}
+
 
       {/* Floating Balloons & Confetti Victory Celebration Overlay */}
       {showCelebration && session && (

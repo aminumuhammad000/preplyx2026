@@ -159,7 +159,7 @@ export default function Profile() {
 
       {/* Header */}
       <div style={{ marginBottom: '28px' }}>
-        <h1 style={{ fontSize: '24px', fontWeight: 700, color: 'var(--color-text-main)', marginBottom: '4px' }}>
+        <h1 style={{ fontSize: '18px', fontWeight: 600, color: 'var(--color-text-main)', marginBottom: '4px' }}>
           Profile & Account
         </h1>
         <p style={{ fontSize: '14px', color: 'var(--color-text-muted)' }}>
@@ -190,7 +190,7 @@ export default function Profile() {
               <div style={{
                 width: '84px', height: '84px', borderRadius: '50%',
                 background: 'linear-gradient(135deg, #4B0FA3 0%, #7B2FF7 100%)',
-                color: '#fff', fontSize: '32px', fontWeight: 800,
+                color: '#fff', fontSize: '24px', fontWeight: 600,
                 display: 'flex', alignItems: 'center', justifyContent: 'center'
               }}>
                 {user?.name?.charAt(0) || 'U'}
@@ -215,7 +215,7 @@ export default function Profile() {
           </div>
 
           <div style={{ flex: 1 }}>
-            <h2 style={{ fontSize: '20px', fontWeight: 800, color: 'var(--color-text-main)', marginBottom: '4px' }}>
+            <h2 style={{ fontSize: '16px', fontWeight: 600, color: 'var(--color-text-main)', marginBottom: '4px' }}>
               {user?.name || user?.full_name || 'Student Candidate'}
             </h2>
             <p style={{ fontSize: '13px', color: 'var(--color-text-muted)', margin: 0 }}>
@@ -246,9 +246,9 @@ export default function Profile() {
           <div style={{ padding: '16px', borderRadius: '12px', backgroundColor: '#f8fafc', border: '1px solid #e2e8f0' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px', color: '#64748b' }}>
               <UserIcon size={16} />
-              <span style={{ fontSize: '12px', fontWeight: 700, textTransform: 'uppercase' }}>Full Name</span>
+              <span style={{ fontSize: '11px', fontWeight: 500, textTransform: 'uppercase' }}>Full Name</span>
             </div>
-            <div style={{ fontSize: '15px', fontWeight: 700, color: '#0f172a' }}>
+            <div style={{ fontSize: '14px', fontWeight: 500, color: '#0f172a' }}>
               {user?.full_name || user?.name || 'Not provided'}
             </div>
           </div>
@@ -256,9 +256,9 @@ export default function Profile() {
           <div style={{ padding: '16px', borderRadius: '12px', backgroundColor: '#f8fafc', border: '1px solid #e2e8f0' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px', color: '#64748b' }}>
               <Mail size={16} />
-              <span style={{ fontSize: '12px', fontWeight: 700, textTransform: 'uppercase' }}>Email Address</span>
+              <span style={{ fontSize: '11px', fontWeight: 500, textTransform: 'uppercase' }}>Email Address</span>
             </div>
-            <div style={{ fontSize: '15px', fontWeight: 700, color: '#0f172a' }}>
+            <div style={{ fontSize: '14px', fontWeight: 500, color: '#0f172a' }}>
               {user?.email || 'Not provided'}
             </div>
           </div>
@@ -266,9 +266,9 @@ export default function Profile() {
           <div style={{ padding: '16px', borderRadius: '12px', backgroundColor: '#f8fafc', border: '1px solid #e2e8f0' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px', color: '#64748b' }}>
               <Phone size={16} />
-              <span style={{ fontSize: '12px', fontWeight: 700, textTransform: 'uppercase' }}>Phone Number</span>
+              <span style={{ fontSize: '11px', fontWeight: 500, textTransform: 'uppercase' }}>Phone Number</span>
             </div>
-            <div style={{ fontSize: '15px', fontWeight: 700, color: '#0f172a' }}>
+            <div style={{ fontSize: '14px', fontWeight: 500, color: '#0f172a' }}>
               {user?.phone || 'Not provided'}
             </div>
           </div>
@@ -276,9 +276,9 @@ export default function Profile() {
           <div style={{ padding: '16px', borderRadius: '12px', backgroundColor: '#f8fafc', border: '1px solid #e2e8f0' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px', color: '#64748b' }}>
               <Shield size={16} />
-              <span style={{ fontSize: '12px', fontWeight: 700, textTransform: 'uppercase' }}>Primary Exam Target</span>
+              <span style={{ fontSize: '11px', fontWeight: 500, textTransform: 'uppercase' }}>Primary Exam Target</span>
             </div>
-            <div style={{ fontSize: '15px', fontWeight: 700, color: '#7B2FF7' }}>
+            <div style={{ fontSize: '14px', fontWeight: 500, color: '#7B2FF7' }}>
               {user?.exam_type || 'JAMB UTME'}
             </div>
           </div>
@@ -298,7 +298,7 @@ export default function Profile() {
             maxWidth: '480px', width: '100%', boxShadow: '0 20px 50px rgba(0,0,0,0.2)'
           }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-              <h3 style={{ fontSize: '18px', fontWeight: 800, color: '#0f172a', margin: 0 }}>Edit Profile Details</h3>
+              <h3 style={{ fontSize: '14px', fontWeight: 600, color: '#0f172a', margin: 0 }}>Edit Profile Details</h3>
               <button onClick={() => setIsEditModalOpen(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#64748b' }}>
                 <X size={20} />
               </button>

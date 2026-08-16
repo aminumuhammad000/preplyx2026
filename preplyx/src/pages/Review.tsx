@@ -84,7 +84,7 @@ export default function Review() {
           <BookOpen size={20} color="#fff" />
         </div>
         <div style={{ textAlign: 'center' }}>
-          <div style={{ fontSize: '15px', fontWeight: 700, color: 'var(--color-text-main)', marginBottom: '4px' }}>
+          <div style={{ fontSize: '13px', fontWeight: 600, color: 'var(--color-text-main)', marginBottom: '4px' }}>
             Loading Answered Questions & Past Sessions...
           </div>
           <div style={{ fontSize: '12px', color: 'var(--color-text-muted)' }}>
@@ -100,7 +100,7 @@ export default function Review() {
       
       {/* Header */}
       <div style={{ marginBottom: '24px' }}>
-        <h1 style={{ fontSize: '24px', fontWeight: 800, color: 'var(--color-text-main)', marginBottom: '4px' }}>
+        <h1 style={{ fontSize: '18px', fontWeight: 600, color: 'var(--color-text-main)', marginBottom: '4px' }}>
           Answered Questions & Exam History
         </h1>
         <p style={{ fontSize: '13px', color: 'var(--color-text-muted)' }}>
@@ -116,7 +116,7 @@ export default function Review() {
             padding: '10px 20px', borderRadius: '12px',
             backgroundColor: activeTab === 'sessions' ? '#7B2FF7' : '#f1f5f9',
             color: activeTab === 'sessions' ? '#ffffff' : '#475569',
-            border: 'none', fontSize: '13px', fontWeight: 800, cursor: 'pointer',
+            border: 'none', fontSize: '13px', fontWeight: 600, cursor: 'pointer',
             display: 'flex', alignItems: 'center', gap: '8px'
           }}
         >
@@ -129,7 +129,7 @@ export default function Review() {
             padding: '10px 20px', borderRadius: '12px',
             backgroundColor: activeTab === 'questions' ? '#7B2FF7' : '#f1f5f9',
             color: activeTab === 'questions' ? '#ffffff' : '#475569',
-            border: 'none', fontSize: '13px', fontWeight: 800, cursor: 'pointer',
+            border: 'none', fontSize: '13px', fontWeight: 600, cursor: 'pointer',
             display: 'flex', alignItems: 'center', gap: '8px'
           }}
         >
@@ -171,7 +171,7 @@ export default function Review() {
               borderRadius: '20px', border: '1px solid #e2e8f0'
             }}>
               <BookOpen size={40} color="#7B2FF7" style={{ margin: '0 auto 12px', opacity: 0.6 }} />
-              <h3 style={{ fontSize: '16px', fontWeight: 800, color: '#0f172a', marginBottom: '6px' }}>
+              <h3 style={{ fontSize: '14px', fontWeight: 600, color: '#0f172a', marginBottom: '6px' }}>
                 No Exam Sessions Found
               </h3>
               <p style={{ fontSize: '13px', color: '#64748b', marginBottom: '20px' }}>
@@ -207,13 +207,13 @@ export default function Review() {
                   >
                     <div>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '4px' }}>
-                        <span style={{ fontSize: '16px', fontWeight: 800, color: '#0f172a' }}>
+                        <span style={{ fontSize: '16px', fontWeight: 600, color: '#0f172a' }}>
                           {sess.exam || 'JAMB'} • {sess.subject || 'General'}
                         </span>
                         
                         {/* Status Badge */}
                         <span style={{
-                          fontSize: '11px', fontWeight: 800, padding: '2px 8px', borderRadius: '6px',
+                          fontSize: '11px', fontWeight: 600, padding: '2px 8px', borderRadius: '6px',
                           backgroundColor: st === 'completed' ? '#dcfce7' : st === 'timed_out' ? '#fee2e2' : st === 'abandoned_0_answers' ? '#f3f4f6' : '#fef3c7',
                           color: st === 'completed' ? '#15803d' : st === 'timed_out' ? '#b91c1c' : st === 'abandoned_0_answers' ? '#4b5563' : '#b45309'
                         }}>
@@ -221,7 +221,7 @@ export default function Review() {
                         </span>
 
                         <span style={{
-                          fontSize: '11px', fontWeight: 800, padding: '3px 10px', borderRadius: '20px',
+                          fontSize: '11px', fontWeight: 600, padding: '3px 10px', borderRadius: '20px',
                           backgroundColor: unlocked ? '#dcfce7' : '#f3e8ff',
                           color: unlocked ? '#15803d' : '#6b21a8',
                           display: 'inline-flex', alignItems: 'center', gap: '4px'
@@ -266,15 +266,15 @@ export default function Review() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: '14px', marginBottom: '24px' }}>
             <div style={{ padding: '16px', borderRadius: '14px', backgroundColor: '#fff', border: '1px solid var(--glass-border)' }}>
               <p style={{ fontSize: '11px', fontWeight: 700, color: '#64748b', textTransform: 'uppercase', marginBottom: '2px' }}>Total Questions</p>
-              <p style={{ fontSize: '22px', fontWeight: 900, color: '#0f172a', margin: 0 }}>{stats.total}</p>
+              <p style={{ fontSize: '17px', fontWeight: 700, color: '#0f172a', margin: 0 }}>{stats.total}</p>
             </div>
             <div style={{ padding: '16px', borderRadius: '14px', backgroundColor: '#fff', border: '1px solid var(--glass-border)' }}>
               <p style={{ fontSize: '11px', fontWeight: 700, color: '#16a34a', textTransform: 'uppercase', marginBottom: '2px' }}>Correct</p>
-              <p style={{ fontSize: '22px', fontWeight: 900, color: '#16a34a', margin: 0 }}>{stats.correct}</p>
+              <p style={{ fontSize: '17px', fontWeight: 700, color: '#16a34a', margin: 0 }}>{stats.correct}</p>
             </div>
             <div style={{ padding: '16px', borderRadius: '14px', backgroundColor: '#fff', border: '1px solid var(--glass-border)' }}>
               <p style={{ fontSize: '11px', fontWeight: 700, color: '#dc2626', textTransform: 'uppercase', marginBottom: '2px' }}>Incorrect</p>
-              <p style={{ fontSize: '22px', fontWeight: 900, color: '#dc2626', margin: 0 }}>{stats.incorrect}</p>
+              <p style={{ fontSize: '17px', fontWeight: 700, color: '#dc2626', margin: 0 }}>{stats.incorrect}</p>
             </div>
           </div>
 

@@ -34,12 +34,12 @@ export default function Dashboard() {
         }}>
           <div>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
-              <span style={{ fontSize: '11px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '1px', color: '#7c3aed', display: 'flex', alignItems: 'center', gap: '4px' }}>
+              <span style={{ fontSize: '11px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px', color: '#7c3aed', display: 'flex', alignItems: 'center', gap: '4px' }}>
                 <Sparkles size={13} color="#7c3aed" /> Daily Challenge
               </span>
               <DailyChallengeBadge />
             </div>
-            <h2 style={{ fontSize: '16px', fontWeight: 800, marginBottom: '6px', color: '#0f172a' }}>Today's 10-Question Quiz</h2>
+            <h2 style={{ fontSize: '14px', fontWeight: 600, marginBottom: '6px', color: '#0f172a' }}>Today's 10-Question Quiz</h2>
             <p style={{ fontSize: '13px', color: '#64748b', marginBottom: '18px', lineHeight: 1.4 }}>
               Complete to earn 50 Preplyx coins and extend your streak.
             </p>
@@ -60,11 +60,11 @@ export default function Dashboard() {
       </div>
 
       {/* Stats row */}
-      <p style={{ fontSize: '11px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '1.2px', color: '#64748b', marginBottom: '12px' }}>Your Stats This Week</p>
+      <p style={{ fontSize: '11px', fontWeight: 500, textTransform: 'uppercase', letterSpacing: '1px', color: '#64748b', marginBottom: '12px' }}>Your Stats This Week</p>
       <DashboardStats />
 
       {/* Exam Selection */}
-      <p style={{ fontSize: '11px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '1.2px', color: '#64748b', marginBottom: '12px' }}>Select Exam Type</p>
+      <p style={{ fontSize: '11px', fontWeight: 500, textTransform: 'uppercase', letterSpacing: '1px', color: '#64748b', marginBottom: '12px' }}>Select Exam Type</p>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 220px), 1fr))', gap: '16px', marginBottom: '28px' }}>
         {[
           { name: 'JAMB', desc: '7 Subjects · 2004–2024', background: 'linear-gradient(135deg, #6d28d9 0%, #4c1d95 100%)', border: 'rgba(109, 40, 217, 0.3)', Icon: BookOpen },
@@ -79,7 +79,7 @@ export default function Dashboard() {
             position: 'relative', overflow: 'hidden'
           }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', position: 'relative', zIndex: 1 }}>
-              <span style={{ fontSize: '20px', fontWeight: 900, color: '#fff', letterSpacing: '-0.5px' }}>{exam.name}</span>
+              <span style={{ fontSize: '16px', fontWeight: 700, color: '#fff', letterSpacing: '-0.5px' }}>{exam.name}</span>
               <div style={{
                 width: '36px', height: '36px', borderRadius: '10px',
                 backgroundColor: 'rgba(255, 255, 255, 0.18)', display: 'flex',
@@ -89,7 +89,7 @@ export default function Dashboard() {
               </div>
             </div>
             <span style={{ fontSize: '12px', color: 'rgba(255, 255, 255, 0.85)', marginTop: '8px', fontWeight: 600, position: 'relative', zIndex: 1 }}>{exam.desc}</span>
-            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', marginTop: '16px', fontSize: '12px', fontWeight: 800, color: '#fff', position: 'relative', zIndex: 1 }}>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', marginTop: '16px', fontSize: '12px', fontWeight: 600, color: '#fff', position: 'relative', zIndex: 1 }}>
               Practice Now <ArrowRight size={14} strokeWidth={2.5} />
             </span>
           </Link>
@@ -97,7 +97,7 @@ export default function Dashboard() {
       </div>
 
       {/* Recent Performance */}
-      <p style={{ fontSize: '11px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '1.2px', color: '#64748b', marginBottom: '12px' }}>Recent Sessions</p>
+      <p style={{ fontSize: '11px', fontWeight: 500, textTransform: 'uppercase', letterSpacing: '1px', color: '#64748b', marginBottom: '12px' }}>Recent Sessions</p>
       <RecentSessionsList />
 
     </div>

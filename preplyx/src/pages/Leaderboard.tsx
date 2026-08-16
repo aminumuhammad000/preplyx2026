@@ -135,7 +135,7 @@ export default function Leaderboard() {
           <Trophy size={24} color="#ffffff" />
         </div>
         <div style={{ textAlign: 'center' }}>
-          <h3 style={{ fontSize: '15px', fontWeight: 600, color: '#0f172a', marginBottom: '4px' }}>Loading Leaderboard Rankings</h3>
+          <h3 style={{ fontSize: '13px', fontWeight: 600, color: '#0f172a', marginBottom: '4px' }}>Loading Leaderboard Rankings</h3>
           <p style={{ fontSize: '13px', color: '#64748b' }}>Fetching candidate scores across Nigeria...</p>
         </div>
       </div>
@@ -434,7 +434,7 @@ export default function Leaderboard() {
             <div style={{ fontSize: '11px', color: '#64748b', marginBottom: '8px' }}>
               {top3.second.exam ? `${top3.second.exam} Candidate` : (top3.second.school || 'Silver Contender')}
             </div>
-            <div style={{ fontSize: '17px', fontWeight: 700, color: '#7B2FF7' }}>
+            <div style={{ fontSize: '14px', fontWeight: 600, color: '#7B2FF7' }}>
               {top3.second.points.toLocaleString()} <span style={{ fontSize: '11px', color: '#94a3b8', fontWeight: 500 }}>XP</span>
             </div>
           </div>
@@ -467,7 +467,7 @@ export default function Leaderboard() {
                 width: '60px', height: '60px', borderRadius: '50%',
                 background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)', color: '#ffffff',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontSize: '19px', fontWeight: 700, boxShadow: '0 4px 12px rgba(245, 158, 11, 0.3)'
+                fontSize: '16px', fontWeight: 700, boxShadow: '0 4px 12px rgba(245, 158, 11, 0.3)'
               }}>
                 {top3.first.avatar || '1st'}
               </div>
@@ -481,7 +481,7 @@ export default function Leaderboard() {
             <div style={{ fontSize: '11.5px', color: '#d97706', fontWeight: 500, marginBottom: '8px' }}>
               {top3.first.exam ? `${top3.first.exam} Top Candidate` : (top3.first.school || 'National Champion')}
             </div>
-            <div style={{ fontSize: '20px', fontWeight: 700, color: '#7B2FF7' }}>
+            <div style={{ fontSize: '16px', fontWeight: 700, color: '#7B2FF7' }}>
               {top3.first.points.toLocaleString()} <span style={{ fontSize: '11.5px', color: '#94a3b8', fontWeight: 500 }}>XP</span>
             </div>
           </div>
@@ -522,7 +522,7 @@ export default function Leaderboard() {
             <div style={{ fontSize: '11px', color: '#64748b', marginBottom: '8px' }}>
               {top3.third.exam ? `${top3.third.exam} Candidate` : (top3.third.school || 'Bronze Contender')}
             </div>
-            <div style={{ fontSize: '17px', fontWeight: 700, color: '#7B2FF7' }}>
+            <div style={{ fontSize: '14px', fontWeight: 600, color: '#7B2FF7' }}>
               {top3.third.points.toLocaleString()} <span style={{ fontSize: '11px', color: '#94a3b8', fontWeight: 500 }}>XP</span>
             </div>
           </div>
@@ -549,7 +549,7 @@ export default function Leaderboard() {
           flexWrap: 'wrap'
         }}>
           <div>
-            <h3 style={{ fontSize: '15px', fontWeight: 600, color: '#0f172a', margin: 0 }}>
+            <h3 style={{ fontSize: '13px', fontWeight: 600, color: '#0f172a', margin: 0 }}>
               {examFilter === 'all' ? 'Full Rankings' : `${examFilter} Candidate Rankings`}
             </h3>
             <p style={{ fontSize: '12px', color: '#64748b', margin: '2px 0 0' }}>Sorted by accumulated practice XP points</p>

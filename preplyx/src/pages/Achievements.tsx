@@ -169,7 +169,7 @@ export default function Achievements() {
       {/* Header & Top Controls */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px', marginBottom: '20px' }}>
         <div>
-          <h1 style={{ fontSize: '22px', fontWeight: 800, color: 'var(--color-text-main)', margin: '0 0 2px 0', letterSpacing: '-0.5px' }}>
+          <h1 style={{ fontSize: '17px', fontWeight: 600, color: 'var(--color-text-main)', margin: '0 0 2px 0', letterSpacing: '-0.5px' }}>
             Achievements & Badges
           </h1>
           <p style={{ fontSize: '13px', color: 'var(--color-text-muted)', margin: 0 }}>
@@ -212,12 +212,12 @@ export default function Achievements() {
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '4px' }}>
               <Crown size={15} color="#f59e0b" />
-              <span style={{ fontSize: '11px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.8px', opacity: 0.9 }}>
+              <span style={{ fontSize: '11px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.8px', opacity: 0.9 }}>
                 Level {currentLevel} Scholar Rank
               </span>
             </div>
 
-            <div style={{ fontSize: '30px', fontWeight: 900, letterSpacing: '-0.5px', marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <div style={{ fontSize: '24px', fontWeight: 700, letterSpacing: '-0.5px', marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '8px' }}>
               <span>{currentPoints.toLocaleString()} XP</span>
               <span style={{ fontSize: '11px', fontWeight: 700, backgroundColor: 'rgba(255,255,255,0.18)', padding: '3px 8px', borderRadius: '10px' }}>
                 <Sparkles size={12} style={{ display: 'inline', marginRight: '3px', color: '#f59e0b' }} />
@@ -248,7 +248,7 @@ export default function Achievements() {
               padding: '12px 18px', borderRadius: '14px', border: '1px solid rgba(255, 255, 255, 0.18)',
               minWidth: '115px', textAlign: 'center'
             }}>
-              <div style={{ fontSize: '20px', fontWeight: 900 }}>
+              <div style={{ fontSize: '18px', fontWeight: 700 }}>
                 {userProgress.unlocked} / {userProgress.totalAchievements}
               </div>
               <div style={{ fontSize: '10px', opacity: 0.8, textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.5px' }}>
@@ -261,7 +261,7 @@ export default function Achievements() {
               padding: '12px 18px', borderRadius: '14px', border: '1px solid rgba(255, 255, 255, 0.18)',
               minWidth: '115px', textAlign: 'center'
             }}>
-              <div style={{ fontSize: '20px', fontWeight: 900, color: '#f59e0b' }}>
+              <div style={{ fontSize: '18px', fontWeight: 700, color: '#f59e0b' }}>
                 {Math.round((userProgress.unlocked / Math.max(1, userProgress.totalAchievements)) * 100)}%
               </div>
               <div style={{ fontSize: '10px', opacity: 0.8, textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.5px' }}>
@@ -363,7 +363,7 @@ export default function Achievements() {
                 {/* Header Tag & Status */}
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
                   <span style={{
-                    fontSize: '9px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.5px',
+                    fontSize: '9px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px',
                     color: getRarityColor(item.rarity || 'Rare'), backgroundColor: `${getRarityColor(item.rarity || 'Rare')}12`,
                     padding: '2px 7px', borderRadius: '8px'
                   }}>
@@ -419,7 +419,7 @@ export default function Achievements() {
                   )}
 
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid #f8fafc', paddingTop: '10px' }}>
-                    <span style={{ fontSize: '11px', fontWeight: 800, color: '#f59e0b', display: 'flex', alignItems: 'center', gap: '3px' }}>
+                    <span style={{ fontSize: '11px', fontWeight: 600, color: '#f59e0b', display: 'flex', alignItems: 'center', gap: '3px' }}>
                       <Sparkles size={12} /> +{xpReward} XP
                     </span>
 
@@ -535,14 +535,14 @@ export default function Achievements() {
               })()}
 
               <span style={{
-                fontSize: '10px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.5px',
+                fontSize: '10px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px',
                 color: getRarityColor(selectedBadge.rarity || 'Rare'), backgroundColor: `${getRarityColor(selectedBadge.rarity || 'Rare')}15`,
                 padding: '4px 12px', borderRadius: '12px'
               }}>
                 {selectedBadge.rarity || 'Scholar Milestone'}
               </span>
 
-              <h2 style={{ fontSize: '20px', fontWeight: 900, color: '#0f172a', margin: '10px 0 4px 0' }}>
+              <h2 style={{ fontSize: '16px', fontWeight: 600, color: '#0f172a', margin: '10px 0 4px 0' }}>
                 {selectedBadge.title || selectedBadge.name}
               </h2>
               <p style={{ fontSize: '13px', color: '#64748b', margin: 0, maxWidth: '320px', marginLeft: 'auto', marginRight: 'auto' }}>
@@ -554,7 +554,7 @@ export default function Achievements() {
               <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', marginBottom: '24px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px' }}>
                   <span style={{ color: '#64748b' }}>Reward Points</span>
-                  <span style={{ fontWeight: 800, color: '#f59e0b', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                  <span style={{ fontWeight: 600, color: '#f59e0b', display: 'flex', alignItems: 'center', gap: '4px' }}>
                     <Sparkles size={14} /> +{selectedBadge.xp || selectedBadge.id * 100} XP
                   </span>
                 </div>

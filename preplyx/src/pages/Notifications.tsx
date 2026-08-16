@@ -103,7 +103,7 @@ export default function Notifications() {
       {/* Header */}
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px', justifyContent: 'space-between', alignItems: 'center', marginBottom: '28px' }}>
         <div>
-          <h1 style={{ fontSize: '24px', fontWeight: 700, color: 'var(--color-text-main)', marginBottom: '4px' }}>
+          <h1 style={{ fontSize: '18px', fontWeight: 600, color: 'var(--color-text-main)', marginBottom: '4px' }}>
             Notifications
           </h1>
           <p style={{ fontSize: '14px', color: 'var(--color-text-muted)' }}>
@@ -233,7 +233,7 @@ export default function Notifications() {
                   </div>
                 <div style={{ flex: 1 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
-                    <h4 style={{ fontSize: '14px', fontWeight: 700, color: 'var(--color-text-main)' }}>
+                    <h4 style={{ fontSize: '14px', fontWeight: 600, color: 'var(--color-text-main)' }}>
                       {notification.title}
                     </h4>
                     <span style={{

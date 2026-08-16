@@ -431,13 +431,13 @@ export default function Challenge() {
           <div style={{
             display: 'inline-flex', alignItems: 'center', gap: '6px',
             padding: '6px 14px', borderRadius: '20px', backgroundColor: 'rgba(255, 255, 255, 0.18)',
-            fontSize: '12px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.5px',
+            fontSize: '12px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px',
             marginBottom: '12px'
           }}>
             <Zap size={15} color="#FFD700" /> Real-Time 1v1 CBT Battle Mode
           </div>
 
-          <h1 style={{ fontSize: '28px', fontWeight: 900, marginBottom: '8px', lineHeight: 1.2 }}>
+          <h1 style={{ fontSize: '20px', fontWeight: 600, marginBottom: '6px', lineHeight: 1.2 }}>
             Challenge a Friend to a CBT Exam Match
           </h1>
           <p style={{ fontSize: '14px', color: 'rgba(255, 255, 255, 0.9)', maxWidth: '640px', lineHeight: 1.5 }}>
@@ -462,7 +462,7 @@ export default function Challenge() {
               <UserPlus size={22} />
             </div>
             <div>
-              <h3 style={{ fontSize: '17px', fontWeight: 800, color: 'var(--color-text-main)', margin: 0 }}>
+              <h3 style={{ fontSize: '17px', fontWeight: 600, color: 'var(--color-text-main)', margin: 0 }}>
                 Create Challenge Room
               </h3>
               <p style={{ fontSize: '12px', color: 'var(--color-text-muted)', margin: 0 }}>
@@ -473,7 +473,7 @@ export default function Challenge() {
 
           <form onSubmit={handleCreateChallenge} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
             <div>
-              <label style={{ fontSize: '12px', fontWeight: 700, color: 'var(--color-text-main)', display: 'block', marginBottom: '6px' }}>
+              <label style={{ fontSize: '12px', fontWeight: 500, color: 'var(--color-text-main)', display: 'block', marginBottom: '6px' }}>
                 Select Exam Target
               </label>
               <select
@@ -493,7 +493,7 @@ export default function Challenge() {
             </div>
 
             <div>
-              <label style={{ fontSize: '12px', fontWeight: 700, color: 'var(--color-text-main)', display: 'block', marginBottom: '6px' }}>
+              <label style={{ fontSize: '12px', fontWeight: 500, color: 'var(--color-text-main)', display: 'block', marginBottom: '6px' }}>
                 Select Subject
               </label>
               <select
@@ -517,7 +517,7 @@ export default function Challenge() {
 
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
               <div>
-                <label style={{ fontSize: '12px', fontWeight: 700, color: 'var(--color-text-main)', display: 'block', marginBottom: '6px' }}>
+                <label style={{ fontSize: '12px', fontWeight: 500, color: 'var(--color-text-main)', display: 'block', marginBottom: '6px' }}>
                   Questions
                 </label>
                 <select
@@ -536,7 +536,7 @@ export default function Challenge() {
               </div>
 
               <div>
-                <label style={{ fontSize: '12px', fontWeight: 700, color: 'var(--color-text-main)', display: 'block', marginBottom: '6px' }}>
+                <label style={{ fontSize: '12px', fontWeight: 500, color: 'var(--color-text-main)', display: 'block', marginBottom: '6px' }}>
                   Time Limit
                 </label>
                 <select
@@ -556,7 +556,7 @@ export default function Challenge() {
             </div>
 
             <div>
-              <label style={{ fontSize: '12px', fontWeight: 700, color: 'var(--color-text-main)', display: 'block', marginBottom: '6px' }}>
+              <label style={{ fontSize: '12px', fontWeight: 500, color: 'var(--color-text-main)', display: 'block', marginBottom: '6px' }}>
                 Friend's Name / Tag (Optional)
               </label>
               <input
@@ -578,7 +578,7 @@ export default function Challenge() {
               style={{
                 marginTop: '8px', padding: '14px', borderRadius: '12px',
                 background: 'linear-gradient(135deg, #7B2FF7 0%, #4B0FA3 100%)',
-                color: '#ffffff', border: 'none', fontWeight: 800, fontSize: '14px',
+                color: '#ffffff', border: 'none', fontWeight: 600, fontSize: '14px',
                 cursor: creating ? 'not-allowed' : 'pointer',
                 boxShadow: '0 4px 14px rgba(123, 47, 247, 0.35)',
                 display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px'
@@ -599,7 +599,7 @@ export default function Challenge() {
             border: generatedRoomCode ? '2px solid #7B2FF7' : '1px solid var(--glass-border)',
             boxShadow: '0 4px 16px rgba(0,0,0,0.03)', textAlign: 'center'
           }}>
-            <h3 style={{ fontSize: '16px', fontWeight: 800, color: 'var(--color-text-main)', marginBottom: '6px' }}>
+            <h3 style={{ fontSize: '13px', fontWeight: 600, color: 'var(--color-text-main)', marginBottom: '6px' }}>
               Your Challenge Invitation Link
             </h3>
             <p style={{ fontSize: '12px', color: 'var(--color-text-muted)', marginBottom: '20px' }}>
@@ -612,10 +612,10 @@ export default function Challenge() {
                   padding: '16px', borderRadius: '14px', backgroundColor: '#f3e8ff',
                   border: '1px dashed #7B2FF7', marginBottom: '16px'
                 }}>
-                  <div style={{ fontSize: '11px', fontWeight: 800, color: '#6b21a8', textTransform: 'uppercase', marginBottom: '4px' }}>
+                  <div style={{ fontSize: '11px', fontWeight: 600, color: '#6b21a8', textTransform: 'uppercase', marginBottom: '4px' }}>
                     ROOM CODE
                   </div>
-                  <div style={{ fontSize: '24px', fontWeight: 900, color: '#7B2FF7', letterSpacing: '1px' }}>
+                  <div style={{ fontSize: '19px', fontWeight: 700, color: '#7B2FF7', letterSpacing: '0.5px' }}>
                     {generatedRoomCode}
                   </div>
                 </div>
@@ -654,7 +654,7 @@ export default function Challenge() {
                   style={{
                     width: '100%', padding: '14px', borderRadius: '12px',
                     backgroundColor: '#16a34a', color: '#ffffff',
-                    border: 'none', fontWeight: 800, fontSize: '14px', cursor: 'pointer',
+                    border: 'none', fontWeight: 600, fontSize: '14px', cursor: 'pointer',
                     boxShadow: '0 4px 14px rgba(22, 163, 74, 0.35)',
                     display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px'
                   }}
@@ -677,7 +677,7 @@ export default function Challenge() {
             backgroundColor: '#ffffff', borderRadius: '20px', padding: '24px',
             border: '1px solid var(--glass-border)', boxShadow: '0 4px 16px rgba(0,0,0,0.03)'
           }}>
-            <h3 style={{ fontSize: '15px', fontWeight: 800, color: 'var(--color-text-main)', marginBottom: '4px' }}>
+            <h3 style={{ fontSize: '13px', fontWeight: 600, color: 'var(--color-text-main)', marginBottom: '4px' }}>
               Have a Friend's Room Code?
             </h3>
             <p style={{ fontSize: '12px', color: 'var(--color-text-muted)', marginBottom: '14px' }}>
@@ -722,14 +722,14 @@ export default function Challenge() {
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }}>
           <ShieldAlert size={20} color="#7B2FF7" />
-          <h3 style={{ fontSize: '16px', fontWeight: 800, color: 'var(--color-text-main)', margin: 0 }}>
+          <h3 style={{ fontSize: '13px', fontWeight: 600, color: 'var(--color-text-main)', margin: 0 }}>
             1v1 Challenge Match Rules & Scoring
           </h3>
         </div>
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '16px' }}>
           <div style={{ padding: '16px', borderRadius: '12px', backgroundColor: '#f8fafc', border: '1px solid #e2e8f0' }}>
-            <div style={{ fontWeight: 800, fontSize: '13px', color: '#7B2FF7', marginBottom: '4px' }}>
+            <div style={{ fontWeight: 600, fontSize: '13px', color: '#7B2FF7', marginBottom: '4px' }}>
               1. Identical Question Set
             </div>
             <div style={{ fontSize: '12px', color: '#475569', lineHeight: 1.4 }}>
@@ -738,7 +738,7 @@ export default function Challenge() {
           </div>
 
           <div style={{ padding: '16px', borderRadius: '12px', backgroundColor: '#f8fafc', border: '1px solid #e2e8f0' }}>
-            <div style={{ fontWeight: 800, fontSize: '13px', color: '#7B2FF7', marginBottom: '4px' }}>
+            <div style={{ fontWeight: 600, fontSize: '13px', color: '#7B2FF7', marginBottom: '4px' }}>
               2. Synchronized Timer
             </div>
             <div style={{ fontSize: '12px', color: '#475569', lineHeight: 1.4 }}>
@@ -747,7 +747,7 @@ export default function Challenge() {
           </div>
 
           <div style={{ padding: '16px', borderRadius: '12px', backgroundColor: '#f8fafc', border: '1px solid #e2e8f0' }}>
-            <div style={{ fontWeight: 800, fontSize: '13px', color: '#7B2FF7', marginBottom: '4px' }}>
+            <div style={{ fontWeight: 600, fontSize: '13px', color: '#7B2FF7', marginBottom: '4px' }}>
               3. Victory Flyer & PDF Certificate
             </div>
             <div style={{ fontSize: '12px', color: '#475569', lineHeight: 1.4 }}>
@@ -756,7 +756,7 @@ export default function Challenge() {
           </div>
 
           <div style={{ padding: '16px', borderRadius: '12px', backgroundColor: '#f8fafc', border: '1px solid #e2e8f0' }}>
-            <div style={{ fontWeight: 800, fontSize: '13px', color: '#7B2FF7', marginBottom: '4px' }}>
+            <div style={{ fontWeight: 600, fontSize: '13px', color: '#7B2FF7', marginBottom: '4px' }}>
               4. +50 Leaderboard Points
             </div>
             <div style={{ fontSize: '12px', color: '#475569', lineHeight: 1.4 }}>
@@ -772,7 +772,7 @@ export default function Challenge() {
         border: '1px solid var(--glass-border)', boxShadow: '0 4px 16px rgba(0,0,0,0.03)'
       }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-          <h3 style={{ fontSize: '16px', fontWeight: 800, color: 'var(--color-text-main)', margin: 0 }}>
+          <h3 style={{ fontSize: '13px', fontWeight: 600, color: 'var(--color-text-main)', margin: 0 }}>
             Recent Challenge Match History
           </h3>
           <button
@@ -803,12 +803,12 @@ export default function Challenge() {
             <tbody>
               {matches.map(m => (
                 <tr key={m.id} style={{ borderBottom: '1px solid #f1f5f9' }}>
-                  <td style={{ padding: '14px 12px', fontWeight: 800, color: '#7B2FF7' }}>{m.id}</td>
+                  <td style={{ padding: '14px 12px', fontWeight: 600, color: '#7B2FF7' }}>{m.id}</td>
                   <td style={{ padding: '14px 12px', fontWeight: 600, color: '#0f172a' }}>{m.exam} {m.subject}</td>
                   <td style={{ padding: '14px 12px', color: '#334155', fontWeight: 600 }}>{m.opponent}</td>
                   <td style={{ padding: '14px 12px', fontWeight: 700, color: '#16a34a' }}>{m.myScore}</td>
                   <td style={{ padding: '14px 12px', color: '#64748b' }}>{m.opponentScore}</td>
-                  <td style={{ padding: '14px 12px', fontWeight: 800, color: m.result.includes('WON') ? '#16a34a' : '#d97706' }}>
+                  <td style={{ padding: '14px 12px', fontWeight: 600, color: m.result.includes('WON') ? '#16a34a' : '#d97706' }}>
                     {m.result}
                   </td>
                   <td style={{ padding: '14px 12px' }}>
@@ -867,19 +867,19 @@ export default function Challenge() {
             {/* Header Logo */}
             <div style={{ textAlign: 'center', marginBottom: '12px' }}>
               <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
-                <div style={{ width: '22px', height: '22px', borderRadius: '6px', backgroundColor: '#6C2BD9', color: '#fff', fontSize: '14px', fontWeight: 900, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <div style={{ width: '22px', height: '22px', borderRadius: '6px', backgroundColor: '#6C2BD9', color: '#fff', fontSize: '14px', fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   P
                 </div>
-                <span style={{ fontSize: '18px', fontWeight: 900, color: '#1e0e62', letterSpacing: '0.5px' }}>
+                <span style={{ fontSize: '18px', fontWeight: 700, color: '#1e0e62', letterSpacing: '0.5px' }}>
                   PREPLYX
                 </span>
               </div>
-              <div style={{ fontSize: '18px', fontWeight: 900, fontStyle: 'italic', color: '#1e0e62', marginTop: '2px' }}>
+              <div style={{ fontSize: '18px', fontWeight: 700, fontStyle: 'italic', color: '#1e0e62', marginTop: '2px' }}>
                 {selectedFlyerMatch.exam || 'JAMB'} CHALLENGE
               </div>
               <div style={{
                 display: 'inline-block', padding: '2px 12px', borderRadius: '14px',
-                backgroundColor: '#6C2BD9', color: '#ffffff', fontSize: '9px', fontWeight: 900,
+                backgroundColor: '#6C2BD9', color: '#ffffff', fontSize: '9px', fontWeight: 700,
                 letterSpacing: '0.5px', marginTop: '4px'
               }}>
                 ✦  FINAL RESULT  ✦
@@ -899,14 +899,14 @@ export default function Challenge() {
                 <div style={{ textAlign: 'center' }}>
                   <div style={{
                     width: '46px', height: '46px', borderRadius: '50%', backgroundColor: '#ffffff',
-                    border: '2px solid #6C2BD9', color: '#4c1d95', fontSize: '22px', fontWeight: 900,
+                    border: '2px solid #6C2BD9', color: '#4c1d95', fontSize: '22px', fontWeight: 700,
                     display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 4px'
                   }}>
                     👤
                   </div>
                   <div style={{
                     display: 'inline-block', padding: '2px 10px', borderRadius: '10px',
-                    backgroundColor: '#4c1d95', color: '#fff', fontSize: '10px', fontWeight: 900
+                    backgroundColor: '#4c1d95', color: '#fff', fontSize: '10px', fontWeight: 700
                   }}>
                     {(user?.name || 'AMINU').toUpperCase()}
                   </div>
@@ -915,20 +915,20 @@ export default function Challenge() {
                     backgroundColor: '#6C2BD9', borderRadius: '14px', padding: '10px 6px',
                     color: '#ffffff', marginTop: '6px', boxShadow: '0 4px 14px rgba(108, 43, 217, 0.3)'
                   }}>
-                    <div style={{ fontSize: '22px', fontWeight: 900, lineHeight: 1 }}>
+                    <div style={{ fontSize: '22px', fontWeight: 700, lineHeight: 1 }}>
                       {selectedFlyerMatch.myScore.split(' ')[0]}
                     </div>
-                    <div style={{ fontSize: '9px', fontWeight: 800, color: '#4ade80', marginTop: '4px' }}>
+                    <div style={{ fontSize: '9px', fontWeight: 600, color: '#4ade80', marginTop: '4px' }}>
                       ✔ 18 CORRECT
                     </div>
-                    <div style={{ fontSize: '9px', fontWeight: 800, color: '#fca5a5' }}>
+                    <div style={{ fontSize: '9px', fontWeight: 600, color: '#fca5a5' }}>
                       ✖ 2 WRONG
                     </div>
                   </div>
 
                   <div style={{
                     display: 'inline-block', padding: '2px 10px', borderRadius: '10px',
-                    backgroundColor: '#4c1d95', color: '#fff', fontSize: '10px', fontWeight: 900, marginTop: '4px'
+                    backgroundColor: '#4c1d95', color: '#fff', fontSize: '10px', fontWeight: 700, marginTop: '4px'
                   }}>
                     90%
                   </div>
@@ -938,7 +938,7 @@ export default function Challenge() {
               {/* VS Badge */}
               <div style={{
                 width: '30px', height: '30px', borderRadius: '50%', backgroundColor: '#ffffff',
-                border: '2px solid #c4b5fd', color: '#6C2BD9', fontSize: '11px', fontWeight: 900,
+                border: '2px solid #c4b5fd', color: '#6C2BD9', fontSize: '11px', fontWeight: 700,
                 display: 'flex', alignItems: 'center', justifyContent: 'center'
               }}>
                 VS
@@ -948,14 +948,14 @@ export default function Challenge() {
               <div style={{ textAlign: 'center' }}>
                 <div style={{
                   width: '46px', height: '46px', borderRadius: '50%', backgroundColor: '#ffffff',
-                  border: '2px solid #6C2BD9', color: '#4c1d95', fontSize: '22px', fontWeight: 900,
+                  border: '2px solid #6C2BD9', color: '#4c1d95', fontSize: '22px', fontWeight: 700,
                   display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 4px'
                 }}>
                   👤
                 </div>
                 <div style={{
                   display: 'inline-block', padding: '2px 10px', borderRadius: '10px',
-                  backgroundColor: '#4c1d95', color: '#fff', fontSize: '10px', fontWeight: 900
+                  backgroundColor: '#4c1d95', color: '#fff', fontSize: '10px', fontWeight: 700
                 }}>
                   {(selectedFlyerMatch.opponent || 'HASSAN').toUpperCase()}
                 </div>
@@ -965,20 +965,20 @@ export default function Challenge() {
                   color: '#0f172a', marginTop: '6px', border: '1px solid #e2e8f0',
                   boxShadow: '0 2px 8px rgba(0,0,0,0.03)'
                 }}>
-                  <div style={{ fontSize: '22px', fontWeight: 900, lineHeight: 1 }}>
+                  <div style={{ fontSize: '22px', fontWeight: 700, lineHeight: 1 }}>
                     {selectedFlyerMatch.opponentScore.split(' ')[0]}
                   </div>
-                  <div style={{ fontSize: '9px', fontWeight: 800, color: '#16a34a', marginTop: '4px' }}>
+                  <div style={{ fontSize: '9px', fontWeight: 600, color: '#16a34a', marginTop: '4px' }}>
                     ✔ 15 CORRECT
                   </div>
-                  <div style={{ fontSize: '9px', fontWeight: 800, color: '#dc2626' }}>
+                  <div style={{ fontSize: '9px', fontWeight: 600, color: '#dc2626' }}>
                     ✖ 5 WRONG
                   </div>
                 </div>
 
                 <div style={{
                   display: 'inline-block', padding: '2px 10px', borderRadius: '10px',
-                  backgroundColor: '#4c1d95', color: '#fff', fontSize: '10px', fontWeight: 900, marginTop: '4px'
+                  backgroundColor: '#4c1d95', color: '#fff', fontSize: '10px', fontWeight: 700, marginTop: '4px'
                 }}>
                   75%
                 </div>
@@ -990,17 +990,17 @@ export default function Challenge() {
               <div style={{ fontSize: '30px', lineHeight: 1 }}>🏆</div>
               <div style={{
                 display: 'inline-block', padding: '2px 10px', borderRadius: '10px',
-                backgroundColor: '#4c1d95', color: '#fff', fontSize: '9px', fontWeight: 900,
+                backgroundColor: '#4c1d95', color: '#fff', fontSize: '9px', fontWeight: 700,
                 marginTop: '2px'
               }}>
                 WINNER
               </div>
-              <div style={{ fontSize: '22px', fontWeight: 900, fontStyle: 'italic', color: '#1e0e62', marginTop: '2px' }}>
+              <div style={{ fontSize: '22px', fontWeight: 700, fontStyle: 'italic', color: '#1e0e62', marginTop: '2px' }}>
                 {(user?.name || 'AMINU').toUpperCase()}
               </div>
               <div style={{
                 display: 'inline-block', padding: '3px 14px', borderRadius: '10px',
-                backgroundColor: '#1e0e62', color: '#fff', fontSize: '12px', fontWeight: 900, marginTop: '2px'
+                backgroundColor: '#1e0e62', color: '#fff', fontSize: '12px', fontWeight: 700, marginTop: '2px'
               }}>
                 {selectedFlyerMatch.myScore.split(' ')[0]}
               </div>
@@ -1011,7 +1011,7 @@ export default function Challenge() {
               backgroundColor: '#ffffff', borderRadius: '14px', padding: '10px',
               border: '1px solid #c4b5fd', textAlign: 'center', marginBottom: '12px'
             }}>
-              <div style={{ fontSize: '11px', fontWeight: 800, color: '#0f172a', marginBottom: '6px' }}>
+              <div style={{ fontSize: '11px', fontWeight: 600, color: '#0f172a', marginBottom: '6px' }}>
                 Can you beat the winner?
               </div>
               <button
@@ -1019,7 +1019,7 @@ export default function Challenge() {
                 style={{
                   width: '100%', padding: '9px', borderRadius: '10px',
                   backgroundColor: '#6C2BD9', color: '#ffffff', border: 'none',
-                  fontSize: '11px', fontWeight: 900, cursor: 'pointer',
+                  fontSize: '11px', fontWeight: 700, cursor: 'pointer',
                   display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px'
                 }}
               >
@@ -1027,7 +1027,7 @@ export default function Challenge() {
               </button>
             </div>
 
-            <div style={{ textAlign: 'center', fontSize: '11px', fontWeight: 800, color: '#1e0e62', marginBottom: '12px' }}>
+            <div style={{ textAlign: 'center', fontSize: '11px', fontWeight: 600, color: '#1e0e62', marginBottom: '12px' }}>
               🌐 preplyx.com.ng
             </div>
 
@@ -1039,7 +1039,7 @@ export default function Challenge() {
                 style={{
                   padding: '8px', borderRadius: '8px',
                   backgroundColor: '#6C2BD9', color: '#ffffff',
-                  border: 'none', fontWeight: 800, fontSize: '11px', cursor: 'pointer',
+                  border: 'none', fontWeight: 600, fontSize: '11px', cursor: 'pointer',
                   display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px'
                 }}
               >
@@ -1052,7 +1052,7 @@ export default function Challenge() {
                 style={{
                   padding: '8px', borderRadius: '8px',
                   backgroundColor: '#3b82f6', color: '#ffffff',
-                  border: 'none', fontWeight: 800, fontSize: '11px', cursor: 'pointer',
+                  border: 'none', fontWeight: 600, fontSize: '11px', cursor: 'pointer',
                   display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px'
                 }}
               >
@@ -1065,7 +1065,7 @@ export default function Challenge() {
               style={{
                 width: '100%', padding: '9px', borderRadius: '8px',
                 backgroundColor: '#25D366', color: '#ffffff',
-                border: 'none', fontWeight: 800, fontSize: '11px', cursor: 'pointer',
+                border: 'none', fontWeight: 600, fontSize: '11px', cursor: 'pointer',
                 display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px'
               }}
             >

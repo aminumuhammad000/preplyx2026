@@ -148,7 +148,7 @@ export default function Settings() {
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px', marginBottom: '24px' }}>
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '4px' }}>
-            <h1 style={{ fontSize: '24px', fontWeight: 800, color: 'var(--color-text-main)', letterSpacing: '-0.5px', margin: 0 }}>
+            <h1 style={{ fontSize: '18px', fontWeight: 600, color: 'var(--color-text-main)', letterSpacing: '-0.5px', margin: 0 }}>
               Settings & Preferences
             </h1>
             <span style={{
@@ -283,7 +283,7 @@ export default function Settings() {
             }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '22px', borderBottom: '1px solid #f1f5f9', paddingBottom: '16px' }}>
                 <Palette size={20} color="#7B2FF7" />
-                <h3 style={{ fontSize: '16px', fontWeight: 700, color: '#0f172a', margin: 0 }}>Appearance & Theme Settings</h3>
+                <h3 style={{ fontSize: '13px', fontWeight: 700, color: '#0f172a', margin: 0 }}>Appearance & Theme Settings</h3>
               </div>
 
               <div style={{ display: 'flex', flexDirection: 'column', gap: '22px' }}>
@@ -364,7 +364,7 @@ export default function Settings() {
             }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '22px', borderBottom: '1px solid #f1f5f9', paddingBottom: '16px' }}>
                 <BookOpen size={20} color="#7B2FF7" />
-                <h3 style={{ fontSize: '16px', fontWeight: 700, color: '#0f172a', margin: 0 }}>CBT Exam Defaults & Audio</h3>
+                <h3 style={{ fontSize: '13px', fontWeight: 700, color: '#0f172a', margin: 0 }}>CBT Exam Defaults & Audio</h3>
               </div>
 
               <div style={{ display: 'flex', flexDirection: 'column', gap: '22px' }}>
@@ -389,7 +389,7 @@ export default function Settings() {
                           borderColor: examType === type ? '#7B2FF7' : '#e2e8f0',
                           backgroundColor: examType === type ? '#7B2FF7' : '#f8fafc',
                           color: examType === type ? '#ffffff' : '#334155',
-                          fontSize: '13px', fontWeight: 800, cursor: 'pointer'
+                          fontSize: '13px', fontWeight: 600, cursor: 'pointer'
                         }}
                       >
                         {type}
@@ -495,7 +495,7 @@ export default function Settings() {
             }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '22px', borderBottom: '1px solid #f1f5f9', paddingBottom: '16px' }}>
                 <Bell size={20} color="#7B2FF7" />
-                <h3 style={{ fontSize: '16px', fontWeight: 700, color: '#0f172a', margin: 0 }}>Study Notifications & Reminders</h3>
+                <h3 style={{ fontSize: '13px', fontWeight: 700, color: '#0f172a', margin: 0 }}>Study Notifications & Reminders</h3>
               </div>
 
               <div style={{ display: 'flex', flexDirection: 'column', gap: '22px' }}>
@@ -568,7 +568,7 @@ export default function Settings() {
             }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '22px', borderBottom: '1px solid #f1f5f9', paddingBottom: '16px' }}>
                 <ShieldCheck size={20} color="#7B2FF7" />
-                <h3 style={{ fontSize: '16px', fontWeight: 700, color: '#0f172a', margin: 0 }}>Account Details & Security</h3>
+                <h3 style={{ fontSize: '13px', fontWeight: 700, color: '#0f172a', margin: 0 }}>Account Details & Security</h3>
               </div>
 
               <div style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>

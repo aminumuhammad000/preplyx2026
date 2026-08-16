@@ -207,7 +207,7 @@ export default function Practice() {
             </span>
           </div>
           
-          <h1 style={{ fontSize: '22px', fontWeight: 700, color: 'var(--color-text-main)', letterSpacing: '-0.3px', marginBottom: '4px' }}>
+          <h1 style={{ fontSize: '16px', fontWeight: 600, color: 'var(--color-text-main)', letterSpacing: '-0.3px', marginBottom: '4px' }}>
             Computer-Based Test Simulator
           </h1>
           <p style={{ fontSize: '13px', color: 'var(--color-text-muted)', maxWidth: '680px', lineHeight: 1.5 }}>
@@ -287,7 +287,7 @@ export default function Practice() {
                   fontSize: '11px', fontWeight: 700, display: 'flex',
                   alignItems: 'center', justifyContent: 'center'
                 }}>1</span>
-                <h2 style={{ fontSize: '15px', fontWeight: 700, color: 'var(--color-text-main)', letterSpacing: '-0.3px' }}>
+                <h2 style={{ fontSize: '14px', fontWeight: 600, color: 'var(--color-text-main)', letterSpacing: '-0.3px' }}>
                   Select Exam Board
                 </h2>
               </div>
@@ -374,7 +374,7 @@ export default function Practice() {
                   fontSize: '11px', fontWeight: 700, display: 'flex',
                   alignItems: 'center', justifyContent: 'center'
                 }}>2</span>
-                <h2 style={{ fontSize: '15px', fontWeight: 700, color: 'var(--color-text-main)', letterSpacing: '-0.3px' }}>
+                <h2 style={{ fontSize: '14px', fontWeight: 600, color: 'var(--color-text-main)', letterSpacing: '-0.3px' }}>
                   Select Exam Year
                   {availableYears.length > 0 && (
                     <span style={{ fontSize: '12px', fontWeight: 500, color: 'var(--color-text-muted)', marginLeft: '6px' }}>
@@ -517,7 +517,7 @@ export default function Practice() {
                   fontSize: '11px', fontWeight: 700, display: 'flex',
                   alignItems: 'center', justifyContent: 'center'
                 }}>3</span>
-                <h2 style={{ fontSize: '15px', fontWeight: 700, color: 'var(--color-text-main)', letterSpacing: '-0.3px' }}>
+                <h2 style={{ fontSize: '14px', fontWeight: 600, color: 'var(--color-text-main)', letterSpacing: '-0.3px' }}>
                   Pick Practice Subjects ({selectedExam} {selectedYear === 'All' ? 'All Years' : selectedYear})
                 </h2>
               </div>

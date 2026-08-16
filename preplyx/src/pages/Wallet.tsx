@@ -199,7 +199,7 @@ export default function Wallet() {
         <div style={{ width: '48px', height: '48px', borderRadius: '50%', backgroundColor: '#fef2f2', color: '#dc2626', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <X size={24} />
         </div>
-        <h3 style={{ fontSize: '18px', fontWeight: 700, color: '#0f172a' }}>Unable to load wallet</h3>
+        <h3 style={{ fontSize: '14px', fontWeight: 700, color: '#0f172a' }}>Unable to load wallet</h3>
         <p style={{ fontSize: '14px', color: '#64748b', maxWidth: '360px' }}>{error}</p>
         <button
           onClick={() => fetchWalletData(true)}
@@ -233,7 +233,7 @@ export default function Wallet() {
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '16px', marginBottom: '24px' }}>
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '6px' }}>
-            <h1 style={{ fontSize: '24px', fontWeight: 800, color: 'var(--color-text-main)', letterSpacing: '-0.5px' }}>
+            <h1 style={{ fontSize: '18px', fontWeight: 600, color: 'var(--color-text-main)', letterSpacing: '-0.5px' }}>
               My Wallet
             </h1>
             <span style={{
@@ -301,7 +301,7 @@ export default function Wallet() {
           <div>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <span style={{ fontSize: '11px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '1px', opacity: 0.85 }}>
+                <span style={{ fontSize: '11px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px', opacity: 0.85 }}>
                   Available Balance
                 </span>
                 <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', fontSize: '11px', backgroundColor: 'rgba(255,255,255,0.18)', padding: '2px 8px', borderRadius: '10px' }}>
@@ -324,7 +324,7 @@ export default function Wallet() {
               </button>
             </div>
 
-            <div style={{ fontSize: '38px', fontWeight: 900, letterSpacing: '-1px', marginBottom: '18px' }}>
+            <div style={{ fontSize: '28px', fontWeight: 700, letterSpacing: '-1px', marginBottom: '18px' }}>
               {balanceVisible ? `₦${(balance || 0).toLocaleString('en-NG', { minimumFractionDigits: 2 })}` : '••••••••'}
             </div>
           </div>
@@ -334,7 +334,7 @@ export default function Wallet() {
               onClick={() => setIsFundModalOpen(true)}
               style={{
                 padding: '11px 20px', borderRadius: '12px', backgroundColor: '#ffffff',
-                color: '#4B0FA3', fontSize: '13px', fontWeight: 800, border: 'none',
+                color: '#4B0FA3', fontSize: '13px', fontWeight: 600, border: 'none',
                 cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px',
                 boxShadow: '0 4px 14px rgba(0,0,0,0.18)'
               }}
@@ -372,7 +372,7 @@ export default function Wallet() {
                 <Building2 size={20} />
               </div>
               <div>
-                <h3 style={{ fontSize: '15px', fontWeight: 700, color: '#0f172a', margin: 0 }}>Dedicated Bank Account</h3>
+                <h3 style={{ fontSize: '13px', fontWeight: 700, color: '#0f172a', margin: 0 }}>Dedicated Bank Account</h3>
                 <span style={{ fontSize: '12px', color: '#64748b' }}>Transfer from any mobile bank app</span>
               </div>
             </div>
@@ -392,7 +392,7 @@ export default function Wallet() {
             boxShadow: '0 6px 16px rgba(15, 23, 42, 0.12)', marginBottom: '12px'
           }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
-              <span style={{ fontSize: '11px', fontWeight: 800, opacity: 0.8, letterSpacing: '0.5px', textTransform: 'uppercase' }}>
+              <span style={{ fontSize: '11px', fontWeight: 600, opacity: 0.8, letterSpacing: '0.5px', textTransform: 'uppercase' }}>
                 {currentBankName}
               </span>
               <ShieldCheck size={18} style={{ opacity: 0.7 }} />
@@ -402,7 +402,7 @@ export default function Wallet() {
               ACCOUNT NUMBER
             </div>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
-              <span style={{ fontSize: '18px', fontWeight: 800, letterSpacing: '2px', fontFamily: 'monospace' }}>
+              <span style={{ fontSize: '18px', fontWeight: 600, letterSpacing: '2px', fontFamily: 'monospace' }}>
                 {formatAccountNumber(currentAccountNo)}
               </span>
               <button
@@ -446,7 +446,7 @@ export default function Wallet() {
               <ArrowUpRight size={18} />
             </div>
           </div>
-          <div style={{ fontSize: '22px', fontWeight: 800, color: 'var(--color-text-main)', marginBottom: '4px' }}>
+          <div style={{ fontSize: '22px', fontWeight: 600, color: 'var(--color-text-main)', marginBottom: '4px' }}>
             ₦{(walletSummary?.totalFunded || 0).toLocaleString()}
           </div>
           <div style={{ fontSize: '12px', color: '#16a34a', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '4px' }}>
@@ -468,7 +468,7 @@ export default function Wallet() {
               <ArrowDownRight size={18} />
             </div>
           </div>
-          <div style={{ fontSize: '22px', fontWeight: 800, color: 'var(--color-text-main)', marginBottom: '4px' }}>
+          <div style={{ fontSize: '22px', fontWeight: 600, color: 'var(--color-text-main)', marginBottom: '4px' }}>
             ₦{(walletSummary?.totalSpent || 0).toLocaleString()}
           </div>
           <div style={{ fontSize: '12px', color: 'var(--color-text-muted)', fontWeight: 500 }}>
@@ -490,7 +490,7 @@ export default function Wallet() {
               <Gift size={18} />
             </div>
           </div>
-          <div style={{ fontSize: '22px', fontWeight: 800, color: 'var(--color-text-main)', marginBottom: '4px' }}>
+          <div style={{ fontSize: '22px', fontWeight: 600, color: 'var(--color-text-main)', marginBottom: '4px' }}>
             ₦{(walletSummary?.welcomeBonus || 0).toLocaleString()}
           </div>
           <div style={{ fontSize: '12px', color: '#d97706', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '4px' }}>
@@ -515,7 +515,7 @@ export default function Wallet() {
                 <History size={18} />
               </div>
               <div>
-                <h3 style={{ fontSize: '16px', fontWeight: 700, color: '#0f172a', margin: 0 }}>Transaction Statements</h3>
+                <h3 style={{ fontSize: '13px', fontWeight: 700, color: '#0f172a', margin: 0 }}>Transaction Statements</h3>
                 <span style={{ fontSize: '12px', color: '#64748b' }}>
                   Showing {filteredTransactions.length} transaction{filteredTransactions.length === 1 ? '' : 's'}
                 </span>
@@ -605,7 +605,7 @@ export default function Wallet() {
 
                     <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
                       <div style={{ textAlign: 'right' }}>
-                        <div style={{ fontSize: '15px', fontWeight: 800, color: isCredit ? '#16a34a' : '#0f172a' }}>
+                        <div style={{ fontSize: '15px', fontWeight: 600, color: isCredit ? '#16a34a' : '#0f172a' }}>
                           {isCredit ? '+' : '-'}₦{Math.abs(tx.amount).toLocaleString('en-NG', { minimumFractionDigits: 2 })}
                         </div>
                         <span style={{
@@ -643,14 +643,14 @@ export default function Wallet() {
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
               <Zap size={18} color="#7B2FF7" />
-              <h3 style={{ fontSize: '15px', fontWeight: 700, color: '#0f172a', margin: 0 }}>
+              <h3 style={{ fontSize: '13px', fontWeight: 700, color: '#0f172a', margin: 0 }}>
                 Deposit Guide
               </h3>
             </div>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', marginBottom: '20px' }}>
               <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
-                <div style={{ width: '24px', height: '24px', borderRadius: '50%', backgroundColor: 'rgba(123, 47, 247, 0.1)', color: '#7B2FF7', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', fontWeight: 800, flexShrink: 0 }}>
+                <div style={{ width: '24px', height: '24px', borderRadius: '50%', backgroundColor: 'rgba(123, 47, 247, 0.1)', color: '#7B2FF7', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', fontWeight: 600, flexShrink: 0 }}>
                   1
                 </div>
                 <div>
@@ -660,7 +660,7 @@ export default function Wallet() {
               </div>
 
               <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
-                <div style={{ width: '24px', height: '24px', borderRadius: '50%', backgroundColor: 'rgba(123, 47, 247, 0.1)', color: '#7B2FF7', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', fontWeight: 800, flexShrink: 0 }}>
+                <div style={{ width: '24px', height: '24px', borderRadius: '50%', backgroundColor: 'rgba(123, 47, 247, 0.1)', color: '#7B2FF7', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', fontWeight: 600, flexShrink: 0 }}>
                   2
                 </div>
                 <div>
@@ -670,7 +670,7 @@ export default function Wallet() {
               </div>
 
               <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
-                <div style={{ width: '24px', height: '24px', borderRadius: '50%', backgroundColor: 'rgba(123, 47, 247, 0.1)', color: '#7B2FF7', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', fontWeight: 800, flexShrink: 0 }}>
+                <div style={{ width: '24px', height: '24px', borderRadius: '50%', backgroundColor: 'rgba(123, 47, 247, 0.1)', color: '#7B2FF7', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', fontWeight: 600, flexShrink: 0 }}>
                   3
                 </div>
                 <div>
@@ -720,7 +720,7 @@ export default function Wallet() {
                   <WalletIcon size={18} />
                 </div>
                 <div>
-                  <h3 style={{ fontSize: '16px', fontWeight: 700, color: '#0f172a', margin: 0 }}>Add Funds to Wallet</h3>
+                  <h3 style={{ fontSize: '13px', fontWeight: 700, color: '#0f172a', margin: 0 }}>Add Funds to Wallet</h3>
                   <span style={{ fontSize: '12px', color: '#64748b' }}>Select funding amount & method</span>
                 </div>
               </div>
@@ -823,7 +823,7 @@ export default function Wallet() {
                   <div style={{ fontSize: '12px', color: '#64748b', marginBottom: '4px' }}>Bank Name & Account Number</div>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
                     <span style={{ fontSize: '14px', fontWeight: 700, color: '#0f172a' }}>{currentBankName}</span>
-                    <span style={{ fontSize: '16px', fontWeight: 800, color: '#7B2FF7', fontFamily: 'monospace' }}>{currentAccountNo}</span>
+                    <span style={{ fontSize: '16px', fontWeight: 600, color: '#7B2FF7', fontFamily: 'monospace' }}>{currentAccountNo}</span>
                   </div>
                   <div style={{ fontSize: '11px', color: '#64748b', borderTop: '1px dashed #cbd5e1', paddingTop: '8px' }}>
                     Copy this account number into your banking app and transfer <strong>₦{fundAmount.toLocaleString()}</strong>.
@@ -890,7 +890,7 @@ export default function Wallet() {
               <div style={{ fontSize: '12px', fontWeight: 700, textTransform: 'uppercase', color: '#64748b', letterSpacing: '0.5px' }}>
                 Transaction Receipt
               </div>
-              <div style={{ fontSize: '28px', fontWeight: 900, color: '#0f172a', marginTop: '4px' }}>
+              <div style={{ fontSize: '28px', fontWeight: 700, color: '#0f172a', marginTop: '4px' }}>
                 ₦{Math.abs(selectedTransaction.amount).toLocaleString('en-NG', { minimumFractionDigits: 2 })}
               </div>
               <span style={{
