@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import {
   FileQuestion, Scan, Search, Plus, Trash2, CheckCircle, X,
   UploadCloud, CheckCircle2, ChevronLeft, ChevronRight, BookOpen, GraduationCap,
-  Lightbulb, Calendar, RefreshCw, AlertTriangle, Edit3, Wifi
+  Lightbulb, Calendar, RefreshCw, AlertTriangle, Edit3
 } from 'lucide-react';
 import './Questions.css';
 
@@ -158,8 +158,6 @@ export const Questions: React.FC = () => {
   const [importerState, setImporterState]   = useState<'upload' | 'parsing' | 'review' | 'uploading' | 'done'>('upload');
   const [importedResults, setImportedResults] = useState<QuestionData[]>([]);
   const [savingImported, setSavingImported] = useState(false);
-  const [uploadProgress, setUploadProgress] = useState(0);
-  const [uploadResult, setUploadResult]     = useState<{ count: number; error?: string } | null>(null);
   const csvInputRef = useRef<HTMLInputElement>(null);
 
   // Delete
