@@ -435,35 +435,39 @@ export const Questions: React.FC = () => {
           const lines = text.split(/\r?\n/);
           if (lines.length < 2) return;
 
-          const headers = parseCSVRow(lines[0]);
-          const textIdx = headers.findIndex(h => h.match(/question|text/i));
-          const optAIdx = headers.findIndex(h => h.match(/option_?a|opt_?a/i));
-          const optBIdx = headers.findIndex(h => h.match(/option_?b|opt_?b/i));
-          const optCIdx = headers.findIndex(h => h.match(/option_?c|opt_?c/i));
-          const optDIdx = headers.findIndex(h => h.match(/option_?d|opt_?d/i));
-          const optEIdx = headers.findIndex(h => h.match(/option_?e|opt_?e/i));
-          const correctIdx = headers.findIndex(h => h.match(/correct|answer/i));
-          const examIdx = headers.findIndex(h => h.match(/exam/i));
-          const subjectIdx = headers.findIndex(h => h.match(/subject/i));
-          const yearIdx = headers.findIndex(h => h.match(/year/i));
-          const explanationIdx = headers.findIndex(h => h.match(/explanation/i));
+          const headers = parseCSVRow(lines[0]).map(h => h.toLowerCase().trim());
+          const textIdx = headers.findIndex(h => /question|text/.test(h));
+          const optAIdx = headers.findIndex(h => /option_?a|opt_?a/.test(h));
+          const optBIdx = headers.findIndex(h => /option_?b|opt_?b/.test(h));
+          const optCIdx = headers.findIndex(h => /option_?c|opt_?c/.test(h));
+          const optDIdx = headers.findIndex(h => /option_?d|opt_?d/.test(h));
+          const optEIdx = headers.findIndex(h => /option_?e|opt_?e/.test(h));
+          const correctIdx = headers.findIndex(h => /correct|answer/.test(h));
+          const examIdx = headers.findIndex(h => /^exam$/.test(h));
+          const subjectIdx = headers.findIndex(h => /^subject$/.test(h));
+          const yearIdx = headers.findIndex(h => /^year$/.test(h));
+          const explanationIdx = headers.findIndex(h => /explanation/.test(h));
+
+          if (textIdx === -1 || optAIdx === -1 || optBIdx === -1) {
+            showToast('CSV must have columns: text/question, option_a, option_b', 'error');
+            return;
+          }
 
           const results: any[] = [];
           for (let i = 1; i < lines.length; i++) {
             const line = lines[i].trim();
             if (!line) continue;
             const cols = parseCSVRow(line);
-            if (cols.length < 5) continue;
 
             const qText = cols[textIdx]?.trim();
             const optA = cols[optAIdx]?.trim();
             const optB = cols[optBIdx]?.trim();
-            const optC = optCIdx !== -1 ? cols[optCIdx]?.trim() : '';
-            const optD = optDIdx !== -1 ? cols[optDIdx]?.trim() : '';
-            const optE = optEIdx !== -1 ? cols[optEIdx]?.trim() : '';
-            const correctAnsRaw = correctIdx !== -1 ? cols[correctIdx]?.trim() : '';
-            const yearVal = yearIdx !== -1 && cols[yearIdx] ? cols[yearIdx].trim() : CURRENT_YEAR;
-            const explanation = explanationIdx !== -1 ? cols[explanationIdx]?.trim() : '';
+            const optC = optCIdx !== -1 ? (cols[optCIdx]?.trim() || '') : '';
+            const optD = optDIdx !== -1 ? (cols[optDIdx]?.trim() || '') : '';
+            const optE = optEIdx !== -1 ? (cols[optEIdx]?.trim() || '') : '';
+            const correctAnsRaw = correctIdx !== -1 ? (cols[correctIdx]?.trim() || '') : '';
+            const yearVal = yearIdx !== -1 && cols[yearIdx]?.trim() ? cols[yearIdx].trim() : String(CURRENT_YEAR);
+            const explanation = explanationIdx !== -1 ? (cols[explanationIdx]?.trim() || '') : '';
 
             if (!qText || !optA || !optB) continue;
 
@@ -477,13 +481,17 @@ export const Questions: React.FC = () => {
               else if (upperAns === 'C') correctAnswer = optC || optA;
               else if (upperAns === 'D') correctAnswer = optD || optA;
               else if (upperAns === 'E') correctAnswer = optE || optA;
-              else correctAnswer = correctAnsRaw;
+              else {
+                // Might be the actual answer text — match it against options
+                const matched = optionsArr.find(o => o.toLowerCase() === correctAnsRaw.toLowerCase());
+                correctAnswer = matched || correctAnsRaw;
+              }
             }
 
             results.push({
               _id: `imp_${Date.now()}_${i}`,
-              exam: examIdx !== -1 && cols[examIdx] ? cols[examIdx].trim() : (filterExam === 'All' ? 'JAMB' : filterExam),
-              subject: subjectIdx !== -1 && cols[subjectIdx] ? cols[subjectIdx].trim() : (filterSubject === 'All' ? 'Mathematics' : filterSubject),
+              exam: examIdx !== -1 && cols[examIdx]?.trim() ? cols[examIdx].trim().toUpperCase() : (filterExam === 'All' ? 'JAMB' : filterExam),
+              subject: subjectIdx !== -1 && cols[subjectIdx]?.trim() ? cols[subjectIdx].trim() : (filterSubject === 'All' ? 'Mathematics' : filterSubject),
               year: yearVal,
               text: qText,
               options: optionsArr,
@@ -496,10 +504,10 @@ export const Questions: React.FC = () => {
             setImportedResults(results);
             setImporterState('review');
           } else {
-            showToast('No valid questions found in CSV. Check the file format.', 'error');
+            showToast('No valid questions found in CSV. Check that columns text/question, option_a, option_b exist and have data.', 'error');
           }
         } catch {
-          showToast('Failed to parse CSV file', 'error');
+          showToast('Failed to parse CSV file. Please check the format.', 'error');
         }
       };
       reader.readAsText(file);
@@ -524,18 +532,16 @@ export const Questions: React.FC = () => {
 
       if (res.ok) {
         const data = await res.json();
-        showToast(`${data.count ?? importedResults.length} questions saved to database!`, 'success');
+        showToast(`✅ ${data.count ?? importedResults.length} questions saved to database!`, 'success');
+        setImporterOpen(false);
+        fetchQuestions();
       } else {
-        setQuestions(prev => [...importedResults, ...prev]);
-        showToast(`${importedResults.length} questions imported (local only — check API connection)`, 'success');
+        let errMsg = 'Server error';
+        try { const errData = await res.json(); errMsg = errData.message || errMsg; } catch {}
+        showToast(`❌ Import failed: ${errMsg}`, 'error');
       }
-
-      setImporterOpen(false);
-      fetchQuestions();
-    } catch {
-      setQuestions(prev => [...importedResults, ...prev]);
-      showToast(`${importedResults.length} questions imported (local only — check API connection)`, 'success');
-      setImporterOpen(false);
+    } catch (err) {
+      showToast('❌ Network error — could not reach the server. Check your connection.', 'error');
     } finally {
       setSavingImported(false);
     }

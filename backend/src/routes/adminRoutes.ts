@@ -66,13 +66,13 @@ router.post('/subjects', createAdminSubject);
 router.put('/subjects/:id', updateAdminSubject);
 router.delete('/subjects/:id', deleteAdminSubject);
 
-// Question Management
+// Question Management — specific routes MUST come before /:id wildcard
 router.get('/questions', getAdminQuestions);
 router.post('/questions', createAdminQuestion);
 router.post('/questions/bulk', bulkCreateAdminQuestions);
+router.post('/questions/scan', scanQuestionPaper);
 router.put('/questions/:id', updateAdminQuestion);
 router.delete('/questions/:id', deleteAdminQuestion);
-router.post('/questions/scan', scanQuestionPaper);
 
 // Simulation Management
 router.get('/simulations', getAdminSimulations);
