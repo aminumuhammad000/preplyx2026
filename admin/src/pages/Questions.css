@@ -200,3 +200,100 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* ── Real-time live indicator ── */
+.qb-live-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  background: rgba(16, 185, 129, 0.08);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  border-radius: 20px;
+}
+
+.qb-live-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #10b981;
+  flex-shrink: 0;
+  animation: qb-pulse 2s infinite;
+}
+
+.qb-live-dot--syncing {
+  background: #f59e0b;
+  animation: qb-pulse-fast 0.7s infinite;
+}
+
+.qb-live-text {
+  font-size: 11px;
+  font-weight: 600;
+  color: #10b981;
+  white-space: nowrap;
+}
+
+.qb-live-dot--syncing ~ .qb-live-text {
+  color: #f59e0b;
+}
+
+@keyframes qb-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.5; transform: scale(0.85); }
+}
+
+@keyframes qb-pulse-fast {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.4; }
+}
+
+/* ── Loading bar at top of list ── */
+.qb-list-wrap {
+  position: relative;
+}
+
+.qb-loading-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  border-radius: 3px;
+  background: linear-gradient(90deg, transparent, #7B2FF7, transparent);
+  background-size: 200% 100%;
+  animation: qb-bar-slide 1.2s linear infinite;
+  z-index: 2;
+}
+
+@keyframes qb-bar-slide {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* List dims slightly while refreshing (but still readable) */
+.qb-list--loading {
+  opacity: 0.75;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+/* ── Skeleton shimmer cards ── */
+.qb-skeleton-card {
+  pointer-events: none;
+}
+
+.qb-skel {
+  border-radius: 6px;
+  background: linear-gradient(90deg, var(--border-color) 25%, var(--surface-hover) 50%, var(--border-color) 75%);
+  background-size: 200% 100%;
+  animation: qb-shimmer 1.4s infinite;
+}
+
+.qb-skel-tags  { height: 20px; width: 180px; }
+.qb-skel-title { height: 14px; width: 100%; margin-top: 4px; }
+.qb-skel-opt   { height: 38px; }
+
+@keyframes qb-shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}

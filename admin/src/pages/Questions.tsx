@@ -2,11 +2,30 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import {
   FileQuestion, Scan, Search, Plus, Trash2, CheckCircle, X,
   UploadCloud, CheckCircle2, ChevronLeft, ChevronRight, BookOpen, GraduationCap,
-  Lightbulb, Calendar, RefreshCw, AlertTriangle, Edit3
+  Lightbulb, Calendar, RefreshCw, AlertTriangle, Edit3, Wifi
 } from 'lucide-react';
 import './Questions.css';
 
 import { API_BASE_URL } from '../config/api';
+
+const POLL_INTERVAL_MS = 15_000; // 15 seconds
+
+function useTimeAgo(date: Date | null): string {
+  const [label, setLabel] = React.useState('');
+  React.useEffect(() => {
+    if (!date) { setLabel(''); return; }
+    const update = () => {
+      const diff = Math.floor((Date.now() - date.getTime()) / 1000);
+      if (diff < 5)  setLabel('just now');
+      else if (diff < 60) setLabel(`${diff}s ago`);
+      else setLabel(`${Math.floor(diff / 60)}m ago`);
+    };
+    update();
+    const id = setInterval(update, 5000);
+    return () => clearInterval(id);
+  }, [date]);
+  return label;
+}
 
 /* ── Types ── */
 interface QuestionData {
@@ -107,6 +126,9 @@ export const Questions: React.FC = () => {
   const [questions, setQuestions]           = useState<QuestionData[]>(DEFAULT_QUESTIONS);
   const [selectableSubjects, setSelectableSubjects] = useState<string[]>(DEFAULT_SUBJECTS_LIST);
   const [toast, setToast]                   = useState<ToastState>(null);
+  const [loading, setLoading]               = useState(false);
+  const [lastUpdated, setLastUpdated]       = useState<Date | null>(null);
+  const lastUpdatedLabel = useTimeAgo(lastUpdated);
 
   // Pagination & Filtering
   const [page, setPage]                     = useState(1);
@@ -133,9 +155,11 @@ export const Questions: React.FC = () => {
 
   // CSV Importer Modal
   const [importerOpen, setImporterOpen]     = useState(false);
-  const [importerState, setImporterState]   = useState<'upload' | 'review'>('upload');
+  const [importerState, setImporterState]   = useState<'upload' | 'parsing' | 'review' | 'uploading' | 'done'>('upload');
   const [importedResults, setImportedResults] = useState<QuestionData[]>([]);
   const [savingImported, setSavingImported] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [uploadResult, setUploadResult]     = useState<{ count: number; error?: string } | null>(null);
   const csvInputRef = useRef<HTMLInputElement>(null);
 
   // Delete
@@ -167,6 +191,7 @@ export const Questions: React.FC = () => {
   }, [fetchSubjectsList]);
 
   const fetchQuestions = useCallback(async () => {
+    setLoading(true);
     try {
       const q = new URLSearchParams({
         page: String(page),
@@ -182,15 +207,24 @@ export const Questions: React.FC = () => {
           setQuestions(data.questions);
           setTotalPages(data.totalPages || 1);
           setTotalQuestions(data.total !== undefined ? data.total : data.questions.length);
+          setLastUpdated(new Date());
         }
       }
     } catch {
       // Keeps DEFAULT_QUESTIONS
+    } finally {
+      setLoading(false);
     }
   }, [page, filterExam, filterSubject, search]);
 
   useEffect(() => {
     fetchQuestions();
+  }, [fetchQuestions]);
+
+  // Real-time polling every 15 s
+  useEffect(() => {
+    const id = setInterval(fetchQuestions, POLL_INTERVAL_MS);
+    return () => clearInterval(id);
   }, [fetchQuestions]);
 
   const showToast = (msg: string, type: 'success' | 'error') => {
@@ -541,7 +575,23 @@ export const Questions: React.FC = () => {
           <h1 className="dashboard-page-title">Question Bank</h1>
           <p className="dashboard-page-subtitle">Centralized repository of examination past questions with AI scanning & batch CSV imports</p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-2 items-center">
+          {/* Live indicator */}
+          <div className="qb-live-badge">
+            <span className={`qb-live-dot ${loading ? 'qb-live-dot--syncing' : ''}`} />
+            <span className="qb-live-text">
+              {loading ? 'Syncing…' : lastUpdated ? `Updated ${lastUpdatedLabel}` : 'Live'}
+            </span>
+          </div>
+          <button
+            className="view-all-btn"
+            onClick={fetchQuestions}
+            disabled={loading}
+            title="Refresh question bank"
+          >
+            <RefreshCw size={13} className={loading ? 'um-spin' : ''} />
+            <span>Refresh</span>
+          </button>
           <button className="view-all-btn" onClick={openImporter}>
             <UploadCloud size={13} />
             <span>Import CSV</span>
@@ -666,62 +716,82 @@ export const Questions: React.FC = () => {
         </div>
 
         {/* QUESTIONS LISTING */}
-        <div className="qb-list">
-          {filteredQuestions.length === 0 ? (
-            <div className="um-empty">
-              <FileQuestion size={28} />
-              <p>No questions match your criteria.</p>
-            </div>
-          ) : (
-            filteredQuestions.map((q, idx) => (
-              <div className="qb-item-card" key={q._id || idx}>
-                <div className="qb-item-header">
-                  <div className="qb-item-tags">
-                    <span className="em-board-badge" style={{ backgroundColor: 'rgba(123, 47, 247, 0.12)', color: '#7B2FF7', fontSize: '10px' }}>
-                      {q.exam}
-                    </span>
-                    <span className="em-chip" style={{ fontSize: '11px' }}>
-                      {q.subject}
-                    </span>
-                    <span className="badge badge-success" style={{ fontSize: '11px' }}>
-                      <Calendar size={11} className="mr-1" /> {q.year || '2026'}
-                    </span>
-                  </div>
-                  <div className="action-buttons-cell">
-                    <button className="btn-action edit" onClick={() => openEditDrawer(q)} title="Edit Question">
-                      <Edit3 size={13} />
-                      <span>Edit</span>
-                    </button>
-                    <button className="btn-action delete" onClick={() => setDeleteTarget(q)} title="Delete Question">
-                      <Trash2 size={13} />
-                    </button>
-                  </div>
-                </div>
+        <div className="qb-list-wrap">
+          {/* Subtle loading bar at top */}
+          {loading && <div className="qb-loading-bar" />}
 
-                <div className="qb-item-text">{q.text}</div>
-
-                <div className="qb-item-options">
-                  {q.options.map((opt, i) => {
-                    const isCorrect = opt === q.correctAnswer;
-                    return (
-                      <div key={i} className={`qb-option ${isCorrect ? 'is-correct' : ''}`}>
-                        <div className="font-bold">{['A', 'B', 'C', 'D'][i]}.</div>
-                        <div style={{ flex: 1 }}>{opt}</div>
-                        {isCorrect && <CheckCircle2 size={14} color="#10b981" />}
-                      </div>
-                    );
-                  })}
-                </div>
-
-                {q.explanation && (
-                  <div className="qb-item-explanation">
-                    <Lightbulb size={14} color="#f59e0b" />
-                    <div><strong>Explanation:</strong> {q.explanation}</div>
-                  </div>
-                )}
+          <div className={`qb-list ${loading ? 'qb-list--loading' : ''}`}>
+            {filteredQuestions.length === 0 && !loading ? (
+              <div className="um-empty">
+                <FileQuestion size={28} />
+                <p>No questions match your criteria.</p>
               </div>
-            ))
-          )}
+            ) : filteredQuestions.length === 0 && loading ? (
+              // Skeleton cards on first load
+              Array.from({ length: 4 }).map((_, i) => (
+                <div className="qb-item-card qb-skeleton-card" key={i}>
+                  <div className="qb-skel qb-skel-tags" />
+                  <div className="qb-skel qb-skel-title" />
+                  <div className="qb-skel qb-skel-title" style={{ width: '70%' }} />
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
+                    <div className="qb-skel qb-skel-opt" />
+                    <div className="qb-skel qb-skel-opt" />
+                    <div className="qb-skel qb-skel-opt" />
+                    <div className="qb-skel qb-skel-opt" />
+                  </div>
+                </div>
+              ))
+            ) : (
+              filteredQuestions.map((q, idx) => (
+                <div className="qb-item-card" key={q._id || idx}>
+                  <div className="qb-item-header">
+                    <div className="qb-item-tags">
+                      <span className="em-board-badge" style={{ backgroundColor: 'rgba(123, 47, 247, 0.12)', color: '#7B2FF7', fontSize: '10px' }}>
+                        {q.exam}
+                      </span>
+                      <span className="em-chip" style={{ fontSize: '11px' }}>
+                        {q.subject}
+                      </span>
+                      <span className="badge badge-success" style={{ fontSize: '11px' }}>
+                        <Calendar size={11} className="mr-1" /> {q.year || '2026'}
+                      </span>
+                    </div>
+                    <div className="action-buttons-cell">
+                      <button className="btn-action edit" onClick={() => openEditDrawer(q)} title="Edit Question">
+                        <Edit3 size={13} />
+                        <span>Edit</span>
+                      </button>
+                      <button className="btn-action delete" onClick={() => setDeleteTarget(q)} title="Delete Question">
+                        <Trash2 size={13} />
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="qb-item-text">{q.text}</div>
+
+                  <div className="qb-item-options">
+                    {q.options.map((opt, i) => {
+                      const isCorrect = opt === q.correctAnswer;
+                      return (
+                        <div key={i} className={`qb-option ${isCorrect ? 'is-correct' : ''}`}>
+                          <div className="font-bold">{['A', 'B', 'C', 'D'][i]}.</div>
+                          <div style={{ flex: 1 }}>{opt}</div>
+                          {isCorrect && <CheckCircle2 size={14} color="#10b981" />}
+                        </div>
+                      );
+                    })}
+                  </div>
+
+                  {q.explanation && (
+                    <div className="qb-item-explanation">
+                      <Lightbulb size={14} color="#f59e0b" />
+                      <div><strong>Explanation:</strong> {q.explanation}</div>
+                    </div>
+                  )}
+                </div>
+              ))
+            )}
+          </div>
         </div>
 
         {/* Pagination Bar */}
