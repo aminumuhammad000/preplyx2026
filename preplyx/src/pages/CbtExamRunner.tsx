@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
+import { useParams, useNavigate, useSearchParams, useBlocker } from 'react-router-dom';
 import { Timer, ArrowLeft, ArrowRight, Flag, CheckCheck, BookOpen, AlertCircle, Calculator, Volume2, VolumeX, Save, Check, Sparkles, LogOut, FileText, Info, ChevronDown } from 'lucide-react';
 import { saveActiveSession, getActiveSession, clearActiveSession, saveCompletedSession } from '@/lib/storage';
 import { api } from '@/lib/api';
@@ -32,6 +32,18 @@ export default function CbtExamRunner() {
   const [showSubmitConfirm, setShowSubmitConfirm] = useState(false);
   const [showExitConfirm, setShowExitConfirm] = useState(false);
   const [showCalculator, setShowCalculator] = useState(false);
+
+  // Block in-app navigation (sidebar links, browser back, etc.) during active exam
+  const blocker = useBlocker(({ currentLocation, nextLocation }) =>
+    !isSubmitted && currentLocation.pathname !== nextLocation.pathname
+  );
+
+  // When the blocker fires, show the exit confirmation modal
+  useEffect(() => {
+    if (blocker.state === 'blocked') {
+      setShowExitConfirm(true);
+    }
+  }, [blocker.state]);
   const [showAiTutor, setShowAiTutor] = useState(false);
   const [showDescription, setShowDescription] = useState(false);
   const [aiAction, setAiAction] = useState<string | undefined>(undefined);
@@ -715,8 +727,8 @@ export default function CbtExamRunner() {
             <h3 style={{ fontSize: '18px', fontWeight: 800, color: 'var(--color-text-main)', marginBottom: '8px' }}>Exit Exam Session?</h3>
             <p style={{ fontSize: '13px', color: 'var(--color-text-muted)', marginBottom: '24px' }}>Your active exam progress is automatically saved! You can safely resume this exam session anytime from your dashboard.</p>
             <div style={{ display: 'flex', gap: '12px' }}>
-              <button onClick={() => setShowExitConfirm(false)} style={{ flex: 1, padding: '12px', borderRadius: '10px', border: '1px solid var(--glass-border)', backgroundColor: '#fff', color: 'var(--color-text-main)', fontWeight: 600, cursor: 'pointer' }}>Continue Test</button>
-              <button onClick={confirmExitExam} style={{ flex: 1, padding: '12px', borderRadius: '10px', border: 'none', backgroundColor: '#dc2626', color: '#fff', fontWeight: 700, cursor: 'pointer' }}>Exit Session</button>
+              <button onClick={() => { setShowExitConfirm(false); blocker.reset?.(); }} style={{ flex: 1, padding: '12px', borderRadius: '10px', border: '1px solid var(--glass-border)', backgroundColor: '#fff', color: 'var(--color-text-main)', fontWeight: 600, cursor: 'pointer' }}>Continue Test</button>
+              <button onClick={() => { blocker.proceed?.(); confirmExitExam(); }} style={{ flex: 1, padding: '12px', borderRadius: '10px', border: 'none', backgroundColor: '#dc2626', color: '#fff', fontWeight: 700, cursor: 'pointer' }}>Exit Session</button>
             </div>
           </div>
         </div>
